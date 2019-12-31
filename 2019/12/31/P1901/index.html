@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="单调栈,">
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="比你优秀的人还在努力，比你差劲的人还没放弃，你有什么资格说自己无能为力？">
-<meta property="og:type" content="website">
-<meta property="og:title" content="JuicyMio&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/强连通分量/index.html">
+<meta name="description" content="链接Luogu   题解每个发射站的信号只能传给离它最近的比它高的,所以我们维护一个高度单调递减的栈,因为如果一个塔已经比前面的塔高了,前面的塔就不会收到这个塔之后入栈的塔的能量,所以就把比新入栈的塔低的塔全部弹出去. 每次一个新的发射塔入栈,就会把能量发射给弹完栈之后的栈顶.也就是栈中离它最近的比他高的塔,左右各进行一次,就统计出每个塔收到的所有能量,再求出最大值,显然时间复杂度 $O(n)$.">
+<meta name="keywords" content="单调栈">
+<meta property="og:type" content="article">
+<meta property="og:title" content="P1901 发射站">
+<meta property="og:url" content="http://yoursite.com/2019/12/31/P1901/index.html">
 <meta property="og:site_name" content="JuicyMio&#39;s Blog">
-<meta property="og:description" content="比你优秀的人还在努力，比你差劲的人还没放弃，你有什么资格说自己无能为力？">
+<meta property="og:description" content="链接Luogu   题解每个发射站的信号只能传给离它最近的比它高的,所以我们维护一个高度单调递减的栈,因为如果一个塔已经比前面的塔高了,前面的塔就不会收到这个塔之后入栈的塔的能量,所以就把比新入栈的塔低的塔全部弹出去. 每次一个新的发射塔入栈,就会把能量发射给弹完栈之后的栈顶.也就是栈中离它最近的比他高的塔,左右各进行一次,就统计出每个塔收到的所有能量,再求出最大值,显然时间复杂度 $O(n)$.">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-12-31T07:24:24.410Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JuicyMio&#39;s Blog">
-<meta name="twitter:description" content="比你优秀的人还在努力，比你差劲的人还没放弃，你有什么资格说自己无能为力？">
+<meta name="twitter:title" content="P1901 发射站">
+<meta name="twitter:description" content="链接Luogu   题解每个发射站的信号只能传给离它最近的比它高的,所以我们维护一个高度单调递减的栈,因为如果一个塔已经比前面的塔高了,前面的塔就不会收到这个塔之后入栈的塔的能量,所以就把比新入栈的塔低的塔全部弹出去. 每次一个新的发射塔入栈,就会把能量发射给弹完栈之后的栈顶.也就是栈中离它最近的比他高的塔,左右各进行一次,就统计出每个塔收到的所有能量,再求出最大值,显然时间复杂度 $O(n)$.">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/强连通分量/">
+  <link rel="canonical" href="http://yoursite.com/2019/12/31/P1901/">
 
 
 
 
 
-  <title>标签: 强连通分量 | JuicyMio's Blog</title>
+  <title>P1901 发射站 | JuicyMio's Blog</title>
   
 
 
@@ -143,7 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left ">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
@@ -279,52 +281,182 @@
           <div id="content" class="content">
             
 
-  
-  
-  
-  <div class="post-block tag">
+  <div id="posts" class="posts-expand">
+    
 
-    <div id="posts" class="posts-collapse">
-      <div class="collection-title">
-        <h1>强连通分量<small>标签</small>
-        </h1>
-      </div>
+  
 
-      
-        
+  
+  
+  
 
   <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
-    <header class="post-header">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/31/P1901/">
 
-      <h2 class="post-title">
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="JuicyMio">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="JuicyMio's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
         
-            <a class="post-title-link" href="/2019/12/19/tarjan/" itemprop="url">
-              
-                <span itemprop="name">tarjan学习笔记</span>
-              
-            </a>
         
-      </h2>
+          <h1 class="post-title" itemprop="name headline">P1901 发射站</h1>
+        
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-12-19T12:31:04+08:00" content="2019-12-19">
-          12-19
-        </time>
-      </div>
+        <div class="post-meta">
+          <span class="post-time">
+            
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-31T15:18:28+08:00">
+                2019-12-31
+              </time>
+            
 
-    </header>
-  </article>
+            
+              <span class="post-meta-divider">|</span>
+            
 
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-check-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">更新于&#58;</span>
+              
+              <time title="更新于" itemprop="dateModified" datetime="2019-12-31T15:24:24+08:00">
+                2019-12-31
+              </time>
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  378
+                </span>
+              
+
+              
+
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://www.luogu.com.cn/problem/P1901" target="_blank" rel="noopener">Luogu</a>  </p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>每个发射站的信号只能传给离它最近的比它高的,所以我们维护一个高度单调递减的栈,因为如果一个塔已经比前面的塔高了,前面的塔就不会收到这个塔之后入栈的塔的能量,所以就把比新入栈的塔低的塔全部弹出去.</p>
+<p>每次一个新的发射塔入栈,就会把能量发射给弹完栈之后的栈顶.也就是栈中离它最近的比他高的塔,左右各进行一次,就统计出每个塔收到的所有能量,再求出最大值,显然时间复杂度 $O(n)$.</p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">1000000</span>+<span class="number">5</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Stack</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> <span class="built_in">stack</span>[MAXN];</span><br><span class="line">    <span class="keyword">int</span> pos;</span><br><span class="line">    Stack() :pos(<span class="number">0</span>) &#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">empty</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> pos == <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">clear</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        pos = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">int</span> <span class="title">top</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="built_in">stack</span>[pos];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">bool</span> <span class="title">pop</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (pos)</span><br><span class="line">        &#123;</span><br><span class="line">            pos --;</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">push</span><span class="params">(<span class="keyword">int</span> x)</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">stack</span>[++ pos] = x;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; S;</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> h[MAXN], v[MAXN], power[MAXN];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;n);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= n;i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%lld %lld"</span>, &amp;h[i], &amp;v[i]);</span><br><span class="line">        <span class="keyword">while</span> (!S.empty() &amp;&amp; h[S.top()] &lt; h[i]) S.pop();</span><br><span class="line">        <span class="keyword">if</span> (!S.empty()) power[S.top()] += v[i];</span><br><span class="line">        S.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    S.clear();</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = n;i &gt;= <span class="number">1</span>;i --)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span>(!S.empty() &amp;&amp; h[S.top()] &lt; h[i]) S.pop();</span><br><span class="line">        <span class="keyword">if</span>(!S.empty()) power[S.top()] += v[i];</span><br><span class="line">        S.push(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> maxpower = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= n;i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        maxpower = <span class="built_in">std</span>::max(maxpower, power[i]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%d"</span>, maxpower);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
+    
+    
+    
 
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/单调栈/" rel="tag"># 单调栈</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/27/P2055/" rel="next" title="P2055 [ZJOI2009]假期的宿舍">
+                <i class="fa fa-chevron-left"></i> P2055 [ZJOI2009]假期的宿舍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </div>
   
   
   
+  </article>
 
-  
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -332,6 +464,10 @@
 
 
           
+
+  
+
+
 
         </div>
         
@@ -352,8 +488,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -406,6 +551,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">1.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题解"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -555,6 +716,10 @@
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
