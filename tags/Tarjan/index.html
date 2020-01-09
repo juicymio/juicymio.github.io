@@ -82,7 +82,7 @@
 <meta name="description" content="比你优秀的人还在努力，比你差劲的人还没放弃，你有什么资格说自己无能为力？">
 <meta property="og:type" content="website">
 <meta property="og:title" content="JuicyMio&#39;s Blog">
-<meta property="og:url" content="http://yoursite.com/tags/tarjan/index.html">
+<meta property="og:url" content="http://yoursite.com/tags/Tarjan/index.html">
 <meta property="og:site_name" content="JuicyMio&#39;s Blog">
 <meta property="og:description" content="比你优秀的人还在努力，比你差劲的人还没放弃，你有什么资格说自己无能为力？">
 <meta property="og:locale" content="zh-Hans">
@@ -118,13 +118,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/tarjan/">
+  <link rel="canonical" href="http://yoursite.com/tags/Tarjan/">
 
 
 
 
 
-  <title>标签: tarjan | JuicyMio's Blog</title>
+  <title>标签: Tarjan | JuicyMio's Blog</title>
   
 
 
@@ -286,7 +286,7 @@
 
     <div id="posts" class="posts-collapse">
       <div class="collection-title">
-        <h1>tarjan<small>标签</small>
+        <h1>Tarjan<small>标签</small>
         </h1>
       </div>
 
@@ -298,17 +298,43 @@
 
       <h2 class="post-title">
         
-            <a class="post-title-link" href="/2019/12/19/tarjan/" itemprop="url">
+            <a class="post-title-link" href="/2019/12/20/P3469/" itemprop="url">
               
-                <span itemprop="name">tarjan学习笔记</span>
+                <span itemprop="name">P3469 BLO-bolckade</span>
               
             </a>
         
       </h2>
 
       <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated" datetime="2019-12-19T12:31:04+08:00" content="2019-12-19">
-          12-19
+        <time class="post-time" itemprop="dateCreated" datetime="2019-12-20T13:25:53+08:00" content="2019-12-20">
+          12-20
+        </time>
+      </div>
+
+    </header>
+  </article>
+
+
+      
+        
+
+  <article class="post post-type-normal" itemscope="" itemtype="http://schema.org/Article">
+    <header class="post-header">
+
+      <h2 class="post-title">
+        
+            <a class="post-title-link" href="/2019/12/16/P2746/" itemprop="url">
+              
+                <span itemprop="name">P2746 [USACO5.3]校园网</span>
+              
+            </a>
+        
+      </h2>
+
+      <div class="post-meta">
+        <time class="post-time" itemprop="dateCreated" datetime="2019-12-16T22:15:34+08:00" content="2019-12-16">
+          12-16
         </time>
       </div>
 
@@ -370,7 +396,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-count">38</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -383,7 +409,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">36</span>
+                  <span class="site-state-item-count">37</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
@@ -420,7 +446,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2019</span>
+        <div class="copyright">&copy; 2018 &mdash; <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -434,7 +460,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">18.7k</span>
+    <span title="Site words total count">20.9k</span>
   
 </div>
 
@@ -958,7 +984,67 @@
 
 </body>
 </html>
-         inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+istener('input', inputEventFunction);
+          } else {
+            $('.search-icon').click(inputEventFunction);
+            input.addEventListener('keypress', function (event) {
+              if (event.keyCode === 13) {
+                inputEventFunction();
+              }
+            });
+          }
+
+          // remove loading animation
+          $(".local-search-pop-overlay").remove();
+          $('body').css('overflow', '');
+
+          proceedsearch();
+        }
+      });
+    }
+
+    // handle and trigger popup window;
+    $('.popup-trigger').click(function(e) {
+      e.stopPropagation();
+      if (isfetched === false) {
+        searchFunc(path, 'local-search-input', 'local-search-result');
+      } else {
+        proceedsearch();
+      };
+    });
+
+    $('.popup-btn-close').click(onPopupClose);
+    $('.popup').click(function(e){
+      e.stopPropagation();
+    });
+    $(document).on('keyup', function (event) {
+      var shouldDismissSearchPopup = event.which === 27 &&
+        $('.search-popup').is(':visible');
+      if (shouldDismissSearchPopup) {
+        onPopupClose();
+      }
+    });
+  </script>
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
           processEscapes: true,
           skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
         }
