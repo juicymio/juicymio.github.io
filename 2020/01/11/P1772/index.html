@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Tarjan,割点,">
+  <meta name="keywords" content="最短路,DP,">
 
 
 
@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="链接Luogu   题意给定一张无向图,求每个点被封锁后有多少个有序点对 $(x,y),(x!=y,1&amp;lt;=x,y&amp;lt;=n)$ 满足 $x$ 无法到达 $y$ . 题意摘抄自洛谷 题解1.如果被封锁的点不是割点,那么答案就是 $2*(n-1)$ ,即这个点到达其他所有点的双向路径. 2.如果是割点,那么封锁之后会把图分成多个连通块">
-<meta name="keywords" content="Tarjan,割点">
+<meta name="description" content="链接Luogu  题解我们考虑使用DP+最短路.   用$f(i)$表示前$i$天最小成本,那么可以想到   $f(i) = min(f(j) + cost(j+1,i)*(i-j) + k),j&amp;lt;i$,其中$cost(j+1,i)$ 表示从第$j+1$天到第$i$天走相同最短路的每天成本.   $f(i)$初始化为$cost(1,i)*i$,即一直不换路线.   那么就要考虑如何求出$co">
+<meta name="keywords" content="最短路,DP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="P3469 BLO-bolckade">
-<meta property="og:url" content="http://yoursite.com/2019/12/20/P3469/index.html">
+<meta property="og:title" content="P1772 物流运输">
+<meta property="og:url" content="http://yoursite.com/2020/01/11/P1772/index.html">
 <meta property="og:site_name" content="JuicyMio&#39;s Blog">
-<meta property="og:description" content="链接Luogu   题意给定一张无向图,求每个点被封锁后有多少个有序点对 $(x,y),(x!=y,1&amp;lt;=x,y&amp;lt;=n)$ 满足 $x$ 无法到达 $y$ . 题意摘抄自洛谷 题解1.如果被封锁的点不是割点,那么答案就是 $2*(n-1)$ ,即这个点到达其他所有点的双向路径. 2.如果是割点,那么封锁之后会把图分成多个连通块">
+<meta property="og:description" content="链接Luogu  题解我们考虑使用DP+最短路.   用$f(i)$表示前$i$天最小成本,那么可以想到   $f(i) = min(f(j) + cost(j+1,i)*(i-j) + k),j&amp;lt;i$,其中$cost(j+1,i)$ 表示从第$j+1$天到第$i$天走相同最短路的每天成本.   $f(i)$初始化为$cost(1,i)*i$,即一直不换路线.   那么就要考虑如何求出$co">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-12-20T05:30:23.332Z">
+<meta property="og:updated_time" content="2020-01-11T10:10:40.927Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="P3469 BLO-bolckade">
-<meta name="twitter:description" content="链接Luogu   题意给定一张无向图,求每个点被封锁后有多少个有序点对 $(x,y),(x!=y,1&amp;lt;=x,y&amp;lt;=n)$ 满足 $x$ 无法到达 $y$ . 题意摘抄自洛谷 题解1.如果被封锁的点不是割点,那么答案就是 $2*(n-1)$ ,即这个点到达其他所有点的双向路径. 2.如果是割点,那么封锁之后会把图分成多个连通块">
+<meta name="twitter:title" content="P1772 物流运输">
+<meta name="twitter:description" content="链接Luogu  题解我们考虑使用DP+最短路.   用$f(i)$表示前$i$天最小成本,那么可以想到   $f(i) = min(f(j) + cost(j+1,i)*(i-j) + k),j&amp;lt;i$,其中$cost(j+1,i)$ 表示从第$j+1$天到第$i$天走相同最短路的每天成本.   $f(i)$初始化为$cost(1,i)*i$,即一直不换路线.   那么就要考虑如何求出$co">
 
 
 
@@ -120,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/12/20/P3469/">
+  <link rel="canonical" href="http://yoursite.com/2020/01/11/P1772/">
 
 
 
 
 
-  <title>P3469 BLO-bolckade | JuicyMio's Blog</title>
+  <title>P1772 物流运输 | JuicyMio's Blog</title>
   
 
 
@@ -295,7 +295,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/20/P3469/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/01/11/P1772/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="JuicyMio">
@@ -312,7 +312,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">P3469 BLO-bolckade</h1>
+          <h1 class="post-title" itemprop="name headline">P1772 物流运输</h1>
         
 
         <div class="post-meta">
@@ -325,8 +325,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-12-20T13:25:53+08:00">
-                2019-12-20
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-11T17:57:51+08:00">
+                2020-01-11
               </time>
             
 
@@ -341,8 +341,8 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2019-12-20T13:30:23+08:00">
-                2019-12-20
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-11T18:10:40+08:00">
+                2020-01-11
               </time>
             
           </span>
@@ -369,7 +369,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  114
+                  610
                 </span>
               
 
@@ -394,11 +394,14 @@
       
 
       
-        <h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://www.luogu.com.cn/problem/P3469" target="_blank" rel="noopener">Luogu</a>  </p>
-<h2 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h2><p>给定一张无向图,求每个点被封锁后有多少个有序点对 $(x,y),(x!=y,1&lt;=x,y&lt;=n)$ 满足 $x$ 无法到达 $y$ .</p>
-<p>题意摘抄自洛谷</p>
-<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>1.如果被封锁的点不是割点,那么答案就是 $2*(n-1)$ ,即这个点到达其他所有点的双向路径.</p>
-<p>2.如果是割点,那么封锁之后会把图分成多个连通块</p>
+        <h2 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h2><p><a href="https://www.luogu.com.cn/problem/P1772" target="_blank" rel="noopener">Luogu</a> </p>
+<h2 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h2><p>我们考虑使用DP+最短路.  </p>
+<p>用$f(i)$表示前$i$天最小成本,那么可以想到  </p>
+<p>$f(i) = min(f(j) + cost(j+1,i)*(i-j) + k),j&lt;i$,其中$cost(j+1,i)$ 表示从第$j+1$天到第$i$天走相同最短路的每天成本.  </p>
+<p>$f(i)$初始化为$cost(1,i)*i$,即一直不换路线.  </p>
+<p>那么就要考虑如何求出$cost$数组,数据范围很小,所以直接枚举天数然后封住这些天不可用的码头,跑最短路即可.  </p>
+<p>最后答案为$f(n)$.  </p>
+<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstring&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;algorithm&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;cstdio&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;queue&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;stack&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;vector&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">21</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXD = <span class="number">101</span>;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">edge</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> u, v;</span><br><span class="line">    <span class="keyword">long</span> <span class="keyword">long</span> w;</span><br><span class="line">    edge(<span class="keyword">int</span> u, <span class="keyword">int</span> v, <span class="keyword">long</span> <span class="keyword">long</span> w) : u(u), v(v), w(w) &#123;&#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> u, d;</span><br><span class="line">    node (<span class="keyword">int</span> u, <span class="keyword">int</span> d) :u(u), d(d) &#123;&#125;</span><br><span class="line">    <span class="keyword">bool</span> <span class="keyword">operator</span> &lt; (<span class="keyword">const</span> node&amp; rhs) <span class="keyword">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> d &gt; rhs.d;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="built_in">std</span>::<span class="built_in">vector</span>&lt;edge&gt; G[MAXN];</span><br><span class="line"></span><br><span class="line"><span class="keyword">int</span> closed[MAXN][MAXD];</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> cost[MAXD][MAXD];</span><br><span class="line"><span class="keyword">int</span> cantvis[MAXN];</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> f[MAXD];</span><br><span class="line"><span class="keyword">long</span> <span class="keyword">long</span> dis[MAXN];</span><br><span class="line"><span class="keyword">int</span> n, m, k, e;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">addEdge</span><span class="params">(<span class="keyword">int</span> u, <span class="keyword">int</span> v, <span class="keyword">long</span> <span class="keyword">long</span> w)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    G[u].push_back((edge)&#123;u,v,w&#125;);</span><br><span class="line">    G[v].push_back((edge)&#123;v,u,w&#125;);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">dijkstra</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">2</span>;i &lt;= m;i ++) dis[i] = (<span class="keyword">long</span> <span class="keyword">long</span>)<span class="number">1e8</span>;</span><br><span class="line">    dis[<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    <span class="built_in">std</span>::priority_queue&lt;node&gt; Q;</span><br><span class="line">    Q.push((node)&#123;<span class="number">1</span>,<span class="number">0</span>&#125;);</span><br><span class="line">    <span class="keyword">while</span> (!Q.empty())</span><br><span class="line">    &#123;</span><br><span class="line">        node cur = Q.top();</span><br><span class="line">        Q.pop();</span><br><span class="line">        <span class="keyword">int</span> u = cur.u, v, d = cur.d;</span><br><span class="line">        <span class="keyword">if</span> (d != dis[u]) <span class="keyword">continue</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; G[u].size();i ++)</span><br><span class="line">        &#123;</span><br><span class="line">            v = G[u][i].v;</span><br><span class="line">            <span class="keyword">if</span> (cantvis[v]) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="keyword">if</span> (dis[u] + G[u][i].w &lt; dis[v])</span><br><span class="line">            &#123;</span><br><span class="line">                dis[v] = dis[u] + G[u][i].w;</span><br><span class="line">                Q.push(node(v, dis[v]));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d %d %d %d"</span>, &amp;n, &amp;m, &amp;k, &amp;e);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; e;i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> u, v;</span><br><span class="line">        <span class="keyword">long</span> <span class="keyword">long</span> w;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d %d %lld"</span>, &amp;u, &amp;v, &amp;w);</span><br><span class="line">        addEdge(u, v, w);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> d;</span><br><span class="line">    <span class="built_in">scanf</span>(<span class="string">"%d"</span>, &amp;d);</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>;i &lt; d;i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">int</span> p, a, b;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%d %d %d"</span>, &amp;p, &amp;a, &amp;b);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = a;j &lt;= b;j ++)</span><br><span class="line">            closed[p][j] = <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= n;i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = i;j &lt;= n;j ++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">memset</span>(cantvis, <span class="number">0</span>, <span class="keyword">sizeof</span>(cantvis));</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> day = i;day &lt;= j;day ++)</span><br><span class="line">                <span class="keyword">for</span> (<span class="keyword">int</span> q = <span class="number">1</span>;q &lt;= m;q ++) <span class="keyword">if</span> (closed[q][day]) cantvis[q] = <span class="number">1</span>;</span><br><span class="line">            dijkstra();</span><br><span class="line">            cost[i][j] = dis[m]; </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">memset</span>(f,<span class="number">0x7f</span>,<span class="keyword">sizeof</span>(f));</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>;i &lt;= n;i ++)</span><br><span class="line">    &#123;</span><br><span class="line">        f[i] = <span class="number">1L</span>L * (<span class="keyword">long</span> <span class="keyword">long</span>)cost[<span class="number">1</span>][i] * (<span class="keyword">long</span> <span class="keyword">long</span>)i;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>;j &lt; i;j ++)</span><br><span class="line">        &#123;</span><br><span class="line">            f[i] = <span class="built_in">std</span>::min(f[i], f[j] + cost[j+<span class="number">1</span>][i] * (i-j) + <span class="number">1L</span>L * k);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">"%lld"</span>, f[n]);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -416,9 +419,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Tarjan/" rel="tag"># Tarjan</a>
+            <a href="/tags/最短路/" rel="tag"># 最短路</a>
           
-            <a href="/tags/割点/" rel="tag"># 割点</a>
+            <a href="/tags/DP/" rel="tag"># DP</a>
           
         </div>
       
@@ -431,8 +434,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/12/20/UVA12563/" rel="next" title="UVA12563 劲歌金曲">
-                <i class="fa fa-chevron-left"></i> UVA12563 劲歌金曲
+              <a href="/2020/01/11/P1703/" rel="next" title="P1703 最优贸易">
+                <i class="fa fa-chevron-left"></i> P1703 最优贸易
               </a>
             
           </div>
@@ -440,10 +443,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/12/25/BigInt/" rel="prev" title="高精度模板">
-                高精度模板 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -568,7 +567,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">1.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题意"><span class="nav-number">2.</span> <span class="nav-text">题意</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题解"><span class="nav-number">3.</span> <span class="nav-text">题解</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#链接"><span class="nav-number">1.</span> <span class="nav-text">链接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#题解"><span class="nav-number">2.</span> <span class="nav-text">题解</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#代码"><span class="nav-number">3.</span> <span class="nav-text">代码</span></a></li></ol></div>
             
 
           </div>

@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="tarjan,点双连通分量,割点,">
+  <meta name="keywords" content="tarjan,割点,点双连通分量,">
 
 
 
@@ -80,14 +80,14 @@
 
 
 <meta name="description" content="链接Luogu   题意设置尽量少的救援出口,使任意点坍塌之后其他点都与至少一个救援出口联通.求最少救援出口数和最少救援出口的方案总数   题解看起来就像连通分量相关的题.首先用Tarjan跑出割点,然后DFS搜索每个被割点分割成的连通块(点双连通分量),统计每个连通块中割点的数目.   没有: 需要建立两个出口,一个坍塌了就可以去另一个.   一个: 如果普通点坍塌,则可以走割点到别的连通块或本">
-<meta name="keywords" content="tarjan,点双连通分量,割点">
+<meta name="keywords" content="tarjan,割点,点双连通分量">
 <meta property="og:type" content="article">
 <meta property="og:title" content="P3225 [HNOI2012]矿场搭建">
 <meta property="og:url" content="http://yoursite.com/2020/01/09/P3225/index.html">
 <meta property="og:site_name" content="JuicyMio&#39;s Blog">
 <meta property="og:description" content="链接Luogu   题意设置尽量少的救援出口,使任意点坍塌之后其他点都与至少一个救援出口联通.求最少救援出口数和最少救援出口的方案总数   题解看起来就像连通分量相关的题.首先用Tarjan跑出割点,然后DFS搜索每个被割点分割成的连通块(点双连通分量),统计每个连通块中割点的数目.   没有: 需要建立两个出口,一个坍塌了就可以去另一个.   一个: 如果普通点坍塌,则可以走割点到别的连通块或本">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-01-09T08:10:31.149Z">
+<meta property="og:updated_time" content="2020-01-09T08:42:51.109Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="P3225 [HNOI2012]矿场搭建">
 <meta name="twitter:description" content="链接Luogu   题意设置尽量少的救援出口,使任意点坍塌之后其他点都与至少一个救援出口联通.求最少救援出口数和最少救援出口的方案总数   题解看起来就像连通分量相关的题.首先用Tarjan跑出割点,然后DFS搜索每个被割点分割成的连通块(点双连通分量),统计每个连通块中割点的数目.   没有: 需要建立两个出口,一个坍塌了就可以去另一个.   一个: 如果普通点坍塌,则可以走割点到别的连通块或本">
@@ -341,7 +341,7 @@
               
                 <span class="post-meta-item-text">更新于&#58;</span>
               
-              <time title="更新于" itemprop="dateModified" datetime="2020-01-09T16:10:31+08:00">
+              <time title="更新于" itemprop="dateModified" datetime="2020-01-09T16:42:51+08:00">
                 2020-01-09
               </time>
             
@@ -424,9 +424,9 @@
           
             <a href="/tags/tarjan/" rel="tag"># tarjan</a>
           
-            <a href="/tags/点双连通分量/" rel="tag"># 点双连通分量</a>
-          
             <a href="/tags/割点/" rel="tag"># 割点</a>
+          
+            <a href="/tags/点双连通分量/" rel="tag"># 点双连通分量</a>
           
         </div>
       
@@ -530,7 +530,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">38</span>
+                  <span class="site-state-item-count">40</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -610,7 +610,7 @@
     
       <span class="post-meta-item-text">Site words total count&#58;</span>
     
-    <span title="Site words total count">20.9k</span>
+    <span title="Site words total count">22.1k</span>
   
 </div>
 
@@ -1109,6 +1109,26 @@
   
 
   
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      });
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      });
+    </script>
+    <script type="text/javascript" src="//cdn.bootcss.com/mathjax/2.7.1/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
   
 
 
