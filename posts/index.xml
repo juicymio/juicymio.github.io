@@ -4,7 +4,23 @@
         <link>http://juicymio.github.io/posts/</link>
         <description>All Posts | JuicyMio&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Wed, 12 Oct 2022 23:26:25 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>二进制数中1的个数是否为奇数</title>
+    <link>http://juicymio.github.io/posts/odd_ones/</link>
+    <pubDate>Wed, 12 Oct 2022 23:26:25 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/posts/odd_ones/</guid>
+    <description><![CDATA[CSAPP第二章家庭作业2.65 /*Return 1 when x contains an odd number of 1s; 0 otherwise. Assume w=32 */ int odd_ones(unsigned x) 函数应该遵循位级整数编码规则,你的代码最多只能包含12个算术运算,位运算]]></description>
+</item>
+<item>
+    <title>C八股</title>
+    <link>http://juicymio.github.io/posts/c/</link>
+    <pubDate>Wed, 12 Oct 2022 22:32:18 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/posts/c/</guid>
+    <description><![CDATA[用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途 带缺省值的参数需要放在后面, 这样在调用函数的时候就可以不写那个参数. 放在前面编]]></description>
+</item>
+<item>
     <title>Pwnable.kr</title>
     <link>http://juicymio.github.io/posts/pwnable/</link>
     <pubDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</pubDate>
