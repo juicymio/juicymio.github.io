@@ -28,7 +28,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/c\/"
-        },"genre": "posts","wordcount":  128 ,
+        },"genre": "posts","wordcount":  1047 ,
         "url": "http:\/\/juicymio.github.io\/c\/","datePublished": "2022-10-12T22:32:18+08:00","dateModified": "2022-10-12T22:32:18+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -102,8 +102,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C八股</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;128 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1047 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -127,7 +127,39 @@
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
-<li>字符串占用的空间要算上  &lsquo;\0&rsquo;</li>
+<li>
+<p>字符串占用的空间要算上  &lsquo;\0&rsquo;</p>
+</li>
+<li>
+<p>关于锟斤拷烫烫烫等成因:
+<strong>手持两把锟斤拷，口中疾呼烫烫烫,脚踏千朵屯屯屯，笑看万物锘锘锘</strong></p>
+<ol>
+<li>锟斤拷</li>
+</ol>
+<blockquote>
+<p>源于GBK字符集和Unicode字符集之间的转换问题。Unicode和老编码体系的转化过程中，肯定有一些字，用Unicode是没法表示的，Unicode官方用了一个占位符来表示这些文字，这就是：U+FFFD REPLACEMENT CHARACTER。那么U+FFFD的UTF-8编码出来，恰好是 &lsquo;\xef\xbf\xbd&rsquo;。如果这个&rsquo;\xef\xbf\xbd&rsquo;，重复多次，例如 &lsquo;\xef\xbf\xbd\xef\xbf\xbd&rsquo;，然后放到GBK/CP936/GB2312/GB18030的环境中显示的话，一个汉字2个字节，最终的结果就是：锟斤拷——锟(0xEFBF)，斤（0xBDEF），拷（0xBFBD）。</p>
+</blockquote>
+<ol start="2">
+<li>烫烫烫
+VS/VC debug模式下栈内未初始化的内存会全部被设置成0xcc, 这个0xcc是INT3中断指令, 所以执行这块内存就会中断程序.
+VS调试器默认字符集是MBCS, 其中0xcccc是&rsquo;烫&rsquo;字, 所以&hellip;&hellip;</li>
+</ol>
+<blockquote>
+<p>INT3断点是断点的一种，在诸如Ollydbg中的快捷键是F2，是一种很常用的断点类型。INT3指令的<a href="https://baike.baidu.com/item/%E6%9C%BA%E5%99%A8%E7%A0%81?fromModule=lemma_inlink" target="_blank" rel="noopener noreffer ">机器码</a>为CC，所以通常也称之为CC指令。当被调试进程执行INT3指令导致一个异常时，调试器就会捕捉这个异常从而停在断点处，然后将断点处的指令恢复成原来的指令。当然，如果自己写调试器，也可以用其他一些指令代替INT3指令来触发异常。。</p>
+</blockquote>
+<ol start="3">
+<li>屯屯屯
+由于相似的原因, 堆中空间的缺省值是0xcd, 也是一个中断指令的机器码, 0xcdcd是屯</li>
+<li>锘锘锘
+BOM 是 Byte Order Mark 的缩写。是UTF编码方案里用于标识编码的标准标记，在UTF-16里本来是FF FE，变成UTF-8就成了EF BB BF。这个标记是可选的，因为UTF8字节没有顺序，所以它可以被用来检测一个字节流是否是UTF-8编码的。
+常见原因是在记事本里保存了代码, 因为记事本用utf-8编码, 而且保存自动加BOM
+锘EFBB
+匡BFEF
+豢BBBF</li>
+<li>葺葺葺
+虽然诗里没有, 但堆上申请后释放空间后缺省值是0xdd, 0xdddd是葺</li>
+</ol>
+</li>
 </ul>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">

