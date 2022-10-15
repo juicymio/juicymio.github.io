@@ -4,32 +4,32 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>About - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="About" />
-<meta property="og:description" content="JuicyMio 前OIer 现尝试学习CTF 邮箱:guanhyjuicymio@gmail.com" />
+        <title>C八股 - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="C八股" />
+<meta property="og:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 带缺省值的参数需要放在后面, 这样在调" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://juicymio.github.io/about/" /><meta property="article:section" content="" />
-<meta property="article:published_time" content="2022-10-12T17:19:11+08:00" />
-<meta property="article:modified_time" content="2022-10-12T17:19:11+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
+<meta property="og:url" content="http://juicymio.github.io/c/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2022-10-12T22:32:18+08:00" />
+<meta property="article:modified_time" content="2022-10-12T22:32:18+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="About"/>
-<meta name="twitter:description" content="JuicyMio 前OIer 现尝试学习CTF 邮箱:guanhyjuicymio@gmail.com"/>
+<meta name="twitter:title" content="C八股"/>
+<meta name="twitter:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 带缺省值的参数需要放在后面, 这样在调"/>
 <meta name="application-name" content="My cool site">
 <meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/about/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/c/" /><link rel="prev" href="http://juicymio.github.io/pwnable/" /><link rel="next" href="http://juicymio.github.io/odd_ones/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "About",
+        "headline": "C八股",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "http:\/\/juicymio.github.io\/about\/"
-        },"genre": "page","wordcount":  41 ,
-        "url": "http:\/\/juicymio.github.io\/about\/","datePublished": "2022-10-12T17:19:11+08:00","dateModified": "2022-10-12T17:19:11+08:00","publisher": {
+            "@id": "http:\/\/juicymio.github.io\/c\/"
+        },"genre": "posts","wordcount":  128 ,
+        "url": "http:\/\/juicymio.github.io\/c\/","datePublished": "2022-10-12T22:32:18+08:00","dateModified": "2022-10-12T22:32:18+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -97,11 +97,65 @@
     <div class="search-dropdown mobile">
         <div id="search-dropdown-mobile"></div>
     </div><main class="main">
-                <div class="container"><div class="page single special"><h1 class="single-title animate__animated animate__pulse animate__faster">About</h1><div class="content" id="content"><p>JuicyMio</p>
-<p>前OIer</p>
-<p>现尝试学习CTF</p>
-<p>邮箱:guanhyjuicymio@gmail.com</p>
-</div><div id="comments"></div></div></div>
+                <div class="container"><div class="toc" id="toc-auto">
+            <h2 class="toc-title">Contents</h2>
+            <div class="toc-content" id="toc-content-auto"></div>
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C八股</h1><div class="post-meta">
+            <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;128 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;</div>
+        </div><div class="details toc" id="toc-static"  data-kept="true">
+                <div class="details-summary toc-title">
+                    <span>Contents</span>
+                    <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
+                </div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+            </div><div class="content" id="content"><p>用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途</p>
+<p><strong>编译没过先看报错信息, 不认识英文请善用翻译</strong></p>
+<ul>
+<li>带缺省值的参数需要放在后面, 这样在调用函数的时候就可以不写那个参数.
+放在前面编译会报错.</li>
+</ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// right
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// wrong
+</span></span></span></code></pre></td></tr></table>
+</div>
+</div><ul>
+<li>字符串占用的空间要算上  &lsquo;\0&rsquo;</li>
+</ul>
+</div><div class="post-footer" id="post-footer">
+    <div class="post-info">
+        <div class="post-info-line">
+            <div class="post-info-mod">
+                <span>Updated on 2022-10-12</span>
+            </div></div>
+        <div class="post-info-line">
+            <div class="post-info-md"><span>
+                            <a class="link-to-markdown" href="/c/index.md" target="_blank">Read Markdown</a>
+                        </span></div>
+            <div class="post-info-share">
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/c/" data-title="C八股"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/c/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/c/" data-title="C八股" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/c/" data-title="C八股"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/c/" data-title="C八股"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/c/" data-title="C八股" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/c/" data-title="C八股"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="post-info-more">
+        <section class="post-tags"></section>
+        <section>
+            <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
+        </section>
+    </div>
+
+    <div class="post-nav"><a href="/pwnable/" class="prev" rel="prev" title="Pwnable.kr"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>Pwnable.kr</a>
+            <a href="/odd_ones/" class="next" rel="next" title="二进制数中1的个数是否为奇数">二进制数中1的个数是否为奇数<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+</div>
+<div id="comments"></div></article></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.104.3">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">JuicyMio</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>

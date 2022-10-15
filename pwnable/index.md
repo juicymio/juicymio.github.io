@@ -1,0 +1,58 @@
+# Pwnable.kr
+
+
+# pwnable.kr writeup
+
+## 1 fd
+文件描述符(file descricptor)
+>维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符。在程序设计中，一些涉及底层的程序编写往往会围绕着文件描述符展开。
+
+习惯上 标准输入(stdin)为0, 标准输出(stdout)为1, 标准错误(stderr)为2.
+```c
+//fd.c
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+char buf[32];
+int main(int argc, char* argv[], char* envp[]){
+    if(argc<2){
+        printf("pass argv[1] a number\n");
+        return 0;
+    }
+    int fd = atoi( argv[1] ) - 0x1234;
+    int len = 0;
+    len = read(fd, buf, 32);
+    if(!strcmp("LETMEWIN\n", buf)){
+        printf("good job :)\n");
+        system("/bin/cat flag");
+        exit(0);
+    }
+    printf("learn about Linux file IO\n");
+    return 0;
+}
+```
+得到flag的关键在于如歌通过第二个if语句, 也就是如何让buf=LETMEMIN
+可以看到read从fd中读入32个字节为buf赋值, 如果我们想控制buf的值就要控制fd中的内容, 那么只要让fd=0, 再向标准输入(从命令行直接输入)中输入LETMEWIN就可以了.
+注意到fd在此处赋值:
+```c
+int fd = atoi( argv[1] ) - 0x1234;
+```
+其中atoi是将字符串转化为整数的函数
+```c
+int main(int argc, char* argv[], char* envp[]){
+```
+可以看到argv[]是main函数的一个参数, 而main函数的参数都是程序运行时在命令行输入的, argc代表输入参数的个数(第一个参数是程序路径), argv则存储着指向这些参数的指针. envp存储指向环境变量的指针, 此处没用到.
+
+例如运行程序fd
+```
+./fd 4660
+```
+此时argc值为2, 而argv[0] = "./fd", argv[1] = "4660"
+
+atoi不能转化16进制数, 所以我们手动转换0x1234, 它的十进制表示是4660
+这样我们就可以让fd = 0, 程序等待从stdin中读取字符
+我们再向命令行中输入LETMEWIN, 即可得到flag
+## 2 collision
+
+
+
