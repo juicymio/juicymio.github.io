@@ -4,7 +4,15 @@
         <link>http://juicymio.github.io/posts/</link>
         <description>All Posts | JuicyMio&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Sat, 15 Oct 2022 12:07:05 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Sat, 15 Oct 2022 14:37:24 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>奇技淫巧</title>
+    <link>http://juicymio.github.io/tricks/</link>
+    <pubDate>Sat, 15 Oct 2022 14:37:24 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/tricks/</guid>
+    <description><![CDATA[收录遇到的各种奇技淫巧 位运算转换大小写 转小写 1 2 (&#39;a&#39; | &#39; &#39;) = &#39;a&#39; (&#39;A&#39; | &#39; &#39;) = &#39;a&#39; 转大写 1 2 (&#39;b&#39; &amp; &#39;_&#39;) = &#39;B&#39; (&#39;B&#39; &amp; &#39;_&#39;) = &#39;B&#39; 大小写互换 1 2 (&#39;c&#39; ^ &#39; &#39;) = &#39;C&#39; (&#39;C&#39; ^ &#39; &#39;) = &#39;C&#39;]]></description>
+</item>
+<item>
     <title>Csapp_lab</title>
     <link>http://juicymio.github.io/csapp_lab/</link>
     <pubDate>Sat, 15 Oct 2022 12:07:05 &#43;0800</pubDate>

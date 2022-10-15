@@ -20,10 +20,10 @@ sudo apt-get install gdb
 #### bitXor
 只使用~和&实现^
 ```c
-a^b
-= (a|b)&(~a|~b)
-= ~(~a&~b)&(a&b)
-= (a&~b)|(~a&b)
+a ^ b
+= (a | b) & (~a | ~b)
+= ~(~a & ~b) & (a & b)
+= (a & ~b) | (~a & b)
 ```
 ```c
 //1
@@ -89,5 +89,35 @@ int tmin(void) {
 
 int isTmax(int x) {
   return !((x+1)^(~x))&(!!~x); 
+}
+```
+#### allOddBits
+
+#### negate
+返回-x 
+```
+x + (-x) = 0
+x + ~x = 0xffffffff(所有位全为1)
+x + ~x + 1 = 0
+-x = ~x + 1
+```
+
+```c
+/*
+
+ * negate - return -x
+
+ *   Example: negate(1) = -1.
+
+ *   Legal ops: ! ~ & ^ | + << >>
+
+ *   Max ops: 5
+
+ *   Rating: 2
+
+ */
+
+int negate(int x) {
+  return ~x+1;
 }
 ```
