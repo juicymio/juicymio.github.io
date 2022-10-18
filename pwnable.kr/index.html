@@ -28,7 +28,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/pwnable.kr\/"
-        },"genre": "posts","keywords": "pwn","wordcount":  2730 ,
+        },"genre": "posts","keywords": "pwn","wordcount":  2745 ,
         "url": "http:\/\/juicymio.github.io\/pwnable.kr\/","datePublished": "2022-10-12T17:19:11+08:00","dateModified": "2022-10-12T17:19:11+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -102,7 +102,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Pwnable.kr</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2730 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2745 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;6 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
@@ -967,7 +967,7 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>乍一看没什么不对, 当返回的文件描述符小于0时报错
-但是<code>&lt;</code>是比<code>=</code>优先级高的, 所以事实上首先open()会返回1, 然后执行1&lt;0这个表达式, 它的值是0. 最后执行<code>fd=0</code>, 由第一题fd我们学到了fd = 0是stdin. 所以事实上password是我们输入的.
+但是<code>&lt;</code>是比<code>=</code>优先级高的, 所以事实上首先open()会返回3(0, 1, 2是什么见第1题fd), 然后执行3&lt;0这个表达式, 它的值是0. 最后执行<code>fd=0</code>, 由第一题fd我们学到了fd = 0是stdin. 所以事实上password是我们输入的.
 然后我们再来看xor这个函数, 它将一个字符串的前n个字符与1异或. 题目中给出的是前10个字符.
 所以我们只需要先输入10个字符作为password, 再输入这些字符异或1得到的字符串. 由于字符'0&rsquo;的ascii码为110000, 字符'1&rsquo;的ascii码为110001, 恰好'0&rsquo;^1 = &lsquo;1&rsquo;. 所以只需进行如下操作</p>
 <div class="highlight"><div class="chroma">
