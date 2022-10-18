@@ -4,7 +4,15 @@
         <link>http://juicymio.github.io/posts/</link>
         <description>All Posts | JuicyMio&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Sat, 15 Oct 2022 14:37:24 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Mon, 17 Oct 2022 23:01:24 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/posts/" rel="self" type="application/rss+xml" /><item>
+    <title>ToLearnList</title>
+    <link>http://juicymio.github.io/tolearn/</link>
+    <pubDate>Mon, 17 Oct 2022 23:01:24 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/tolearn/</guid>
+    <description><![CDATA[pwnable.kr python速成 csapp Data Lab 第三章 第二章家庭作业 zsh的使用? tmux又是什么? 温习? Vim symbolic link?]]></description>
+</item>
+<item>
     <title>奇技淫巧</title>
     <link>http://juicymio.github.io/tricks/</link>
     <pubDate>Sat, 15 Oct 2022 14:37:24 &#43;0800</pubDate>
@@ -38,11 +46,11 @@
 </item>
 <item>
     <title>Pwnable.kr</title>
-    <link>http://juicymio.github.io/pwnable/</link>
+    <link>http://juicymio.github.io/pwnable.kr/</link>
     <pubDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</pubDate>
     <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/pwnable/</guid>
-    <description><![CDATA[pwnable.kr writeup 1 fd 文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件]]></description>
+    <guid>http://juicymio.github.io/pwnable.kr/</guid>
+    <description><![CDATA[pwnable.kr writeup python3中使用p32, p64需要进行编码 payload +=p64(1926).decode(&quot;iso-8859-1&quot;) 1 fd 文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个]]></description>
 </item>
 </channel>
 </rss>
