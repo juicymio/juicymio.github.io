@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
         <title>C八股及常见问题 - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="C八股及常见问题" />
-<meta property="og:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 附上全部 全部 全部" />
+<meta property="og:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使用搜索引擎." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://juicymio.github.io/c/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-10-12T22:32:18+08:00" />
@@ -13,7 +13,7 @@
 
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="C八股及常见问题"/>
-<meta name="twitter:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 附上全部 全部 全部"/>
+<meta name="twitter:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使用搜索引擎."/>
 <meta name="application-name" content="My cool site">
 <meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -28,7 +28,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/c\/"
-        },"genre": "posts","wordcount":  1356 ,
+        },"genre": "posts","wordcount":  1528 ,
         "url": "http:\/\/juicymio.github.io\/c\/","datePublished": "2022-10-12T22:32:18+08:00","dateModified": "2022-10-12T22:32:18+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -102,8 +102,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C八股及常见问题</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1356 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1528 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -113,13 +113,15 @@
             </div><div class="content" id="content"><p>用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途</p>
 <ul>
 <li><strong>编译没过先看报错信息, 不认识英文请善用翻译</strong></li>
-<li>如何提问: 附上<strong>全部 全部 全部</strong> 代码, 以及<strong>报错信息 报错信息 报错信息</strong>. 和一组出错了的输入输出, 以及注释或你对代码的解释. 因为阅读别人的代码是一件很烧脑的事.
+<li>如何提问: 先使用搜索引擎. 如果一定要问人, 附上<strong>全部 全部 全部</strong> 代码, 以及<strong>报错信息 报错信息 报错信息</strong>. 和一组出错了的输入输出, 以及注释或你对代码的解释. 因为阅读别人的代码是一件很烧脑的事.
 <ul>
 <li>错误示范: 代码截图, 我错哪了?</li>
 </ul>
 </li>
+<li>关于CSDN: 虽然内容质量感人被StackOverflow等英文网站甩了十条街, 但还是有一些值得一看的文章的. 而且哪怕用百度查到csdn文章看了也比啥也不查直接问强.</li>
 <li>输入数据之后卡住了怎么办: 查看你的代码里是否有死循环, 或者你的输入格式是否合法.</li>
-<li>报错信息里有<code>cannot open output file .../*.exe: permission denied</code>之类的东西: 你之前的程序没关掉</li>
+<li>输入输出对不上: 看看格式控制符跟变量类型能否对应, 常见错误是用<code>%f</code>读入<code>double</code>类型变量.</li>
+<li>报错信息里有<code>cannot open output file .../*.exe: permission denied</code>或者&quot;无法打开xxx程序进行写入&quot;之类的东西: 你之前的程序没关掉</li>
 <li>输出了奇怪的数字: 大概率数组越界</li>
 <li>Segmentation fault: 访问了不可访问的内存. 常见原因是数组越界, 指针漂移, 缓冲区溢出, 数组开太大爆栈&hellip;</li>
 <li>带缺省值的参数需要放在后面, 这样在调用函数的时候就可以不写那个参数.
