@@ -37,12 +37,12 @@
     <description><![CDATA[CSAPP第二章家庭作业2.65 1 2 3 /*Return 1 when x contains an odd number of 1s; 0 otherwise. Assume w=32 */ int odd_ones(unsigned x) 函数应该遵循位级整数编码规则,你的代码最多只能包含12个算术运算,]]></description>
 </item>
 <item>
-    <title>C八股</title>
+    <title>C八股及常见问题</title>
     <link>http://juicymio.github.io/c/</link>
     <pubDate>Wed, 12 Oct 2022 22:32:18 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/c/</guid>
-    <description><![CDATA[用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 带缺省值的参数需要放在后面, 这样在调]]></description>
+    <description><![CDATA[用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 附上全部 全部 全部]]></description>
 </item>
 <item>
     <title>Pwnable.kr</title>

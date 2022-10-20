@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>C八股 - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="C八股" />
-<meta property="og:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 带缺省值的参数需要放在后面, 这样在调" />
+        <title>C八股及常见问题 - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="C八股及常见问题" />
+<meta property="og:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 附上全部 全部 全部" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://juicymio.github.io/c/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-10-12T22:32:18+08:00" />
 <meta property="article:modified_time" content="2022-10-12T22:32:18+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="C八股"/>
-<meta name="twitter:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 带缺省值的参数需要放在后面, 这样在调"/>
+<meta name="twitter:title" content="C八股及常见问题"/>
+<meta name="twitter:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 附上全部 全部 全部"/>
 <meta name="application-name" content="My cool site">
 <meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,12 +23,12 @@
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "C八股",
+        "headline": "C八股及常见问题",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/c\/"
-        },"genre": "posts","wordcount":  1047 ,
+        },"genre": "posts","wordcount":  1356 ,
         "url": "http:\/\/juicymio.github.io\/c\/","datePublished": "2022-10-12T22:32:18+08:00","dateModified": "2022-10-12T22:32:18+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -100,9 +100,9 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C八股</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C八股及常见问题</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1047 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1356 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;3 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
@@ -110,9 +110,18 @@
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
-            </div><div class="content" id="content"><p>用于记录一些比较奇怪/少见的c语法/易错易忘点, 以备考试等用途</p>
-<p><strong>编译没过先看报错信息, 不认识英文请善用翻译</strong></p>
+            </div><div class="content" id="content"><p>用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途</p>
 <ul>
+<li><strong>编译没过先看报错信息, 不认识英文请善用翻译</strong></li>
+<li>如何提问: 附上<strong>全部 全部 全部</strong> 代码, 以及<strong>报错信息 报错信息 报错信息</strong>. 和一组出错了的输入输出, 以及注释或你对代码的解释. 因为阅读别人的代码是一件很烧脑的事.
+<ul>
+<li>错误示范: 代码截图, 我错哪了?</li>
+</ul>
+</li>
+<li>输入数据之后卡住了怎么办: 查看你的代码里是否有死循环, 或者你的输入格式是否合法.</li>
+<li>报错信息里有<code>cannot open output file .../*.exe: permission denied</code>之类的东西: 你之前的程序没关掉</li>
+<li>输出了奇怪的数字: 大概率数组越界</li>
+<li>Segmentation fault: 访问了不可访问的内存. 常见原因是数组越界, 指针漂移, 缓冲区溢出, 数组开太大爆栈&hellip;</li>
 <li>带缺省值的参数需要放在后面, 这样在调用函数的时候就可以不写那个参数.
 放在前面编译会报错.</li>
 </ul>
@@ -122,8 +131,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// right
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// wrong
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="kt">int</span> <span class="n">b</span><span class="p">);</span> <span class="c1">// wrong
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">int</span> <span class="nf">f</span><span class="p">(</span><span class="kt">int</span> <span class="n">b</span><span class="p">,</span> <span class="kt">int</span> <span class="n">a</span> <span class="o">=</span> <span class="mi">0</span><span class="p">);</span> <span class="c1">// right
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -160,7 +169,19 @@ BOM 是 Byte Order Mark 的缩写。是UTF编码方案里用于标识编码的�
 虽然诗里没有, 但堆上申请后释放空间后缺省值是0xdd, 0xdddd是葺</li>
 </ol>
 </li>
+<li>
+<p><code>&lt;</code>优先级比<code>=</code>高, 这使</p>
+</li>
 </ul>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">x</span> <span class="o">=</span> <span class="n">f</span><span class="p">()</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">)</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>并不会像看起来那样工作, 它会首先执行<code>f()&lt;0</code>, 最后被赋值给x的是这个关系运算符的真(1)假(0).</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
@@ -172,7 +193,7 @@ BOM 是 Byte Order Mark 的缩写。是UTF编码方案里用于标识编码的�
                             <a class="link-to-markdown" href="/c/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/c/" data-title="C八股"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/c/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/c/" data-title="C八股" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/c/" data-title="C八股"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/c/" data-title="C八股"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/c/" data-title="C八股" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/c/" data-title="C八股"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/c/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>

