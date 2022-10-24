@@ -52,5 +52,13 @@
     <guid>http://juicymio.github.io/pwnable.kr/</guid>
     <description><![CDATA[pwnable.kr writeup python3中使用p32, p64需要进行编码 payload +=p64(1926).decode(&quot;iso-8859-1&quot;) 1 fd 文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个]]></description>
 </item>
+<item>
+    <title></title>
+    <link>http://juicymio.github.io/untitled/</link>
+    <pubDate>Mon, 01 Jan 0001 00:00:00 &#43;0000</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/untitled/</guid>
+    <description><![CDATA[https://cybersec.ustc.edu.cn/2022/0826/c23847a565848/page.htm 2017-03 &lsquo;Hint: You don&rsquo;,27h,&rsquo;t need to reverse the decryption logic itself 小米9 2340x1080 2608722 2618733 听起来像kdelife 搜出来kdenlive]]></description>
+</item>
 </channel>
 </rss>

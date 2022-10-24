@@ -28,7 +28,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/c\/"
-        },"genre": "posts","wordcount":  1528 ,
+        },"genre": "posts","wordcount":  2037 ,
         "url": "http:\/\/juicymio.github.io\/c\/","datePublished": "2022-10-12T22:32:18+08:00","dateModified": "2022-10-12T22:32:18+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -102,8 +102,8 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C八股及常见问题</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;1528 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;4 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2037 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -116,8 +116,10 @@
 <li>如何提问: 先使用搜索引擎. 如果一定要问人, 附上<strong>全部 全部 全部</strong> 代码, 以及<strong>报错信息 报错信息 报错信息</strong>. 和一组出错了的输入输出, 以及注释或你对代码的解释. 因为阅读别人的代码是一件很烧脑的事.
 <ul>
 <li>错误示范: 代码截图, 我错哪了?</li>
+<li><strong>不要拍屏</strong></li>
 </ul>
 </li>
+<li>查错技巧: 学习使用gdb, 设置断点并查看相关变量的值. 一个低配但很快的方法是用printf输出关键变量</li>
 <li>关于CSDN: 虽然内容质量感人被StackOverflow等英文网站甩了十条街, 但还是有一些值得一看的文章的. 而且哪怕用百度查到csdn文章看了也比啥也不查直接问强.</li>
 <li>输入数据之后卡住了怎么办: 查看你的代码里是否有死循环, 或者你的输入格式是否合法.</li>
 <li>输入输出对不上: 看看格式控制符跟变量类型能否对应, 常见错误是用<code>%f</code>读入<code>double</code>类型变量.</li>
@@ -184,6 +186,34 @@ BOM 是 Byte Order Mark 的缩写。是UTF编码方案里用于标识编码的�
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>并不会像看起来那样工作, 它会首先执行<code>f()&lt;0</code>, 最后被赋值给x的是这个关系运算符的真(1)假(0).</p>
+<ul>
+<li>宏/函数/内联函数
+<ul>
+<li>参数: 宏的参数在展开时不经任何处理直接进行字符串替换, 函数的参数会进行类型检查, 计算后由实参传值到形参. 形参是函数内的局部变量, 占用栈空间.</li>
+<li>宏的展开由预处理器处理, 在预编译(编译之前)时进行, 直接用宏体替换宏名, 占用预编译时间. 函数在执行时才会被调用. 调用时需要保护现场(保存调用者保存的寄存器), 进入函数, 返回主调函数, 恢复现场(恢复寄存器).</li>
+<li>宏会有各种副作用, 这使它难于调试
+<ul>
+<li>由于简单的展开, ++ &ndash;运算符可能会执行多次</li>
+<li>同样由于简单的展开, 如果不加足够多的括号, 会出很多优先级的问题.</li>
+</ul>
+</li>
+<li>但宏也有很多好处
+<ul>
+<li>可以在并不直接允许重载的C语言里实现简单的重载(不过用指针等方法也可以实现)</li>
+<li>对于简单而重复多次的功能, 可以大大减小开销, 提升速度</li>
+<li>实现其他奇技淫巧</li>
+</ul>
+</li>
+<li>内联函数(inline)
+<ul>
+<li>由编译器处理</li>
+<li>用类似宏的方法, 将函数代码直接嵌入到调用处, 不能有循环, 选择等任何复杂结构, 可以节约开销的同时防止宏的一些副作用.</li>
+<li>如果函数不够简单, 编译器会拒绝内联. 在开了某些优化时编译器会自动将一些简单的函数内联.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
