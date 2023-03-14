@@ -4,16 +4,16 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>C八股及常见问题 - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="C八股及常见问题" />
-<meta property="og:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使用搜索引擎." />
+        <title>C/C&#43;&#43;杂项知识点 - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="C/C&#43;&#43;杂项知识点" />
+<meta property="og:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 杂项中的杂项 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://juicymio.github.io/c/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-10-12T22:32:18+08:00" />
 <meta property="article:modified_time" content="2022-10-12T22:32:18+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="C八股及常见问题"/>
-<meta name="twitter:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使用搜索引擎."/>
+<meta name="twitter:title" content="C/C&#43;&#43;杂项知识点"/>
+<meta name="twitter:description" content="用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 杂项中的杂项 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使"/>
 <meta name="application-name" content="My cool site">
 <meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
@@ -23,12 +23,12 @@
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "C八股及常见问题",
+        "headline": "C/C++杂项知识点",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/c\/"
-        },"genre": "posts","wordcount":  2411 ,
+        },"genre": "posts","wordcount":  2333 ,
         "url": "http:\/\/juicymio.github.io\/c\/","datePublished": "2022-10-12T22:32:18+08:00","dateModified": "2022-10-12T22:32:18+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -100,17 +100,23 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C八股及常见问题</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">C/C++杂项知识点</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2411 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;2333 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;5 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
                     <span><i class="details-icon fas fa-angle-right" aria-hidden="true"></i></span>
                 </div>
-                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents"></nav></div>
+                <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
+  <ul>
+    <li><a href="#杂项中的杂项">杂项中的杂项</a></li>
+    <li><a href="#cc的n和stdendl是否刷新缓冲区的问题">C/C++的&rsquo;\n&rsquo;和std::endl是否刷新缓冲区的问题</a></li>
+  </ul>
+</nav></div>
             </div><div class="content" id="content"><p>用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途</p>
+<h2 id="杂项中的杂项">杂项中的杂项</h2>
 <ul>
 <li><strong>编译没过先看报错信息, 不认识英文请善用翻译</strong></li>
 <li>如何提问: 先使用搜索引擎. 如果一定要问人, 附上<strong>全部 全部 全部</strong> 代码, 以及<strong>报错信息 报错信息 报错信息</strong>. 和一组出错了的输入输出, 以及注释或你对代码的解释. 因为阅读别人的代码是一件很烧脑的事.
@@ -213,14 +219,13 @@ BOM 是 Byte Order Mark 的缩写。是UTF编码方案里用于标识编码的�
 </li>
 </ul>
 </li>
-<li>形参出现在函数定义中用来占位,只有在调用时分配内存. 实参出现在函数调用时.在函数调用时实参的值被传递给形参.
-函数原型是用于指定函数的名称和参数个数,类型(并不需要参数名字)和返回值类型的一种省略了函数体的函数声明.函数首行是函数定义中的第一行.需要除函数体之外的所有内容. 函数定义是包括参数类型名字个数, 返回值, 函数体等的全部定义
-报错,不能,不能
-伪代码不能被编译,但可读性更高适合用来描述算法,一定程度上忽略实现细节. 源代码可编译, 更难读.
-算法是计算或解决问题的步骤,程序是算法用程序设计语言的体现, 也可以将程序看作是算法+数据结构
-耦合度是两者之间关联的程度,内聚度是一个模块内各部分彼此结合的紧密程度
-采用模块化结构自上而下逐步求精,模块化内有高内聚度,模块间有低耦合度. 自顶向下的设计方式便于思考, 低耦合度的模块化方便单独调试或修改任意一个功能.</li>
+<li>形参出现在函数定义中用来占位,只有在调用时分配内存. 实参出现在函数调用时.在函数调用时实参的值被传递给形参.</li>
 </ul>
+<h2 id="cc的n和stdendl是否刷新缓冲区的问题">C/C++的&rsquo;\n&rsquo;和std::endl是否刷新缓冲区的问题</h2>
+<p>如果cout输出到一个交互设备(interactive device), 如终端(terminal), 它们通常是行缓冲而非完全缓冲的, 所以&rsquo;\n&rsquo;会刷新缓冲区, 但如文件这种完全缓冲的目标, &lsquo;\n&rsquo;不会刷新缓冲区.
+我提出这个问题并空想一番之后被M4tsuri丢了两个StackOverflow链接, 我去面壁了&hellip;<br>
+<a href="https://stackoverflow.com/questions/5229096/does-printf-always-flush-the-buffer-on-encountering-a-newline" target="_blank" rel="noopener noreffer ">Does printf always flush the buffer on encountering a newline</a><br>
+<a href="https://stackoverflow.com/questions/42430701/does-new-line-character-also-flush-the-buffer" target="_blank" rel="noopener noreffer ">does new line character also flush the buffer</a></p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
@@ -232,7 +237,7 @@ BOM 是 Byte Order Mark 的缩写。是UTF编码方案里用于标识编码的�
                             <a class="link-to-markdown" href="/c/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/c/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/c/" data-title="C八股及常见问题"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/c/" data-title="C/C&#43;&#43;杂项知识点"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/c/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/c/" data-title="C/C&#43;&#43;杂项知识点" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/c/" data-title="C/C&#43;&#43;杂项知识点"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/c/" data-title="C/C&#43;&#43;杂项知识点"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/c/" data-title="C/C&#43;&#43;杂项知识点" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/c/" data-title="C/C&#43;&#43;杂项知识点"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
@@ -250,7 +255,7 @@ BOM 是 Byte Order Mark 的缩写。是UTF编码方案里用于标识编码的�
 <div id="comments"></div></article></div>
             </main><footer class="footer">
         <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.104.3">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
-                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2022</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">JuicyMio</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
+                </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">JuicyMio</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>
 
