@@ -4,7 +4,15 @@
         <link>http://juicymio.github.io/tags/pwn/</link>
         <description>pwn - Tag - JuicyMio&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/tags/pwn/" rel="self" type="application/rss+xml" /><item>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Thu, 16 Mar 2023 22:56:18 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/tags/pwn/" rel="self" type="application/rss+xml" /><item>
+    <title>[BUUCTF]others_shellcode wp</title>
+    <link>http://juicymio.github.io/buuctfothers_shellcode/</link>
+    <pubDate>Thu, 16 Mar 2023 22:56:18 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/buuctfothers_shellcode/</guid>
+    <description><![CDATA[0x00 前置知识 x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
+</item>
+<item>
     <title>Pwnable.kr</title>
     <link>http://juicymio.github.io/pwnable.kr/</link>
     <pubDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</pubDate>

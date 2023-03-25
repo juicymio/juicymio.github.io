@@ -4,32 +4,32 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>操作系统学习笔记 - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="操作系统学习笔记" />
-<meta property="og:description" content="0x00 序言 赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到从0到-1写一个操作系统-0xFF-!!完结撒花!!, 感觉还不错," />
+        <title>[BUUCTF]others_shellcode wp - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="[BUUCTF]others_shellcode wp" />
+<meta property="og:description" content="0x00 前置知识 x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="http://juicymio.github.io/oslearning/" /><meta property="article:section" content="posts" />
-<meta property="article:published_time" content="2023-03-14T22:36:18+08:00" />
-<meta property="article:modified_time" content="2023-03-14T22:36:18+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
+<meta property="og:url" content="http://juicymio.github.io/buuctfothers_shellcode/" /><meta property="article:section" content="posts" />
+<meta property="article:published_time" content="2023-03-16T22:56:18+08:00" />
+<meta property="article:modified_time" content="2023-03-16T22:56:18+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
 
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="操作系统学习笔记"/>
-<meta name="twitter:description" content="0x00 序言 赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到从0到-1写一个操作系统-0xFF-!!完结撒花!!, 感觉还不错,"/>
+<meta name="twitter:title" content="[BUUCTF]others_shellcode wp"/>
+<meta name="twitter:description" content="0x00 前置知识 x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个"/>
 <meta name="application-name" content="My cool site">
 <meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/oslearning/" /><link rel="prev" href="http://juicymio.github.io/mayctf_writeup/" /><link rel="next" href="http://juicymio.github.io/buuctfothers_shellcode/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/buuctfothers_shellcode/" /><link rel="prev" href="http://juicymio.github.io/oslearning/" /><link rel="next" href="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BlogPosting",
-        "headline": "操作系统学习笔记",
+        "headline": "[BUUCTF]others_shellcode wp",
         "inLanguage": "zh-CN",
         "mainEntityOfPage": {
             "@type": "WebPage",
-            "@id": "http:\/\/juicymio.github.io\/oslearning\/"
-        },"genre": "posts","wordcount":  972 ,
-        "url": "http:\/\/juicymio.github.io\/oslearning\/","datePublished": "2023-03-14T22:36:18+08:00","dateModified": "2023-03-14T22:36:18+08:00","publisher": {
+            "@id": "http:\/\/juicymio.github.io\/buuctfothers_shellcode\/"
+        },"genre": "posts","keywords": "pwn","wordcount":  424 ,
+        "url": "http:\/\/juicymio.github.io\/buuctfothers_shellcode\/","datePublished": "2023-03-16T22:56:18+08:00","dateModified": "2023-03-16T22:56:18+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
                 "@type": "Person",
@@ -100,10 +100,10 @@
                 <div class="container"><div class="toc" id="toc-auto">
             <h2 class="toc-title">Contents</h2>
             <div class="toc-content" id="toc-content-auto"></div>
-        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">操作系统学习笔记</h1><div class="post-meta">
+        </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">[BUUCTF]others_shellcode wp</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-03-14">2023-03-14</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;972 words&nbsp;
-                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;2 minutes&nbsp;</div>
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-03-16">2023-03-16</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;424 words&nbsp;
+                <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
                     <span>Contents</span>
@@ -111,71 +111,71 @@
                 </div>
                 <div class="details-content toc-content" id="toc-content-static"><nav id="TableOfContents">
   <ul>
-    <li><a href="#0x00-序言">0x00 序言</a></li>
-    <li><a href="#0x01-操作系统的启动">0x01 操作系统的启动</a>
-      <ul>
-        <li><a href="#实模式">实模式</a></li>
-        <li><a href="#biosbasic-inputoutput-system">BIOS(Basic Input/Output System)</a></li>
-        <li><a href="#boot">Boot</a></li>
-        <li><a href="#mbrmaster-boot-record">MBR(Master boot record)</a></li>
-        <li><a href="#boot-loader">Boot Loader</a></li>
-        <li><a href="#操作系统">操作系统</a></li>
-      </ul>
-    </li>
-    <li><a href="#参考文献">参考文献</a></li>
+    <li><a href="#0x00-前置知识">0x00 前置知识</a></li>
+    <li><a href="#0x01-题目分析">0x01 题目分析</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="0x00-序言">0x00 序言</h2>
-<p>赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到<a href="https://www.52pojie.cn/thread-1748588-1-1.html" target="_blank" rel="noopener noreffer ">从0到-1写一个操作系统-0xFF-!!完结撒花!!</a>, 感觉还不错, 于是开始动手实践, 开一个博客记录, 也是督促自己坚持下去.</p>
-<h2 id="0x01-操作系统的启动">0x01 操作系统的启动</h2>
-<h3 id="实模式">实模式</h3>
-<p>刚开机时CPU进入实模式, 因为此时只能使用物理地址.<br>
-实模式地址的分布是固定的,以8086为例, BIOS入口在0xFFFF0到0xFFFFF之间, 其中是一个jmp指令, 跳转到真正的BIOS位置. 中断向量表在0x00000到0x003FF. MBR加载地址在0x7C00到0x7DFF.</p>
-<h3 id="biosbasic-inputoutput-system">BIOS(Basic Input/Output System)</h3>
-<p>基本输入输出系统. 早期存储在ROM中, 现在存储在主板上的一个或多个芯片中. 目前其继承者UEFI(Unified Extensible Firmware Interface)正在全面取代BIOS.<br>
-BIOS首先进行加电自检(Power-On Self-Test), 缩写为POST, 检查CPU, 内存, 主板, 硬盘, 显卡等设备. POST结束后系统BIOS调用其他设备的BIOS对各个设备进行检测和初始化. 如果自检没有出现问题, 将执行启动程序.</p>
-<h3 id="boot">Boot</h3>
-<p>BOOT(靴子), 意为&quot;to load a program into a computer from a disk; to start or ready for use especially by booting a program.&quot;
-BOOTSTRAP(鞋带)</p>
-<blockquote>
-<p>pull oneself up by one&rsquo;s bootstraps 靠自己自立自强
-by one&rsquo;s own bootstraps 自己努力, 自强</p>
-</blockquote>
-<p>必须先运行程序, 计算机才能启动, 但是计算机不启动就无法运行程序. 这与人没法拽着鞋带把自己拉起来类似. 于是早期工程师们设法先将一小段程序装入内存, 称之为&quot;boot&quot;, 意为&quot;自引导程序&quot;.</p>
-<h3 id="mbrmaster-boot-record">MBR(Master boot record)</h3>
-<p>BIOS按照设定的启动顺序, 将控制权转移给启动顺序首位的存储设备. BIOS首先寻找他们的MBR, 如果该磁盘的主引导扇区(0柱头, 0磁头, 1扇区, 即前512个字节)最后两字节为0x55和0xaa, BIOS则认为MBR有效, 并将控制权转交给MBR. 如果未找到MBR, BIOS会去启动顺序中下一顺位的设备中寻找.
-MBR由三部分组成: 启动代码(446字节), 磁盘分区表(16x4字节), 结束标志(0x55, 0xaa 两字节).</p>
-<h3 id="boot-loader">Boot Loader</h3>
-<p>Boot Loader(启动引导程序)用于加载操作系统内核文件. 用户可以用Boot Loader来选择启动不同的操作系统. Windows的Boot Loader是Windows Boot Manager.</p>
-<h3 id="操作系统">操作系统</h3>
-<p>操作系统内核被载入内存后, 再经过一系列初始化过程完成操作系统的启动.</p>
-<h2 id="参考文献">参考文献</h2>
-<p><a href="https://www.ruanyifeng.com/blog/2013/02/booting.html" target="_blank" rel="noopener noreffer ">计算机是如何启动的</a></p>
+            </div><div class="content" id="content"><h2 id="0x00-前置知识">0x00 前置知识</h2>
+<p>x86_32下应用程序调用系统调用的过程:</p>
+<ol>
+<li>把系统调用号存入eax.</li>
+<li>把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个时，全部参数应该依次放在一块连续的内存区域里，同时在 ebx 中保存指向该内存区域的指针.</li>
+<li>触发0x80中断, 切换到内核态, 执行中断处理函数. (为了节约宝贵的中断号, Linux用int 0x80触发所有系统调用. 再为每个系统调用分配与中断号用法类似的系统调用号)</li>
+</ol>
+<h2 id="0x01-题目分析">0x01 题目分析</h2>
+<p>IDA看到main函数里只执行了一个getShell()函数, 代码如下.</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre tabindex="0" class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">getShell</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span>
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">result</span><span class="p">;</span> <span class="c1">// eax
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">char</span> <span class="n">v1</span><span class="p">[</span><span class="mi">9</span><span class="p">];</span> <span class="c1">// [esp-Ch] [ebp-Ch] BYREF
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">  <span class="n">strcpy</span><span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="s">&#34;/bin//sh&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">result</span> <span class="o">=</span> <span class="mi">11</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="kr">__asm</span> <span class="p">{</span> <span class="kt">int</span>     <span class="mi">80</span><span class="n">h</span><span class="p">;</span> <span class="n">LINUX</span> <span class="o">-</span> <span class="n">sys_execve</span> <span class="p">}</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">result</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></td></tr></table>
+</div>
+</div><p>插入了汇编代码int 0x80. 根据IDA的注释可以看到eax的值就是result的值11. 而32位下系统调用号11即为execve.  32位调用参数存在栈里, 此处即为栈顶的v[1]内的&quot;/bin/sh&quot;. 所以相当于手动调用了系统调用execve(&quot;/bin/sh&quot;).</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
             <div class="post-info-mod">
-                <span>Updated on 2023-03-14</span>
+                <span>Updated on 2023-03-16</span>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/oslearning/index.md" target="_blank">Read Markdown</a>
+                            <a class="link-to-markdown" href="/buuctfothers_shellcode/index.md" target="_blank">Read Markdown</a>
                         </span></div>
             <div class="post-info-share">
-                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/oslearning/" data-title="操作系统学习笔记"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/oslearning/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/oslearning/" data-title="操作系统学习笔记" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/oslearning/" data-title="操作系统学习笔记"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/oslearning/" data-title="操作系统学习笔记"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/oslearning/" data-title="操作系统学习笔记" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/oslearning/" data-title="操作系统学习笔记"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
+                <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/buuctfothers_shellcode/" data-title="[BUUCTF]others_shellcode wp" data-hashtags="pwn"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/buuctfothers_shellcode/" data-hashtag="pwn"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/buuctfothers_shellcode/" data-title="[BUUCTF]others_shellcode wp" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/buuctfothers_shellcode/" data-title="[BUUCTF]others_shellcode wp"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/buuctfothers_shellcode/" data-title="[BUUCTF]others_shellcode wp"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/buuctfothers_shellcode/" data-title="[BUUCTF]others_shellcode wp" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/buuctfothers_shellcode/" data-title="[BUUCTF]others_shellcode wp"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
             </div>
         </div>
     </div>
 
     <div class="post-info-more">
-        <section class="post-tags"></section>
+        <section class="post-tags"><i class="fas fa-tags fa-fw" aria-hidden="true"></i>&nbsp;<a href="/tags/pwn/">pwn</a></section>
         <section>
             <span><a href="javascript:void(0);" onclick="window.history.back();">Back</a></span>&nbsp;|&nbsp;<span><a href="/">Home</a></span>
         </section>
     </div>
 
-    <div class="post-nav"><a href="/mayctf_writeup/" class="prev" rel="prev" title="mayctf writeup by Mio and K-ON!"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>mayctf writeup by Mio and K-ON!</a>
-            <a href="/buuctfothers_shellcode/" class="next" rel="next" title="[BUUCTF]others_shellcode wp">[BUUCTF]others_shellcode wp<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
+    <div class="post-nav"><a href="/oslearning/" class="prev" rel="prev" title="操作系统学习笔记"><i class="fas fa-angle-left fa-fw" aria-hidden="true"></i>操作系统学习笔记</a>
+            <a href="/when-debug-starts-with-no-command-line-parameters/" class="next" rel="next" title="当DEBUG无参数启动时, 我们在debug什么?">当DEBUG无参数启动时, 我们在debug什么?<i class="fas fa-angle-right fa-fw" aria-hidden="true"></i></a></div>
 </div>
 <div id="comments"></div></article></div>
             </main><footer class="footer">

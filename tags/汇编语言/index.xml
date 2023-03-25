@@ -1,0 +1,16 @@
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+    <channel>
+        <title>汇编语言 - Tag - JuicyMio&#39;s blog</title>
+        <link>http://juicymio.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</link>
+        <description>汇编语言 - Tag - JuicyMio&#39;s blog</description>
+        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/" rel="self" type="application/rss+xml" /><item>
+    <title>当DEBUG无参数启动时, 我们在debug什么?</title>
+    <link>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</link>
+    <pubDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</guid>
+    <description><![CDATA[0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程 查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,]]></description>
+</item>
+</channel>
+</rss>

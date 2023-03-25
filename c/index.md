@@ -27,10 +27,11 @@ int f(int b, int a = 0); // right
    1. 锟斤拷
     >源于GBK字符集和Unicode字符集之间的转换问题。Unicode和老编码体系的转化过程中，肯定有一些字，用Unicode是没法表示的，Unicode官方用了一个占位符来表示这些文字，这就是：U+FFFD REPLACEMENT CHARACTER。那么U+FFFD的UTF-8编码出来，恰好是 '\xef\xbf\xbd'。如果这个'\xef\xbf\xbd'，重复多次，例如 '\xef\xbf\xbd\xef\xbf\xbd'，然后放到GBK/CP936/GB2312/GB18030的环境中显示的话，一个汉字2个字节，最终的结果就是：锟斤拷——锟(0xEFBF)，斤（0xBDEF），拷（0xBFBD）。
    2. 烫烫烫 
-    VS/VC debug模式下栈内未初始化的内存会全部被设置成0xcc, 这个0xcc是INT3中断指令, 所以执行这块内存就会中断程序. 
+    VS/VC debug模式下栈内未初始化的内存会全部被设置成0xcc, 这个0xcc是INT3中断指令的机器码, 所以执行这块内存就会中断程序. 
     VS调试器默认字符集是MBCS, 其中0xcccc是'烫'字, 所以......
-   > INT3断点是断点的一种，在诸如Ollydbg中的快捷键是F2，是一种很常用的断点类型。INT3指令的[机器码](https://baike.baidu.com/item/%E6%9C%BA%E5%99%A8%E7%A0%81?fromModule=lemma_inlink)为CC，所以通常也称之为CC指令。当被调试进程执行INT3指令导致一个异常时，调试器就会捕捉这个异常从而停在断点处，然后将断点处的指令恢复成原来的指令。当然，如果自己写调试器，也可以用其他一些指令代替INT3指令来触发异常。。
+   > INT3断点是断点的一种，在诸如Ollydbg中的快捷键是F2，是一种很常用的断点类型。INT3指令的[机器码](https://baike.baidu.com/item/%E6%9C%BA%E5%99%A8%E7%A0%81?fromModule=lemma_inlink)为CC，所以通常也称之为CC指令。当被调试进程执行INT3指令导致一个异常时，调试器就会捕捉这个异常从而停在断点处，然后将断点处的指令恢复成原来的指令。当然，如果自己写调试器，也可以用其他一些指令代替INT3指令来触发异常。
    
+   注: 关于INT3指令的问题可以查阅内中断相关知识, 简单来讲执行INT n指令会调用编号n对应的中断处理程序, 而INT 3是x86系列cpu专门用于调试的指令, 它的中断处理程序会寻找调试器并将控制转交给调试器, 这些知识在汇编语言课里就会学到. 
   3. 屯屯屯
    由于相似的原因, 堆中空间的缺省值是0xcd, 也是一个中断指令的机器码, 0xcdcd是屯
   4. 锘锘锘
@@ -41,6 +42,8 @@ int f(int b, int a = 0); // right
     豢BBBF
   5. 葺葺葺
 	虽然诗里没有, 但堆上申请后释放空间后缺省值是0xdd, 0xdddd是葺
+虽然这个问题在中文环境里令人尤其迷惑, 但英文使用者同样对未初始化的内存为何是这些值感到好奇. 
+[ [When and why will a compiler initialise memory to 0xCD, 0xDD, etc. on malloc/free/new/delete?](https://stackoverflow.com/questions/370195/when-and-why-will-a-compiler-initialise-memory-to-0xcd-0xdd-etc-on-malloc-fre)
 
 -  `<`优先级比`=`高, 这使
 ```c

@@ -4,9 +4,25 @@
         <link>http://juicymio.github.io/</link>
         <description>Plus Ultra</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Tue, 14 Mar 2023 22:36:18 &#43;0800</lastBuildDate>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</lastBuildDate>
             <atom:link href="http://juicymio.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>当DEBUG无参数启动时, 我们在debug什么?</title>
+    <link>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</link>
+    <pubDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</guid>
+    <description><![CDATA[0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程 查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,]]></description>
+</item>
+<item>
+    <title>[BUUCTF]others_shellcode wp</title>
+    <link>http://juicymio.github.io/buuctfothers_shellcode/</link>
+    <pubDate>Thu, 16 Mar 2023 22:56:18 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/buuctfothers_shellcode/</guid>
+    <description><![CDATA[0x00 前置知识 x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
+</item>
+<item>
     <title>操作系统学习笔记</title>
     <link>http://juicymio.github.io/oslearning/</link>
     <pubDate>Tue, 14 Mar 2023 22:36:18 &#43;0800</pubDate>
