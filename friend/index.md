@@ -93,6 +93,14 @@
                   </div>
                   <div class="info"></div>
                </div>
+                <div class="card">
+               <img class="ava" src="https://pic.cnblogs.com/avatar/2988983/20220923000706.png" />
+               <div class="card-header">
+                  <div>
+                     <a href="https://www.cnblogs.com/truman2022">Truman_2022's Blog</a>
+                  </div>
+                  <div class="info">覃神</div>
+               </div>
             </div>
          </div>
       </div>
