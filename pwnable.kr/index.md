@@ -33,7 +33,7 @@ int main(int argc, char* argv[], char* envp[]){
     return 0;
 }
 ```
-得到flag的关键在于如歌通过第二个if语句, 也就是如何让buf=LETMEMIN
+得到flag的关键在于如何通过第二个if语句, 也就是如何让buf=LETMEMIN
 可以看到read从fd中读入32个字节为buf赋值, 如果我们想控制buf的值就要控制fd中的内容, 那么只要让fd=0, 再向标准输入(从命令行直接输入)中输入LETMEWIN就可以了.
 注意到fd在此处赋值:
 ```c
