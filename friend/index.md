@@ -99,7 +99,17 @@
 					   <div>
 						   <a href="https://www.cnblogs.com/truman2022">Truman_2022's Blog</a>
 					   </div>
-					<div class="info">覃神</div>
+						<div class="info">覃神</div>
+					</div>
+				</div>
+				<div class="card">
+				   <img class="ava" src="https://i.loli.net/2019/03/22/5c94875119a93.jpg" />
+				   <div class="card-header">
+					   <div>
+						   <a href="https://www.cnblogs.com/hanruyun/">子谦's Blog</a>
+					   </div>
+					<div class="info">OIer</div>
+					</div>
 				</div>
 			</div>
 		</div>

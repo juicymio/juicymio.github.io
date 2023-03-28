@@ -4,9 +4,17 @@
         <link>http://juicymio.github.io/</link>
         <description>Plus Ultra</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</lastBuildDate>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Tue, 28 Mar 2023 18:34:26 &#43;0800</lastBuildDate>
             <atom:link href="http://juicymio.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>Phoenix</title>
+    <link>http://juicymio.github.io/phoenix/</link>
+    <pubDate>Tue, 28 Mar 2023 18:34:26 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/phoenix/</guid>
+    <description><![CDATA[0x00 前言 Windows+WSL2(Ubuntu22.04)下的exploit.education的phoenix虚拟机环境配置, 但不建议使用W]]></description>
+</item>
+<item>
     <title>当DEBUG无参数启动时, 我们在debug什么?</title>
     <link>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</link>
     <pubDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</pubDate>
