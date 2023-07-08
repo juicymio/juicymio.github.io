@@ -6,7 +6,6 @@
 ### 实模式
 刚开机时CPU进入实模式, 因为此时只能使用物理地址.  
 实模式地址的分布是固定的,以8086为例, BIOS入口在0xFFFF0到0xFFFFF之间, 其中是一个jmp指令, 跳转到真正的BIOS位置. 中断向量表在0x00000到0x003FF. MBR加载地址在0x7C00到0x7DFF. 
-
 ### BIOS(Basic Input/Output System)
 基本输入输出系统. 早期存储在ROM中, 现在存储在主板上的一个或多个芯片中. 目前其继承者UEFI(Unified Extensible Firmware Interface)正在全面取代BIOS.  
 BIOS首先进行加电自检(Power-On Self-Test), 缩写为POST, 检查CPU, 内存, 主板, 硬盘, 显卡等设备. POST结束后系统BIOS调用其他设备的BIOS对各个设备进行检测和初始化. 如果自检没有出现问题, 将执行启动程序. 

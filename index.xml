@@ -4,9 +4,17 @@
         <link>http://juicymio.github.io/</link>
         <description>Plus Ultra</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Tue, 28 Mar 2023 18:34:26 &#43;0800</lastBuildDate>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Sat, 08 Jul 2023 20:41:09 &#43;0800</lastBuildDate>
             <atom:link href="http://juicymio.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
+    <title>WSL2中C/C&#43;&#43;开发环境配置</title>
+    <link>http://juicymio.github.io/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link>
+    <pubDate>Sat, 08 Jul 2023 20:41:09 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid>
+    <description><![CDATA[基础 编辑器: LunarVim 基于clangd的代码提示, compile_commands.json由bear生成, 命令是bear -- make 美化 WSL2: 运行在Windo]]></description>
+</item>
+<item>
     <title>Phoenix</title>
     <link>http://juicymio.github.io/phoenix/</link>
     <pubDate>Tue, 28 Mar 2023 18:34:26 &#43;0800</pubDate>
@@ -77,14 +85,6 @@
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/c/</guid>
     <description><![CDATA[用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途 杂项中的杂项 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使]]></description>
-</item>
-<item>
-    <title>Pwnable.kr</title>
-    <link>http://juicymio.github.io/pwnable.kr/</link>
-    <pubDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/pwnable.kr/</guid>
-    <description><![CDATA[pwnable.kr writeup python3中使用p32, p64需要进行编码 payload +=p64(1926).decode(&quot;iso-8859-1&quot;) 1 fd 文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个]]></description>
 </item>
 </channel>
 </rss>
