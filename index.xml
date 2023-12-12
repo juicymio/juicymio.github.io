@@ -2,17 +2,25 @@
     <channel>
         <title>JuicyMio&#39;s blog</title>
         <link>http://juicymio.github.io/</link>
-        <description>Plus Ultra</description>
+        <description>JuicyMio&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</lastBuildDate>
+            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Tue, 12 Dec 2023 20:47:10 &#43;0800</lastBuildDate>
             <atom:link href="http://juicymio.github.io/index.xml" rel="self" type="application/rss+xml" />
         <item>
-    <title>CVE 2023 25139</title>
+    <title>为什么bss上有时会有stdin,stdout,stderr指针</title>
+    <link>http://juicymio.github.io/io_pointers_on_bss/</link>
+    <pubDate>Tue, 12 Dec 2023 20:47:10 &#43;0800</pubDate>
+    <author>JuicyMio</author>
+    <guid>http://juicymio.github.io/io_pointers_on_bss/</guid>
+    <description><![CDATA[研究了一下bss段上为什么会有stdin,stdout,stderr, 根据经验观察似乎在使用setvbuf时会出现这种情况, 经过控制变量测试]]></description>
+</item>
+<item>
+    <title>CVE-2023-25139</title>
     <link>http://juicymio.github.io/cve-2023-25139/</link>
     <pubDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/cve-2023-25139/</guid>
-    <description><![CDATA[0x00 背景 TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到]]></description>
+    <description><![CDATA[0x00 背景TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到]]></description>
 </item>
 <item>
     <title>WSL2中C/C&#43;&#43;开发环境配置</title>
@@ -28,7 +36,7 @@
     <pubDate>Tue, 28 Mar 2023 18:34:26 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/phoenix/</guid>
-    <description><![CDATA[0x00 前言 Windows+WSL2(Ubuntu22.04)下的exploit.education的phoenix虚拟机环境配置, 但不建议使用W]]></description>
+    <description><![CDATA[0x00 前言Windows+WSL2(Ubuntu22.04)下的exploit.education的phoenix虚拟机环境配置, 但不建议使用W]]></description>
 </item>
 <item>
     <title>当DEBUG无参数启动时, 我们在debug什么?</title>
@@ -36,7 +44,7 @@
     <pubDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</guid>
-    <description><![CDATA[0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程 查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,]]></description>
+    <description><![CDATA[0x00 前言好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,]]></description>
 </item>
 <item>
     <title>[BUUCTF]others_shellcode wp</title>
@@ -44,7 +52,7 @@
     <pubDate>Thu, 16 Mar 2023 22:56:18 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/buuctfothers_shellcode/</guid>
-    <description><![CDATA[0x00 前置知识 x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
+    <description><![CDATA[0x00 前置知识x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
 </item>
 <item>
     <title>操作系统学习笔记</title>
@@ -52,7 +60,7 @@
     <pubDate>Tue, 14 Mar 2023 22:36:18 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/oslearning/</guid>
-    <description><![CDATA[0x00 序言 赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到从0到-1写一个操作系统-0xFF-!!完结撒花!!, 感觉还不错,]]></description>
+    <description><![CDATA[0x00 序言赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到从0到-1写一个操作系统-0xFF-!!完结撒花!!, 感觉还不错,]]></description>
 </item>
 <item>
     <title>mayctf writeup by Mio and K-ON!</title>
@@ -60,7 +68,7 @@
     <pubDate>Mon, 07 Nov 2022 21:00:00 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/mayctf_writeup/</guid>
-    <description><![CDATA[侠客行 crypto easy_md5 计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符串再计算md5]]></description>
+    <description><![CDATA[侠客行 crypto easy_md5计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符]]></description>
 </item>
 <item>
     <title>奇技淫巧</title>
@@ -77,14 +85,6 @@
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/csapp_lab/</guid>
     <description><![CDATA[环境准备 WSL2(Ubuntu22.04) + VSCode 1 2 3 4 apt-get update sudo apt-get install build-essential sudo apt-get install gcc-multilib sudo apt-get install gdb Data Lab 食用方法 阅读README获得完整信息 按照bits.c文件的注释修改bits.c 使用./]]></description>
-</item>
-<item>
-    <title>二进制数中1的个数是否为奇数</title>
-    <link>http://juicymio.github.io/odd_ones/</link>
-    <pubDate>Wed, 12 Oct 2022 23:26:25 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/odd_ones/</guid>
-    <description><![CDATA[CSAPP第二章家庭作业2.65 1 2 3 /*Return 1 when x contains an odd number of 1s; 0 otherwise. Assume w=32 */ int odd_ones(unsigned x) 函数应该遵循位级整数编码规则,你的代码最多只能包含12个算术运算,]]></description>
 </item>
 </channel>
 </rss>

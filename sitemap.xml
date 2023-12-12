@@ -2,9 +2,10 @@
     xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
     xmlns:xhtml="http://www.w3.org/1999/xhtml"
     ><url>
+            <loc>http://juicymio.github.io/</loc><lastmod>2023-12-12T20:47:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>http://juicymio.github.io/posts/</loc><lastmod>2023-12-12T20:47:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
+            <loc>http://juicymio.github.io/io_pointers_on_bss/</loc><lastmod>2023-12-12T20:47:10&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>http://juicymio.github.io/cve-2023-25139/</loc><lastmod>2023-12-11T20:45:56&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>http://juicymio.github.io/</loc><lastmod>2023-12-11T20:45:56&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
-            <loc>http://juicymio.github.io/posts/</loc><lastmod>2023-12-11T20:45:56&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>http://juicymio.github.io/tags/pwn/</loc><lastmod>2023-12-11T20:45:56&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>http://juicymio.github.io/tags/</loc><lastmod>2023-12-11T20:45:56&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>1</priority></url><url>
             <loc>http://juicymio.github.io/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</loc><lastmod>2023-07-08T20:41:09&#43;08:00</lastmod><changefreq>weekly</changefreq><priority>0.5</priority></url><url>

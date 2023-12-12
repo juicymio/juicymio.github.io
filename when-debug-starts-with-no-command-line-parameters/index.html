@@ -4,20 +4,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>当DEBUG无参数启动时, 我们在debug什么? - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="当DEBUG无参数启动时, 我们在debug什么?" />
-<meta property="og:description" content="0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程 查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;," />
+        <title>当DEBUG无参数启动时, 我们在debug什么? - JuicyMio&#39;s blog</title><meta name="Description" content=""><meta property="og:title" content="当DEBUG无参数启动时, 我们在debug什么?" />
+<meta property="og:description" content="0x00 前言好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;," />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2023-03-25T12:22:18+08:00" />
-<meta property="article:modified_time" content="2023-03-25T12:22:18+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
+<meta property="article:modified_time" content="2023-03-25T12:22:18+08:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="当DEBUG无参数启动时, 我们在debug什么?"/>
-<meta name="twitter:description" content="0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程 查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,"/>
-<meta name="application-name" content="My cool site">
-<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="当DEBUG无参数启动时, 我们在debug什么?"/>
+<meta name="twitter:description" content="0x00 前言好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,"/>
+<meta name="application-name" content="JuicyMio&#39;s blog">
+<meta name="apple-mobile-web-app-title" content="JuicyMio&#39;s blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" /><link rel="prev" href="http://juicymio.github.io/buuctfothers_shellcode/" /><link rel="next" href="http://juicymio.github.io/phoenix/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" /><link rel="prev" href="http://juicymio.github.io/buuctfothers_shellcode/" /><link rel="next" href="http://juicymio.github.io/phoenix/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -37,7 +36,7 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -116,10 +115,10 @@
     <li><a href="#0x02-结论">0x02 结论</a></li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h2 id="0x00-前言">0x00 前言</h2>
-<p>好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究.</p>
-<h2 id="0x01-过程">0x01 过程</h2>
-<p>查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;, &ldquo;What DEBUG open by default&quot;之类的问题, 没找到什么答案, 搜索的过程感觉在考古, 有用信息较少.<br>
+            </div><div class="content" id="content"><h2 id="0x00-前言" class="headerLink">
+    <a href="#0x00-%e5%89%8d%e8%a8%80" class="header-mark"></a>0x00 前言</h2><p>好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究.</p>
+<h2 id="0x01-过程" class="headerLink">
+    <a href="#0x01-%e8%bf%87%e7%a8%8b" class="header-mark"></a>0x01 过程</h2><p>查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;, &ldquo;What DEBUG open by default&quot;之类的问题, 没找到什么答案, 搜索的过程感觉在考古, 有用信息较少.<br>
 尝试用-u指令反汇编阅读代码, 看不出什么有用信息.<br>
 然后尝试二分法寻找指令段的结尾, 也没找到什么有用信息. 在这个过程中发现<code>add [BX+SI], AL</code>指令对应的机器码是0000.<br>
 尝试将整个程序dump下来, 没找到怎么dump.<br>
@@ -141,8 +140,8 @@
 <strong>4)</strong> The registers, AX, BX, CX, DX, BP, SI and DI are <em>cleared</em> to <strong>zero</strong> along with the <strong>flag bits</strong> in the Flag Register; with <em>one exception</em>: The <strong>Interrupts</strong> Flag is <strong><em>set</em></strong> to <strong>E</strong>nable <strong>I</strong>nterrupts. (See the Appendix, <a href="https://thestarman.pcministry.com/asm/debug/8086REGs.htm#REGS" target="_blank" rel="noopener noreffer ">The 8086 CPU Registers</a> for more information.)</p>
 </blockquote>
 <p>DEBUG会分配空闲的前64KB内存段, 将CS, DS, ES, SS同时指向它也就是将它同时当作代码段, 数据段, 附加段和栈段, IP设为100, SP设为FFEE.</p>
-<h2 id="0x02-结论">0x02 结论</h2>
-<p>所以说, DEBUG无参数打开时只是将第一段空闲内存中的无用数据作为指令序列而已, 并且作为运行在实模式下的单任务系统, DOS的内存分布相当固定, 我的DOSbox每次打开debug, 段寄存器的值都是0DBD.
+<h2 id="0x02-结论" class="headerLink">
+    <a href="#0x02-%e7%bb%93%e8%ae%ba" class="header-mark"></a>0x02 结论</h2><p>所以说, DEBUG无参数打开时只是将第一段空闲内存中的无用数据作为指令序列而已, 并且作为运行在实模式下的单任务系统, DOS的内存分布相当固定, 我的DOSbox每次打开debug, 段寄存器的值都是0DBD.
 另外, 上面的<a href="http://thestarman.pcministry.com/asm/debug/debug.htm" target="_blank" rel="noopener noreffer ">&ldquo;A Guide to DEBUG&rdquo;</a>是个不错的DEBUG祖传使用指南, 从07年更新到20年, 可能还在持续更新.</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
@@ -152,7 +151,7 @@
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/when-debug-starts-with-no-command-line-parameters/index.md" target="_blank">Read Markdown</a>
+                            <a class="link-to-markdown" href="/when-debug-starts-with-no-command-line-parameters/index.md" target="_blank">Read markdown</a>
                         </span></div>
             <div class="post-info-share">
                 <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" data-title="当DEBUG无参数启动时, 我们在debug什么?" data-hashtags="汇编语言"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" data-hashtag="汇编语言"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" data-title="当DEBUG无参数启动时, 我们在debug什么?" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" data-title="当DEBUG无参数启动时, 我们在debug什么?"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" data-title="当DEBUG无参数启动时, 我们在debug什么?"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" data-title="当DEBUG无参数启动时, 我们在debug什么?" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/" data-title="当DEBUG无参数启动时, 我们在debug什么?"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
@@ -172,7 +171,7 @@
 </div>
 <div id="comments"></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.104.3">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">JuicyMio</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

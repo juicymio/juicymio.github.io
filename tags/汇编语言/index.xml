@@ -10,7 +10,7 @@
     <pubDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</guid>
-    <description><![CDATA[0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程 查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,]]></description>
+    <description><![CDATA[0x00 前言好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,]]></description>
 </item>
 </channel>
 </rss>

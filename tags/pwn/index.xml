@@ -5,12 +5,12 @@
         <description>pwn - Tag - JuicyMio&#39;s blog</description>
         <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
             <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/tags/pwn/" rel="self" type="application/rss+xml" /><item>
-    <title>CVE 2023 25139</title>
+    <title>CVE-2023-25139</title>
     <link>http://juicymio.github.io/cve-2023-25139/</link>
     <pubDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/cve-2023-25139/</guid>
-    <description><![CDATA[0x00 背景 TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到]]></description>
+    <description><![CDATA[0x00 背景TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到]]></description>
 </item>
 <item>
     <title>[BUUCTF]others_shellcode wp</title>
@@ -18,7 +18,7 @@
     <pubDate>Thu, 16 Mar 2023 22:56:18 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/buuctfothers_shellcode/</guid>
-    <description><![CDATA[0x00 前置知识 x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
+    <description><![CDATA[0x00 前置知识x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
 </item>
 <item>
     <title>Pwnable.kr</title>
@@ -26,7 +26,7 @@
     <pubDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</pubDate>
     <author>JuicyMio</author>
     <guid>http://juicymio.github.io/pwnable.kr/</guid>
-    <description><![CDATA[pwnable.kr writeup 1 fd 文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件]]></description>
+    <description><![CDATA[pwnable.kr writeup 1 fd文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文]]></description>
 </item>
 </channel>
 </rss>
