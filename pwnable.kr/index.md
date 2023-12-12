@@ -3,8 +3,6 @@
 
 # pwnable.kr writeup
 
-- python3中使用p32, p64需要进行编码 `payload +=p64(1926).decode("iso-8859-1")`
-
 ## 1 fd
 文件描述符(file descricptor)
 >维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符。在程序设计中，一些涉及底层的程序编写往往会围绕着文件描述符展开。
@@ -61,89 +59,44 @@ atoi不能转化16进制数, 所以我们手动转换0x1234, 它的十进制表�
 **这题没太懂GOT PLT那里的具体原理**
 ```c
 #include <stdio.h>
-
 #include <stdlib.h>
 
-  
-
 void login(){
-
         int passcode1;
-
         int passcode2;
-
-  
-
         printf("enter passcode1 : ");
-
         scanf("%d", passcode1);
-
         fflush(stdin);
-
-  
-
         // ha! mommy told me that 32bit is vulnerable to bruteforcing :)
-
         printf("enter passcode2 : ");
-
         scanf("%d", passcode2);
-
-  
-
         printf("checking...\n");
-
         if(passcode1==338150 && passcode2==13371337){
-
                 printf("Login OK!\n");
-
-                system("/bin/cat flag");
-
+                system("/bin/cat flag");
         }
-
         else{
-
                 printf("Login Failed!\n");
-
                 exit(0);
-
         }
-
 }
 
-  
-
 void welcome(){
-
         char name[100];
-
         printf("enter you name : ");
-
         scanf("%100s", name);
-
         printf("Welcome %s!\n", name);
-
 }
 
   
 
 int main(){
-
-        printf("Toddler's Secure Login System 1.0 beta.\n");
-
-  
-
+        printf("Toddler's Secure Login System 1.0 beta.\n"); 
         welcome();
-
-        login();
-
-  
-
+        login();
         // something after login...
-
         printf("Now I can safely trust you that you have credential :)\n");
-
         return 0;
-
 }
 ```
 容易注意到login函数中这句 
@@ -271,33 +224,16 @@ python -c 'print "A"*96+"\x00\xa0\x04\x08"+"134514147\n"' | ./passcode
 
 
 int main(){
-
         unsigned int random;
-
         random = rand();        // random value!
-
-  
-
         unsigned int key=0;
-
-        scanf("%d", &key);
-
-  
-
+        scanf("%d", &key); 
         if( (key ^ random) == 0xdeadbeef ){
-
                 printf("Good!\n");
-
                 system("/bin/cat flag");
-
                 return 0;
-
         }
-
-  
-
         printf("Wrong, maybe you should try 2^32 cases.\n");
-
         return 0;
 
 }
@@ -319,114 +255,53 @@ Mommy, I thought libc random is unpredictable...
 ```text
 We all make mistakes, let's move on.
 (don't take this too seriously, no fancy hacking skill is required at all)
-
 This task is based on real event
 Thanks to dhmonkey
-
 hint : operator priority
-
 ssh mistake@pwnable.kr -p2222 (pw:guest)
 ```
 提示是操作符的优先级 
 ```c
 #include <stdio.h>
-
 #include <fcntl.h>
-
-  
-
 #define PW_LEN 10
-
-#define XORKEY 1
-
-  
-
+#define XORKEY 1 
 void xor(char* s, int len){
-
         int i;
-
         for(i=0; i<len; i++){
-
                 s[i] ^= XORKEY;
-
         }
-
 }
 
-  
-
 int main(int argc, char* argv[]){
-
-  
-
         int fd;
-
         if(fd=open("/home/mistake/password",O_RDONLY,0400) < 0){
-
                 printf("can't open password %d\n", fd);
-
                 return 0;
-
         }
-
-  
-
         printf("do not bruteforce...\n");
-
         sleep(time(0)%20);
-
-  
-
         char pw_buf[PW_LEN+1];
-
         int len;
-
         if(!(len=read(fd,pw_buf,PW_LEN) > 0)){
-
                 printf("read error\n");
-
                 close(fd);
-
                 return 0;
-
         }
-
-  
-
         char pw_buf2[PW_LEN+1];
-
         printf("input password : ");
-
         scanf("%10s", pw_buf2);
-
-  
-
         // xor your input
-
         xor(pw_buf2, 10);
-
-  
-
         if(!strncmp(pw_buf, pw_buf2, PW_LEN)){
-
-                printf("Password OK\n");
-
+                printf("Password OK\n");
                 system("/bin/cat flag\n");
-
         }
-
         else{
-
                 printf("Wrong Password\n");
-
         }
-
-  
-
         close(fd);
-
         return 0;
-
 }
 ```
 
@@ -451,17 +326,11 @@ Mommy, the operator priority always confuses me :(
 这是一个set-uid程序: 
 ```c
 #include <stdio.h>
-
 int main(){
-
         setresuid(getegid(), getegid(), getegid());
-
         setresgid(getegid(), getegid(), getegid());
-
         system("/home/shellshock/bash -c 'echo shock_me'");
-
         return 0;
-
 }
 ```
 这是一个别名为shellshock的漏洞, CVE-2014-6271 
@@ -482,9 +351,7 @@ vulnerable
 攻击该程序: 如果real uid和effective uid相同时, 环境变量在程序内有效, 就可以利用这个漏洞. 而本题代码中
 ```c
 setresuid(getegid(), getegid(), getegid());
-
-        setresgid(getegid(), getegid(), getegid());
-
+setresgid(getegid(), getegid(), getegid());
 ```
 确保了这一点. 
 所以可以这样攻击: 
@@ -500,233 +367,125 @@ shellshock@ubuntu:~$
 lotto.c: 
 ```c
 #include <stdio.h>
-
 #include <stdlib.h>
-
 #include <string.h>
-
 #include <fcntl.h>
-
-  
 
 unsigned char submit[6];
 
-  
-
 void play(){
-
-  
-
         int i;
-
         printf("Submit your 6 lotto bytes : ");
-
         fflush(stdout);
-
-  
-
         int r;
-
         r = read(0, submit, 6);
-
-  
-
         printf("Lotto Start!\n");
-
         //sleep(1);
 
   
 
         // generate lotto numbers
-
         int fd = open("/dev/urandom", O_RDONLY);
-
         if(fd==-1){
-
                 printf("error. tell admin\n");
-
                 exit(-1);
-
         }
 
         unsigned char lotto[6];
 
         if(read(fd, lotto, 6) != 6){
-
                 printf("error2. tell admin\n");
-
                 exit(-1);
-
         }
 
         for(i=0; i<6; i++){
-
                 lotto[i] = (lotto[i] % 45) + 1;         // 1 ~ 45
-
         }
-
         close(fd);
-
-  
 
         // calculate lotto score
 
         int match = 0, j = 0;
-
         for(i=0; i<6; i++){
-
                 for(j=0; j<6; j++){
-
                         if(lotto[i] == submit[j]){
-
                                 match++;
-
                         }
-
                 }
-
         }
-
-  
-
         // win!
 
         if(match == 6){
-
                 system("/bin/cat flag");
-
         }
-
         else{
-
                 printf("bad luck...\n");
-
         }
-
-  
-
 }
 
   
 
 void help(){
-
         printf("- nLotto Rule -\n");
-
         printf("nlotto is consisted with 6 random natural numbers less than 46\n");
-
         printf("your goal is to match lotto numbers as many as you can\n");
-
         printf("if you win lottery for *1st place*, you will get reward\n");
-
         printf("for more details, follow the link below\n");
-
         printf("http://www.nlotto.co.kr/counsel.do?method=playerGuide#buying_guide01\n\n");
-
         printf("mathematical chance to win this game is known to be 1/8145060.\n");
-
 }
 
   
 
 int main(int argc, char* argv[]){
-
-  
-
         // menu
-
         unsigned int menu;
-
-  
-
         while(1){
-
-  
-
-                printf("- Select Menu -\n");
-
+		        printf("- Select Menu -\n");
                 printf("1. Play Lotto\n");
-
                 printf("2. Help\n");
-
                 printf("3. Exit\n");
-
-  
-
                 scanf("%d", &menu);
-
-  
-
                 switch(menu){
-
                         case 1:
-
                                 play();
-
                                 break;
-
                         case 2:
-
                                 help();
-
                                 break;
-
                         case 3:
-
                                 printf("bye\n");
-
                                 return 0;
-
                         default:
-
                                 printf("invalid menu\n");
-
                                 break;
-
                 }
-
         }
-
         return 0;
-
 }
 ```
 
 看这段: 
 ```c
         for(i=0; i<6; i++){
-
                 for(j=0; j<6; j++){
-
                         if(lotto[i] == submit[j]){
-
                                 match++;
-
                         }
-
                 }
-
         }
-
 ```
 原本应该是lotto和submit按顺序一一对应, 但是这段代码写成了对于lotto中的每一位, 只要submit中有x个与它相同就会使match+x. 这大大降低了枚举难度. 我们只要认死一个1~45中的字符, 比如'#', 一直输入
 "######", 只要随机出的lotto中有一个#, 就可以让match+6, 从而得到flag. 
 不会写代码识别flag, 所以我只能人工盯着屏幕看了
 ```python
 from pwn import *
-
 s = ssh(host='pwnable.kr',user='lotto', port=2222, password='guest')
-
 p = s.process('./lotto')
-
 while 1:
-
     p.sendline("1")
-
     p.sendline("######")
-
     print(p.recvline())
-
 # s.interactive()
 ```
 可以看到得到flag还是很快的, 看到flag就可以ctrl+c结束脚本了
@@ -1178,35 +937,21 @@ b'bad luck...\n'
 ## 14 cmd1
 ```c
 #include <stdio.h>
-
 #include <string.h>
-
   
-
 int filter(char* cmd){
-
         int r=0;
-
         r += strstr(cmd, "flag")!=0;
-
         r += strstr(cmd, "sh")!=0;
-
         r += strstr(cmd, "tmp")!=0;
-
         return r;
-
 }
 
 int main(int argc, char* argv[], char** envp){
-
         putenv("PATH=/thankyouverymuch");
-
         if(filter(argv[1])) return 0;
-
         system( argv[1] );
-
         return 0;
-
 }
 ```
 代码很短, 主要就是执行`system(argv[1])`但可以看到该程序把PATH指向了一个显然不能用的路径, 而且我们传入的argv里不能包含flag, sh, tmp, 也就是不能直接或间接地把flag打印出来. 
@@ -1222,164 +967,97 @@ int main(int argc, char* argv[], char** envp){
 use after free漏洞
 源码: 
 ```cpp
-#include <fcntl.h>
-
-#include <iostream>
-
-#include <cstring>
-
 #include <cstdlib>
-
+#include <cstring>
+#include <fcntl.h>
+#include <iostream>
 #include <unistd.h>
-
 using namespace std;
-
-  
-
-class Human{
-
+class Human {
 private:
-
-        virtual void give_shell(){
-
-                system("/bin/sh");
-
-        }
+  virtual void give_shell() { system("/bin/sh"); }
 
 protected:
-
-        int age;
-
-        string name;
+  int age;
+  string name;
 
 public:
-
-        virtual void introduce(){
-
-                cout << "My name is " << name << endl;
-
-                cout << "I am " << age << " years old" << endl;
-
-        }
-
+  virtual void introduce() {
+    cout << "My name is " << name << endl;
+    cout << "I am " << age << " years old" << endl;
+  }
 };
 
-  
+class Man : public Human {
+public:
+  Man(string name, int age) {
+    this->name = name;
+    this->age = age;
+  }
+  virtual void introduce() {
+    Human::introduce();
+    cout << "I am a nice guy!" << endl;
+  }
+};
 
-class Man: public Human{
+class Woman : public Human {
 
 public:
+  Woman(string name, int age) {
+    this->name = name;
+    this->age = age;
+  }
 
-        Man(string name, int age){
-
-                this->name = name;
-
-                this->age = age;
-
-        }
-
-        virtual void introduce(){
-
-                Human::introduce();
-
-                cout << "I am a nice guy!" << endl;
-
-        }
-
+  virtual void introduce() {
+    Human::introduce();
+    cout << "I am a cute girl!" << endl;
+  }
 };
 
-  
-
-class Woman: public Human{
-
-public:
-
-        Woman(string name, int age){
-
-                this->name = name;
-
-                this->age = age;
-
-        }
-
-        virtual void introduce(){
-
-                Human::introduce();
-
-                cout << "I am a cute girl!" << endl;
-
-        }
-
-};
-
-  
-
-int main(int argc, char* argv[]){
-
-        Human* m = new Man("Jack", 25);
-
-        Human* w = new Woman("Jill", 21);
-
-  
-
-        size_t len;
-
-        char* data;
-
-        unsigned int op;
-
-        while(1){
-
-                cout << "1. use\n2. after\n3. free\n";
-
-                cin >> op;
-
-  
-
-                switch(op){
-
-                        case 1:
-
-                                m->introduce();
-
-                                w->introduce();
-
-                                break;
-
-                        case 2:
-
-                                len = atoi(argv[1]);
-
-                                data = new char[len];
-
-                                read(open(argv[2], O_RDONLY), data, len);
-
-                                cout << "your data is allocated" << endl;
-
-                                break;
-
-                        case 3:
-
-                                delete m;
-
-                                delete w;
-
-                                break;
-
-                        default:
-
-                                break;
-
-                }
-
-        }
-
-  
-
-        return 0;
-
+int main(int argc, char *argv[]) {
+  Human *m = new Man("Jack", 25);
+  Human *w = new Woman("Jill", 21);
+  size_t len;
+  char *data;
+  unsigned int op;
+  while (1) {
+    cout << "1. use\n2. after\n3. free\n";
+    cin >> op;
+    switch (op) {
+    case 1:
+      m->introduce();
+      w->introduce();
+      break;
+    case 2:
+      len = atoi(argv[1]);
+      data = new char[len];
+      read(open(argv[2], O_RDONLY), data, len);
+      cout << "your data is allocated" << endl;
+      break;
+    case 3:
+      delete m;
+      delete w;
+      break;
+    default:
+      break;
+    }
+  }
+  return 0;
 }
 ```
+
+
+
+### unexploitable
+```c
+int __cdecl main(int argc, const char **argv, const char **envp)
+{
+  char buf[16]; // [rsp+0h] [rbp-10h] BYREF
+  sleep(3u);
+  return read(0, buf, 0x50FuLL);
+}
+```
+GOT表里什么都没有, 乍一看好像寄了, 但神奇的地方在于这个read的参数0x50F, 他在内存里是个0x0F05,所以用ROPgadget能找到一个syscall. 
 
 [0.虚表](https://zhuanlan.zhihu.com/p/353260837)
 [1](https://blog.csdn.net/weixin_43921239/article/details/100828167)

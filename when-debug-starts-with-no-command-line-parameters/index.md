@@ -8,7 +8,7 @@
 然后尝试二分法寻找指令段的结尾, 也没找到什么有用信息. 在这个过程中发现`add [BX+SI], AL`指令对应的机器码是0000.  
 尝试将整个程序dump下来, 没找到怎么dump.  
 于是再次返回搜索引擎, 仔细阅读[Debug (command) - Wikipedia](https://en.wikipedia.org/wiki/Debug_(command)#cite_note-Using_Debug-14), 找到了这段, 他的第一句话看起来有用: 
->When DEBUG is started without any parameters the DEBUG prompt, a "-" appears. The user can then enter one of several one or two-letter subcommands, including "A" to enter the assembler mode, "D" to perform a [hexadecimal dump](https://en.wikipedia.org/wiki/Hex_dump "Hex dump"), "T" to trace and "U" to unassemble (disassemble) a program in memory.[[13]](https://en.wikipedia.org/wiki/Debug_(command)#cite_note-TechNet-13) DEBUG can also be used as a "DEBUG script" [interpreter](https://en.wikipedia.org/wiki/Interpreter_(computing) "Interpreter (computing)") using the following syntax. 
+>When DEBUG is started without any parameters the DEBUG prompt, a "-" appears. The user can then enter one of several one or two-letter subcommands, including "A" to enter the assembler mode, "D" to perform a [hexadecimal dump](https://en.wikipedia.org/wiki/Hex_dump "Hex dump"), "T" to trace and "U" to unassemble (disassemble) a program in memory.[13](https://en.wikipedia.org/wiki/Debug_(command)#cite_note-TechNet-13) DEBUG can also be used as a "DEBUG script" [interpreter](https://en.wikipedia.org/wiki/Interpreter_(computing) "Interpreter (computing)") using the following syntax. 
 
 实际上也没什么想要的信息, 还是不知道debug打开的到底是什么. 后来开始翻下面的reference, 找到了这条: 
 > Sedory, Daniel B. ["A Guide to DEBUG"](http://thestarman.pcministry.com/asm/debug/debug.htm). Retrieved 2014-11-29.  
