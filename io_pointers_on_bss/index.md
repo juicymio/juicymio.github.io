@@ -37,4 +37,10 @@ libc_hidden_data_def (_IO_list_all)
 因为stdin等三个变量是未初始化的全局变量, 所以他们被分配到bss段. 在执行setvbuf时, 经过两次重定位将libc地址填入其中.  
 如果不setvbuf, 这三个符号就不会被用到, 也就不会被解析.  
 ### 问题
-发现似乎在使用setbuf时, 它们会作为libc里的变量出现在got表里, 这又是为什么呢?
+~~发现似乎在使用setbuf时, 它们会作为libc里的变量出现在got表里, 这又是为什么呢?~~
+
+P198 P194
+
+![[279a9d0da6d999a174b5d072d63afc92.png]]
+
+![[d2dfc527da1909ca844b92495861ce84_720.png]]

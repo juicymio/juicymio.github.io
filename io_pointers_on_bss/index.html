@@ -27,7 +27,7 @@
         "mainEntityOfPage": {
             "@type": "WebPage",
             "@id": "http:\/\/juicymio.github.io\/io_pointers_on_bss\/"
-        },"genre": "posts","wordcount":  446 ,
+        },"genre": "posts","wordcount":  450 ,
         "url": "http:\/\/juicymio.github.io\/io_pointers_on_bss\/","datePublished": "2023-12-12T20:47:10+08:00","dateModified": "2023-12-12T20:47:10+08:00","publisher": {
             "@type": "Organization",
             "name": ""},"author": {
@@ -101,7 +101,7 @@
             <div class="toc-content" id="toc-content-auto"></div>
         </div><article class="page single"><h1 class="single-title animate__animated animate__flipInX">为什么bss上有时会有stdin,stdout,stderr指针</h1><div class="post-meta">
             <div class="post-meta-line"><span class="post-author"><a href="/" title="Author" rel="author" class="author"><i class="fas fa-user-circle fa-fw" aria-hidden="true"></i>JuicyMio</a></span></div>
-            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-12-12">2023-12-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;446 words&nbsp;
+            <div class="post-meta-line"><i class="far fa-calendar-alt fa-fw" aria-hidden="true"></i>&nbsp;<time datetime="2023-12-12">2023-12-12</time>&nbsp;<i class="fas fa-pencil-alt fa-fw" aria-hidden="true"></i>&nbsp;450 words&nbsp;
                 <i class="far fa-clock fa-fw" aria-hidden="true"></i>&nbsp;One minute&nbsp;</div>
         </div><div class="details toc" id="toc-static"  data-kept="true">
                 <div class="details-summary toc-title">
@@ -188,7 +188,10 @@ setvbuf使用了这三个stdio.h中的extern变量</p>
 </div><p>因为stdin等三个变量是未初始化的全局变量, 所以他们被分配到bss段. 在执行setvbuf时, 经过两次重定位将libc地址填入其中.<br>
 如果不setvbuf, 这三个符号就不会被用到, 也就不会被解析.</p>
 <h3 id="问题" class="headerLink">
-    <a href="#%e9%97%ae%e9%a2%98" class="header-mark"></a>问题</h3><p>发现似乎在使用setbuf时, 它们会作为libc里的变量出现在got表里, 这又是为什么呢?</p>
+    <a href="#%e9%97%ae%e9%a2%98" class="header-mark"></a>问题</h3><p><del>发现似乎在使用setbuf时, 它们会作为libc里的变量出现在got表里, 这又是为什么呢?</del></p>
+<p>P198 P194</p>
+<p>![[279a9d0da6d999a174b5d072d63afc92.png]]</p>
+<p>![[d2dfc527da1909ca844b92495861ce84_720.png]]</p>
 </div><div class="post-footer" id="post-footer">
     <div class="post-info">
         <div class="post-info-line">
