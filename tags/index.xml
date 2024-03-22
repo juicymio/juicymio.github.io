@@ -1,32 +1,31 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>Tags - Tag - JuicyMio&#39;s blog</title>
-        <link>http://juicymio.github.io/tags/</link>
-        <description>Tags - Tag - JuicyMio&#39;s blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/tags/" rel="self" type="application/rss+xml" /><item>
-    <title>pwn</title>
-    <link>http://juicymio.github.io/tags/pwn/</link>
-    <pubDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/tags/pwn/</guid>
-    <description><![CDATA[]]></description>
-</item>
-<item>
-    <title>汇编语言</title>
-    <link>http://juicymio.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</link>
-    <pubDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</guid>
-    <description><![CDATA[]]></description>
-</item>
-<item>
-    <title>CSAPP</title>
-    <link>http://juicymio.github.io/tags/csapp/</link>
-    <pubDate>Sat, 15 Oct 2022 12:07:05 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/tags/csapp/</guid>
-    <description><![CDATA[]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on JuicyMio&#39;s Blog</title>
+    <link>https://juicymio.github.io/tags/</link>
+    <description>Recent content in Tags on JuicyMio&#39;s Blog</description>
+    <image>
+      <title>JuicyMio&#39;s Blog</title>
+      <url>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 11 Dec 2023 20:45:56 +0800</lastBuildDate>
+    <atom:link href="https://juicymio.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pwn</title>
+      <link>https://juicymio.github.io/tags/pwn/</link>
+      <pubDate>Mon, 11 Dec 2023 20:45:56 +0800</pubDate>
+      <guid>https://juicymio.github.io/tags/pwn/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>汇编语言</title>
+      <link>https://juicymio.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</link>
+      <pubDate>Sat, 25 Mar 2023 12:22:18 +0800</pubDate>
+      <guid>https://juicymio.github.io/tags/%E6%B1%87%E7%BC%96%E8%AF%AD%E8%A8%80/</guid>
+      <description></description>
+    </item>
+  </channel>
 </rss>

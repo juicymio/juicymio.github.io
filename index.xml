@@ -1,90 +1,147 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>JuicyMio&#39;s blog</title>
-        <link>http://juicymio.github.io/</link>
-        <description>JuicyMio&#39;s blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Tue, 12 Dec 2023 20:47:10 &#43;0800</lastBuildDate>
-            <atom:link href="http://juicymio.github.io/index.xml" rel="self" type="application/rss+xml" />
-        <item>
-    <title>为什么bss上有时会有stdin,stdout,stderr指针</title>
-    <link>http://juicymio.github.io/io_pointers_on_bss/</link>
-    <pubDate>Tue, 12 Dec 2023 20:47:10 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/io_pointers_on_bss/</guid>
-    <description><![CDATA[研究了一下bss段上为什么会有stdin,stdout,stderr, 根据经验观察似乎在使用setvbuf时会出现这种情况, 经过控制变量测试]]></description>
-</item>
-<item>
-    <title>CVE-2023-25139</title>
-    <link>http://juicymio.github.io/cve-2023-25139/</link>
-    <pubDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/cve-2023-25139/</guid>
-    <description><![CDATA[0x00 背景TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到]]></description>
-</item>
-<item>
-    <title>WSL2中C/C&#43;&#43;开发环境配置</title>
-    <link>http://juicymio.github.io/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link>
-    <pubDate>Sat, 08 Jul 2023 20:41:09 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid>
-    <description><![CDATA[基础 编辑器: LunarVim 基于clangd的代码提示, compile_commands.json由bear生成, 命令是bear -- make tmux管理窗口(目前]]></description>
-</item>
-<item>
-    <title>Phoenix</title>
-    <link>http://juicymio.github.io/phoenix/</link>
-    <pubDate>Tue, 28 Mar 2023 18:34:26 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/phoenix/</guid>
-    <description><![CDATA[0x00 前言Windows+WSL2(Ubuntu22.04)下的exploit.education的phoenix虚拟机环境配置, 但不建议使用W]]></description>
-</item>
-<item>
-    <title>当DEBUG无参数启动时, 我们在debug什么?</title>
-    <link>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</link>
-    <pubDate>Sat, 25 Mar 2023 12:22:18 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/when-debug-starts-with-no-command-line-parameters/</guid>
-    <description><![CDATA[0x00 前言好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究. 0x01 过程查了一堆类似&quot;What DEBUG for DOS debug without parameters&quot;,]]></description>
-</item>
-<item>
-    <title>[BUUCTF]others_shellcode wp</title>
-    <link>http://juicymio.github.io/buuctfothers_shellcode/</link>
-    <pubDate>Thu, 16 Mar 2023 22:56:18 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/buuctfothers_shellcode/</guid>
-    <description><![CDATA[0x00 前置知识x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
-</item>
-<item>
-    <title>操作系统学习笔记</title>
-    <link>http://juicymio.github.io/oslearning/</link>
-    <pubDate>Tue, 14 Mar 2023 22:36:18 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/oslearning/</guid>
-    <description><![CDATA[0x00 序言赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到从0到-1写一个操作系统-0xFF-!!完结撒花!!, 感觉还不错,]]></description>
-</item>
-<item>
-    <title>mayctf writeup by Mio and K-ON!</title>
-    <link>http://juicymio.github.io/mayctf_writeup/</link>
-    <pubDate>Mon, 07 Nov 2022 21:00:00 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/mayctf_writeup/</guid>
-    <description><![CDATA[侠客行 crypto easy_md5计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符]]></description>
-</item>
-<item>
-    <title>奇技淫巧</title>
-    <link>http://juicymio.github.io/tricks/</link>
-    <pubDate>Sat, 15 Oct 2022 14:37:24 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/tricks/</guid>
-    <description><![CDATA[收录遇到的各种奇技淫巧 位运算转换大小写 转小写 1 2 (&#39;a&#39; | &#39; &#39;) = &#39;a&#39; (&#39;A&#39; | &#39; &#39;) = &#39;a&#39; 转大写 1 2 (&#39;b&#39; &amp; &#39;_&#39;) = &#39;B&#39; (&#39;B&#39; &amp; &#39;_&#39;) = &#39;B&#39; 大小写互换 1 2 (&#39;c&#39; ^ &#39; &#39;) = &#39;C&#39; (&#39;C&#39; ^ &#39; &#39;) = &#39;C&#39;]]></description>
-</item>
-<item>
-    <title>Csapp_lab</title>
-    <link>http://juicymio.github.io/csapp_lab/</link>
-    <pubDate>Sat, 15 Oct 2022 12:07:05 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/csapp_lab/</guid>
-    <description><![CDATA[环境准备 WSL2(Ubuntu22.04) + VSCode 1 2 3 4 apt-get update sudo apt-get install build-essential sudo apt-get install gcc-multilib sudo apt-get install gdb Data Lab 食用方法 阅读README获得完整信息 按照bits.c文件的注释修改bits.c 使用./]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>JuicyMio&#39;s Blog</title>
+    <link>https://juicymio.github.io/</link>
+    <description>Recent content on JuicyMio&#39;s Blog</description>
+    <image>
+      <title>JuicyMio&#39;s Blog</title>
+      <url>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 12 Dec 2023 20:47:10 +0800</lastBuildDate>
+    <atom:link href="https://juicymio.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>为什么bss上有时会有stdin,stdout,stderr指针</title>
+      <link>https://juicymio.github.io/posts/io_pointers_on_bss/</link>
+      <pubDate>Tue, 12 Dec 2023 20:47:10 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/io_pointers_on_bss/</guid>
+      <description>研究了一下bss段上为什么会有stdin,stdout,stderr, 根据经验观察似乎在使用setvbuf时会出现这种情况, 经过控制变量测试, 发现只要setvbuf这三个变量的一个, 就会使该变量出现在bss段中. setvbuf使用了这三个stdio.h中的extern变量
+/* Standard streams. */ extern FILE *stdin;	/* Standard input stream. */ extern FILE *stdout;	/* Standard output stream. */ extern FILE *stderr;	/* Standard error output stream. */ /* C89/C99 say they&amp;#39;re macros. Make them happy. */ #define stdin stdin #define stdout stdout #define stderr stderr 他们定义在stdio.c中, 不过右边的仍然是extern变量
+#include &amp;#34;libioP.h&amp;#34; #include &amp;#34;stdio.h&amp;#34; #undef stdin #undef stdout #undef stderr FILE *stdin = (FILE *) &amp;amp;_IO_2_1_stdin_; FILE *stdout = (FILE *) &amp;amp;_IO_2_1_stdout_; FILE *stderr = (FILE *) &amp;amp;_IO_2_1_stderr_; 他们最初的定义在stdfile.</description>
+    </item>
+    <item>
+      <title>CVE-2023-25139</title>
+      <link>https://juicymio.github.io/posts/cve-2023-25139/</link>
+      <pubDate>Mon, 11 Dec 2023 20:45:56 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/cve-2023-25139/</guid>
+      <description>0x00 背景 TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到突破口的off by null如何触发（实际上是测试过程中出现了重大失误，已经找对了地方却没有测试出漏洞），赛后看wp发现有这样一个CVE： 30068 – (CVE-2023-25139) incorrect printf output for integers with thousands separator and width field (CVE-2023-25139) (sourceware.org)
+0x01 分析 先看上面链接中的复现样例：
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;locale.h&amp;gt; int main (void) { if (setlocale (LC_ALL, &amp;#34;&amp;#34;)) { printf (&amp;#34;1234567890123:\n&amp;#34;); printf (&amp;#34;%0+ -&amp;#39;13ld:\n&amp;#34;, 1234567L); } return 0; } 在有漏洞的Glibc2.37下的输出：
+1234567890123: +1,234,567 : 输出的长度是15而不是13，因为两个千位分隔符没有被计入宽度，导致输出时多补了两个空格。 这是一个glibc 2.37里短暂出现就被迅速修复的漏洞：千位分隔符在限制长度的格式化输出时没有被正确计入宽度，导致出现了溢出。 由该commit修复： Account for grouping in printf width (bug 30068) · bminor/glibc@c980549 (github.com) 下面就通过这个修复的commit分析一下这个bug是如何产生的。
+其中第266行由
+width -= workend - string + prec 改成了</description>
+    </item>
+    <item>
+      <title>WSL2中C/C&#43;&#43;开发环境配置</title>
+      <link>https://juicymio.github.io/posts/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</link>
+      <pubDate>Sat, 08 Jul 2023 20:41:09 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</guid>
+      <description>基础 编辑器: LunarVim 基于clangd的代码提示, compile_commands.json由bear生成, 命令是bear -- make tmux管理窗口(目前又改成了zellij, 感觉快捷键更好用一点) 美化 WSL2: 运行在Windows Terminal中, 安装oh my posh, One Half Dark主题 字体: Fira Code Nerd Font (为了显示LunarVim以及终端中各种小图标) Powerlevel10k 效果:
+图炸了（） 比之前那个运行在CMD里调个窗口大小就闪退, 配色还极其阴间, 显示不出来图标的状态强了不知道多少.
+效率提升 lazygit LunarVim中打包的一些插件差不多够用, 懒得折腾新的了 问题 挂代理也连不上各种东西, 经一通检查之后发现 感觉是wsl和steam++一起干的好事&amp;hellip; </description>
+    </item>
+    <item>
+      <title>Phoenix</title>
+      <link>https://juicymio.github.io/posts/phoenix/</link>
+      <pubDate>Tue, 28 Mar 2023 18:34:26 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/phoenix/</guid>
+      <description>0x00 前言 Windows+WSL2(Ubuntu22.04)下的exploit.education的phoenix虚拟机环境配置, 但不建议使用Windows配置环境, 比Linux多了不必要的麻烦.
+0x01 QEMU安装 官网amd的下载包只有Qcow2格式的可用了, 所以只能装一个QEMU. 去QEMU官网下载一个win版的安装包一路默认就可以了, 可以改个安装地址.
+0x02 虚拟机安装以及ssh Linux下直接运行压缩包中的boot脚本即可, 但Windows不行, 我找到个大佬博客提供了脚本.创建一个boot.ps1文件, 把下面的代码复制进去改下qemu的路径即可.
+D:\Program` Files\qemu\qemu-system-x86_64.exe ` -kernel vmlinuz-4.9.0-8-amd64 ` -initrd initrd.img-4.9.0-8-amd64 ` -append &amp;#34;root=/dev/vda1&amp;#34; ` -m 1024M ` -netdev user,id=unet,hostfwd=tcp:127.0.0.1:2222-:22 ` -device virtio-net,netdev=unet ` -drive file=exploit-education-phoenix-amd64.qcow2,if=virtio,format=qcow2,index=0 第一行的路径是qemu的安装路径, 注意空格用`代替. 再用powershell运行一下这个脚本即可, 若提示禁止运行脚本则给一下脚本运行权限即可. 下一步是ssh到Phoenix虚拟机上, 配置脚本中&amp;quot;hostfwd=tcp:127.0.0.1:2222-:22&amp;quot;指定了虚拟机监听本机的127.0.0.1:2222端口, 如果你使用普通虚拟机, 则直接ssh到这个端口即可, 可以ssh -p2222 user@localhost , 用户名和密码都是user, 配置环境到这里就结束了. 但如果你跟我一样使用的是WSL2, 并且没有升级到Win11所以WSL没有固定的ip地址, 那还需要再操作一下. 打开Powershell输入Get-NetIPInterface, 找到vEthernet(WSL), 记下前面的ifIndex, 然后在刚才的脚本前面加上两句.
+$WSL_ip = (Get-NetIPAddress -InterfaceIndex 76 -AddressFamily Ipv4).IPAddress $WSL_ip += &amp;#34;:2222&amp;#34; Get-NetIPAddress的文档: https://learn.</description>
+    </item>
+    <item>
+      <title>当DEBUG无参数启动时, 我们在debug什么?</title>
+      <link>https://juicymio.github.io/posts/when-debug-starts-with-no-command-line-parameters/</link>
+      <pubDate>Sat, 25 Mar 2023 12:22:18 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/when-debug-starts-with-no-command-line-parameters/</guid>
+      <description>0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究.
+0x01 过程 查了一堆类似&amp;quot;What DEBUG for DOS debug without parameters&amp;quot;, &amp;ldquo;What DEBUG open by default&amp;quot;之类的问题, 没找到什么答案, 搜索的过程感觉在考古, 有用信息较少.
+尝试用-u指令反汇编阅读代码, 看不出什么有用信息.
+然后尝试二分法寻找指令段的结尾, 也没找到什么有用信息. 在这个过程中发现add [BX+SI], AL指令对应的机器码是0000.
+尝试将整个程序dump下来, 没找到怎么dump.
+于是再次返回搜索引擎, 仔细阅读Debug (command) - Wikipedia, 找到了这段, 他的第一句话看起来有用:
+When DEBUG is started without any parameters the DEBUG prompt, a &amp;ldquo;-&amp;rdquo; appears. The user can then enter one of several one or two-letter subcommands, including &amp;ldquo;A&amp;rdquo; to enter the assembler mode, &amp;ldquo;D&amp;rdquo; to perform a hexadecimal dump, &amp;ldquo;T&amp;rdquo; to trace and &amp;ldquo;U&amp;rdquo; to unassemble (disassemble) a program in memory.</description>
+    </item>
+    <item>
+      <title>[BUUCTF]others_shellcode wp</title>
+      <link>https://juicymio.github.io/posts/buuctfothers_shellcode/</link>
+      <pubDate>Thu, 16 Mar 2023 22:56:18 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/buuctfothers_shellcode/</guid>
+      <description>0x00 前置知识 x86_32下应用程序调用系统调用的过程:
+把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个时，全部参数应该依次放在一块连续的内存区域里，同时在 ebx 中保存指向该内存区域的指针. 触发0x80中断, 切换到内核态, 执行中断处理函数. (为了节约宝贵的中断号, Linux用int 0x80触发所有系统调用. 再为每个系统调用分配与中断号用法类似的系统调用号) 0x01 题目分析 IDA看到main函数里只执行了一个getShell()函数, 代码如下.
+int getShell() { int result; // eax char v1[9]; // [esp-Ch] [ebp-Ch] BYREF strcpy(v1, &amp;#34;/bin//sh&amp;#34;); result = 11; __asm { int 80h; LINUX - sys_execve } return result; } 插入了汇编代码int 0x80. 根据IDA的注释可以看到eax的值就是result的值11. 而32位下系统调用号11即为execve. 32位调用参数存在栈里, 此处即为栈顶的v[1]内的&amp;quot;/bin/sh&amp;quot;. 所以相当于手动调用了系统调用execve(&amp;quot;/bin/sh&amp;quot;).</description>
+    </item>
+    <item>
+      <title>mayctf writeup by Mio and K-ON!</title>
+      <link>https://juicymio.github.io/posts/mayctf_writeup/</link>
+      <pubDate>Mon, 07 Nov 2022 21:00:00 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/mayctf_writeup/</guid>
+      <description>侠客行 crypto easy_md5 计算服务器给出的乱码字符串的md5码, 虽然很简单但是那个乱码字符串用recvuntil读进来是bytes类型, 转字符串再计算md5的处理折磨了我几天, 最后用一种比较离谱的办法搞出来了.
+#from re import L from pwn import * import binascii import hashlib,string,random context(log_level = &amp;#39;debug&amp;#39;, arch = &amp;#39;amd64&amp;#39;, os = &amp;#39;linux&amp;#39;) io = remote(&amp;#34;124.220.41.254&amp;#34;,11111) io.recvuntil(b&amp;#34;2.Go away\n&amp;#34;) io.sendline(b&amp;#34;1&amp;#34;) io.sendline(b&amp;#34;qwq&amp;#34;) for i in range(6000): io.recvuntil(b&amp;#34;say Goodbye\n&amp;#34;) io.sendline(b&amp;#34;1&amp;#34;) io.recvuntil(b&amp;#34;it: \n&amp;#34;) temp = io.recvuntil(&amp;#34;your answer is:&amp;#34;) print(type(temp)) print(temp) temp1 = binascii.hexlify(temp) print(type(temp1)) print(temp1) temp2 = str(temp1)[2:-33] # 把后面没用的部分和前面的b&amp;#39;切掉 print(temp2) temphex = temp2.encode() print(&amp;#34;hex:&amp;#34; + str(temphex)) temp3 = binascii.</description>
+    </item>
+    <item>
+      <title>奇技淫巧</title>
+      <link>https://juicymio.github.io/posts/tricks/</link>
+      <pubDate>Sat, 15 Oct 2022 14:37:24 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/tricks/</guid>
+      <description>收录遇到的各种奇技淫巧
+位运算转换大小写 转小写 (&amp;#39;a&amp;#39; | &amp;#39; &amp;#39;) = &amp;#39;a&amp;#39; (&amp;#39;A&amp;#39; | &amp;#39; &amp;#39;) = &amp;#39;a&amp;#39; 转大写 (&amp;#39;b&amp;#39; &amp;amp; &amp;#39;_&amp;#39;) = &amp;#39;B&amp;#39; (&amp;#39;B&amp;#39; &amp;amp; &amp;#39;_&amp;#39;) = &amp;#39;B&amp;#39; 大小写互换 (&amp;#39;c&amp;#39; ^ &amp;#39; &amp;#39;) = &amp;#39;C&amp;#39; (&amp;#39;C&amp;#39; ^ &amp;#39; &amp;#39;) = &amp;#39;C&amp;#39; 原理:
+&amp;#39; &amp;#39; = 20 = 0b00100000 &amp;#39;_&amp;#39; = 95 = 0b01011111 &amp;#39;A&amp;#39; = 65 = 0b01000001 &amp;#39;a&amp;#39; = 97 = 0b01100001 &amp;#39;A&amp;#39; - &amp;#39;a&amp;#39; = 20 = &amp;#39; &amp;#39; = 0b00100000 可以看到二进制ASCII码A与a差的就是100000, 其代表的是&amp;rsquo; &amp;lsquo;, 所以进行一个或运算可以将大写字母第5位的0变成1而不影响别的位, 小写字母不变.</description>
+    </item>
+    <item>
+      <title>二进制数中1的个数是否为奇数</title>
+      <link>https://juicymio.github.io/posts/odd_ones/</link>
+      <pubDate>Wed, 12 Oct 2022 23:26:25 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/odd_ones/</guid>
+      <description>CSAPP第二章家庭作业2.65
+/*Return 1 when x contains an odd number of 1s; 0 otherwise. Assume w=32 */ int odd_ones(unsigned x) 函数应该遵循位级整数编码规则,你的代码最多只能包含12个算术运算,位运算和逻辑运算.
+代码 先上个代码
+int odd_ones(unsigned x) { x ^= x &amp;gt;&amp;gt; 16; x ^= x &amp;gt;&amp;gt; 8; x ^= x &amp;gt;&amp;gt; 4; x ^= x &amp;gt;&amp;gt; 2; x ^= x &amp;gt;&amp;gt; 1; return x &amp;amp; 1; //http://stackoverflow.com/a/9133406 } 在使用循环的情况下就可以不用预先知道int的位数是多少,如下
+int odd_ones(unsigned x) { int w = sizeof(x) * 8;//获得x有多少位二进制位,这里是32 int n = 1; while(n &amp;lt; w) { x ^= (x &amp;gt;&amp;gt; n); n &amp;lt;&amp;lt;= 1; } return x &amp;amp; 1; } 原理 由于异或的性质, 可以反映异或对应位上1的个数.</description>
+    </item>
+    <item>
+      <title>C/C&#43;&#43;杂项知识点</title>
+      <link>https://juicymio.github.io/posts/c/</link>
+      <pubDate>Wed, 12 Oct 2022 22:32:18 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/c/</guid>
+      <description>用于记录一些比较奇怪/少见的c语法/易错易忘点/常见问题, 以备考试等用途
+杂项中的杂项 编译没过先看报错信息, 不认识英文请善用翻译 如何提问: 先使用搜索引擎. 如果一定要问人, 附上全部 全部 全部 代码, 以及报错信息 报错信息 报错信息. 和一组出错了的输入输出, 以及注释或你对代码的解释. 因为阅读别人的代码是一件很烧脑的事. 错误示范: 代码截图, 我错哪了? 不要拍屏 查错技巧: 学习使用gdb, 设置断点并查看相关变量的值. 一个低配但很快的方法是用printf输出关键变量 关于CSDN: 虽然内容质量感人被StackOverflow等英文网站甩了十条街, 但还是有一些值得一看的文章的. 而且哪怕用百度查到csdn文章看了也比啥也不查直接问强. 输入数据之后卡住了怎么办: 查看你的代码里是否有死循环, 或者你的输入格式是否合法. 输入输出对不上: 看看格式控制符跟变量类型能否对应, 常见错误是用%f读入double类型变量. 报错信息里有cannot open output file .../*.exe: permission denied或者&amp;quot;无法打开xxx程序进行写入&amp;quot;之类的东西: 你之前的程序没关掉 输出了奇怪的数字: 大概率数组越界 Segmentation fault: 访问了不可访问的内存. 常见原因是数组越界, 指针漂移, 缓冲区溢出, 数组开太大爆栈&amp;hellip; 带缺省值的参数需要放在后面, 这样在调用函数的时候就可以不写那个参数. 放在前面编译会报错. int f(int a = 0, int b); // wrong int f(int b, int a = 0); // right 字符串占用的空间要算上 &amp;lsquo;\0&amp;rsquo;</description>
+    </item>
+    <item>
+      <title>About</title>
+      <link>https://juicymio.github.io/about/</link>
+      <pubDate>Wed, 12 Oct 2022 17:19:11 +0800</pubDate>
+      <guid>https://juicymio.github.io/about/</guid>
+      <description>I&amp;rsquo;m JuicyMio.
+was an OIer.
+Now I&amp;rsquo;m studying pwn.
+May you have happy hacking.</description>
+    </item>
+    <item>
+      <title>Pwnable.kr</title>
+      <link>https://juicymio.github.io/posts/pwnable.kr/</link>
+      <pubDate>Wed, 12 Oct 2022 17:19:11 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/pwnable.kr/</guid>
+      <description>pwnable.kr writeup 1 fd 文件描述符(file descricptor)
+维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符。在程序设计中，一些涉及底层的程序编写往往会围绕着文件描述符展开。
+习惯上 标准输入(stdin)为0, 标准输出(stdout)为1, 标准错误(stderr)为2.
+//fd.c #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; char buf[32]; int main(int argc, char* argv[], char* envp[]){ if(argc&amp;lt;2){ printf(&amp;#34;pass argv[1] a number\n&amp;#34;); return 0; } int fd = atoi( argv[1] ) - 0x1234; int len = 0; len = read(fd, buf, 32); if(!strcmp(&amp;#34;LETMEWIN\n&amp;#34;, buf)){ printf(&amp;#34;good job :)\n&amp;#34;); system(&amp;#34;/bin/cat flag&amp;#34;); exit(0); } printf(&amp;#34;learn about Linux file IO\n&amp;#34;); return 0; } 得到flag的关键在于如何通过第二个if语句, 也就是如何让buf=LETMEMIN 可以看到read从fd中读入32个字节为buf赋值, 如果我们想控制buf的值就要控制fd中的内容, 那么只要让fd=0, 再向标准输入(从命令行直接输入)中输入LETMEWIN就可以了.</description>
+    </item>
+    <item>
+      <title>Friends</title>
+      <link>https://juicymio.github.io/friends/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://juicymio.github.io/friends/</guid>
+      <description>M4tsuri
+Ender
+Truman
+ZiQian
+BC_driver</description>
+    </item>
+  </channel>
 </rss>

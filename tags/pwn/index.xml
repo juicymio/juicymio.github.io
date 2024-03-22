@@ -1,32 +1,48 @@
-<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
-    <channel>
-        <title>pwn - Tag - JuicyMio&#39;s blog</title>
-        <link>http://juicymio.github.io/tags/pwn/</link>
-        <description>pwn - Tag - JuicyMio&#39;s blog</description>
-        <generator>Hugo -- gohugo.io</generator><language>zh-CN</language><managingEditor>guanhyjuicymio@gmail.com (JuicyMio)</managingEditor>
-            <webMaster>guanhyjuicymio@gmail.com (JuicyMio)</webMaster><lastBuildDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</lastBuildDate><atom:link href="http://juicymio.github.io/tags/pwn/" rel="self" type="application/rss+xml" /><item>
-    <title>CVE-2023-25139</title>
-    <link>http://juicymio.github.io/cve-2023-25139/</link>
-    <pubDate>Mon, 11 Dec 2023 20:45:56 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/cve-2023-25139/</guid>
-    <description><![CDATA[0x00 背景TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到]]></description>
-</item>
-<item>
-    <title>[BUUCTF]others_shellcode wp</title>
-    <link>http://juicymio.github.io/buuctfothers_shellcode/</link>
-    <pubDate>Thu, 16 Mar 2023 22:56:18 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/buuctfothers_shellcode/</guid>
-    <description><![CDATA[0x00 前置知识x86_32下应用程序调用系统调用的过程: 把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个]]></description>
-</item>
-<item>
-    <title>Pwnable.kr</title>
-    <link>http://juicymio.github.io/pwnable.kr/</link>
-    <pubDate>Wed, 12 Oct 2022 17:19:11 &#43;0800</pubDate>
-    <author>JuicyMio</author>
-    <guid>http://juicymio.github.io/pwnable.kr/</guid>
-    <description><![CDATA[pwnable.kr writeup 1 fd文件描述符(file descricptor) 维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文]]></description>
-</item>
-</channel>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Pwn on JuicyMio&#39;s Blog</title>
+    <link>https://juicymio.github.io/tags/pwn/</link>
+    <description>Recent content in Pwn on JuicyMio&#39;s Blog</description>
+    <image>
+      <title>JuicyMio&#39;s Blog</title>
+      <url>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 11 Dec 2023 20:45:56 +0800</lastBuildDate>
+    <atom:link href="https://juicymio.github.io/tags/pwn/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>CVE-2023-25139</title>
+      <link>https://juicymio.github.io/posts/cve-2023-25139/</link>
+      <pubDate>Mon, 11 Dec 2023 20:45:56 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/cve-2023-25139/</guid>
+      <description>0x00 背景 TPCTF里和qym师傅研究了两天safehttpd这题（虽然我一直在背英语pre，没干什么活），把整个程序可能的漏洞点翻遍了也没找到突破口的off by null如何触发（实际上是测试过程中出现了重大失误，已经找对了地方却没有测试出漏洞），赛后看wp发现有这样一个CVE： 30068 – (CVE-2023-25139) incorrect printf output for integers with thousands separator and width field (CVE-2023-25139) (sourceware.org)
+0x01 分析 先看上面链接中的复现样例：
+#include &amp;lt;stdio.h&amp;gt; #include &amp;lt;locale.h&amp;gt; int main (void) { if (setlocale (LC_ALL, &amp;#34;&amp;#34;)) { printf (&amp;#34;1234567890123:\n&amp;#34;); printf (&amp;#34;%0+ -&amp;#39;13ld:\n&amp;#34;, 1234567L); } return 0; } 在有漏洞的Glibc2.37下的输出：
+1234567890123: +1,234,567 : 输出的长度是15而不是13，因为两个千位分隔符没有被计入宽度，导致输出时多补了两个空格。 这是一个glibc 2.37里短暂出现就被迅速修复的漏洞：千位分隔符在限制长度的格式化输出时没有被正确计入宽度，导致出现了溢出。 由该commit修复： Account for grouping in printf width (bug 30068) · bminor/glibc@c980549 (github.com) 下面就通过这个修复的commit分析一下这个bug是如何产生的。
+其中第266行由
+width -= workend - string + prec 改成了</description>
+    </item>
+    <item>
+      <title>[BUUCTF]others_shellcode wp</title>
+      <link>https://juicymio.github.io/posts/buuctfothers_shellcode/</link>
+      <pubDate>Thu, 16 Mar 2023 22:56:18 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/buuctfothers_shellcode/</guid>
+      <description>0x00 前置知识 x86_32下应用程序调用系统调用的过程:
+把系统调用号存入eax. 把函数参数存在其他寄存器(ebx, ecx, edx, esi, edi), 当系统调用参数大于6个时，全部参数应该依次放在一块连续的内存区域里，同时在 ebx 中保存指向该内存区域的指针. 触发0x80中断, 切换到内核态, 执行中断处理函数. (为了节约宝贵的中断号, Linux用int 0x80触发所有系统调用. 再为每个系统调用分配与中断号用法类似的系统调用号) 0x01 题目分析 IDA看到main函数里只执行了一个getShell()函数, 代码如下.
+int getShell() { int result; // eax char v1[9]; // [esp-Ch] [ebp-Ch] BYREF strcpy(v1, &amp;#34;/bin//sh&amp;#34;); result = 11; __asm { int 80h; LINUX - sys_execve } return result; } 插入了汇编代码int 0x80. 根据IDA的注释可以看到eax的值就是result的值11. 而32位下系统调用号11即为execve. 32位调用参数存在栈里, 此处即为栈顶的v[1]内的&amp;quot;/bin/sh&amp;quot;. 所以相当于手动调用了系统调用execve(&amp;quot;/bin/sh&amp;quot;).</description>
+    </item>
+    <item>
+      <title>Pwnable.kr</title>
+      <link>https://juicymio.github.io/posts/pwnable.kr/</link>
+      <pubDate>Wed, 12 Oct 2022 17:19:11 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/pwnable.kr/</guid>
+      <description>pwnable.kr writeup 1 fd 文件描述符(file descricptor)
+维基百科：文件描述符在形式上是一个非负整数。实际上，它是一个索引值，指向内核为每一个进程所维护的该进程打开文件的记录表。当程序打开一个现有文件或者创建一个新文件时，内核向进程返回一个文件描述符。在程序设计中，一些涉及底层的程序编写往往会围绕着文件描述符展开。
+习惯上 标准输入(stdin)为0, 标准输出(stdout)为1, 标准错误(stderr)为2.
+//fd.c #include &amp;lt;stdio.h&amp;gt; #include &amp;lt;stdlib.h&amp;gt; #include &amp;lt;string.h&amp;gt; char buf[32]; int main(int argc, char* argv[], char* envp[]){ if(argc&amp;lt;2){ printf(&amp;#34;pass argv[1] a number\n&amp;#34;); return 0; } int fd = atoi( argv[1] ) - 0x1234; int len = 0; len = read(fd, buf, 32); if(!strcmp(&amp;#34;LETMEWIN\n&amp;#34;, buf)){ printf(&amp;#34;good job :)\n&amp;#34;); system(&amp;#34;/bin/cat flag&amp;#34;); exit(0); } printf(&amp;#34;learn about Linux file IO\n&amp;#34;); return 0; } 得到flag的关键在于如何通过第二个if语句, 也就是如何让buf=LETMEMIN 可以看到read从fd中读入32个字节为buf赋值, 如果我们想控制buf的值就要控制fd中的内容, 那么只要让fd=0, 再向标准输入(从命令行直接输入)中输入LETMEWIN就可以了.</description>
+    </item>
+  </channel>
 </rss>
