@@ -24,6 +24,25 @@
 #!/bin/python3 import sys import glob import shutil blog_dir = &amp;#34;/home/juicymio/blog/blog_papermod/&amp;#34; source_dir = &amp;#34;/home/juicymio/notes/PWN!!!/&amp;#34; attachments_folder = source_dir + &amp;#34;attachments&amp;#34; target = sys.argv[1].strip(&amp;#34;.md&amp;#34;) static_dir = blog_dir + &amp;#34;static/&amp;#34; def copy_files(source_dir, dest_dir, pattern): search_pattern = source_dir + &amp;#34;/&amp;#34; + pattern file_paths = glob.glob(search_pattern) for file_path in file_paths: dest_path = dest_dir + &amp;#34;/&amp;#34; + file_path.split(&amp;#34;/&amp;#34;)[-1] shutil.copy2(file_path, dest_path) copy_files(attachments_folder, static_dir, target + &amp;#34;*&amp;#34;) source_path = source_dir + target + &amp;#34;.</description>
     </item>
     <item>
+      <title>开启linux kernel rust support</title>
+      <link>https://juicymio.github.io/posts/linux_kernel_rust_support/</link>
+      <pubDate>Mon, 01 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://juicymio.github.io/posts/linux_kernel_rust_support/</guid>
+      <description>背景 试图用Rust做操作系统小组作业，某组员遇到环境配置问题。我尝试了一下，发现网上中文资料确实比较少，而且官方文档翻译略有过时。（可能有Rust更新比较快的原因。于是写了篇没什么用的流水账记录一下编译一个启用Rust支持的Linux kernel的过程。
+环境配置 本文所述内容均在archlinux下进行。
+Rust: 参照官方文档配置一下rust相关环境。 LLVM 省流版（不保证完全准确，在我这能跑）：
+从 https://www.kernel.org/ 下载linux-6.8.2源码
+在linux-6.8.2目录下切换rustc版本
+rustup override set $(scripts/min-tool-version.sh rustc) 添加rust-src
+rustup component add rust-src 安装bindgen-cli
+注意：此处中文文档已经滞后，需要安装的是bindgen-cli而非bindgen. 详见： https://github.com/rust-lang/cargo/issues/11249
+cargo install --locked --version $(scripts/min-tool-version.sh bindgen) bindgen-cli 需要将~/.cargo/bin添加到环境变量
+生成rust-analyzer配置文件
+make LLVM=1 rust-analyzer 查看rust工具链是否符合要求
+make LLVM=1 rustavailable 在我这的输出是(我没锁bindgen版本)
+❯ make LLVM=1 rustavailable *** *** Rust bindings generator &amp;#39;bindgen&amp;#39; is too new. This may or may not work. *** Your version: 0.69.4 *** Expected version: 0.</description>
+    </item>
+    <item>
       <title>天选4Archlinux安装及使用小记</title>
       <link>https://juicymio.github.io/posts/archlinux-installation/</link>
       <pubDate>Tue, 26 Mar 2024 14:27:40 +0800</pubDate>

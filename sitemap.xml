@@ -8,7 +8,19 @@
     <loc>https://juicymio.github.io/posts/hugo_with_obsidian/</loc>
     <lastmod>2024-04-01T00:00:00+00:00</lastmod>
   </url><url>
+    <loc>https://juicymio.github.io/tags/linux/</loc>
+    <lastmod>2024-04-01T00:00:00+00:00</lastmod>
+  </url><url>
     <loc>https://juicymio.github.io/posts/</loc>
+    <lastmod>2024-04-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://juicymio.github.io/tags/rust/</loc>
+    <lastmod>2024-04-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://juicymio.github.io/tags/</loc>
+    <lastmod>2024-04-01T00:00:00+00:00</lastmod>
+  </url><url>
+    <loc>https://juicymio.github.io/posts/linux_kernel_rust_support/</loc>
     <lastmod>2024-04-01T00:00:00+00:00</lastmod>
   </url><url>
     <loc>https://juicymio.github.io/posts/archlinux-installation/</loc>
@@ -21,9 +33,6 @@
     <lastmod>2023-12-11T20:45:56+08:00</lastmod>
   </url><url>
     <loc>https://juicymio.github.io/tags/pwn/</loc>
-    <lastmod>2023-12-11T20:45:56+08:00</lastmod>
-  </url><url>
-    <loc>https://juicymio.github.io/tags/</loc>
     <lastmod>2023-12-11T20:45:56+08:00</lastmod>
   </url><url>
     <loc>https://juicymio.github.io/posts/wsl2%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</loc>
