@@ -11,8 +11,18 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 26 Mar 2024 14:27:40 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 01 Apr 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://juicymio.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>hugo_with_obsidian</title>
+      <link>https://juicymio.github.io/posts/hugo_with_obsidian/</link>
+      <pubDate>Mon, 01 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://juicymio.github.io/posts/hugo_with_obsidian/</guid>
+      <description>背景 由于obsidian和hugo的图片路径十分不兼容（obsidian支持Vault内的绝对路径或文章相对路径，而hugo会把static内的图片放到public,也就是网站根目录下），如果把图片和md文件放在同一目录下倒是方便一点，但是这样目录就太乱了，令人难以接受。最简单的方案是统一把图片传到图床，但我一是囊中羞涩，二是常常要断网打比赛，需要笔记的图片保存在本地，不能使用图床的方案。总之我拖了好久都没处理这个问题，现在觉得不得不解决了。
+图片复制与链接修正 因为懒，所以先去搜了一下有没有插件可以一键解决。然后浪费了一上午时间测试各种插件，不是修复图片链接不方便就是迁移图片位置不好调整。最后一想，我自己会写代码，还有chatgpt, 为什么要学插件怎么用折磨自己&amp;hellip;
+于是搓了个很糙但是能用的版本。以下代码基本上是chatgpt生成的，就改了一下路径。
+#!/bin/python3 import sys import glob import shutil blog_dir = &amp;#34;/home/juicymio/blog/blog_papermod/&amp;#34; source_dir = &amp;#34;/home/juicymio/notes/PWN!!!/&amp;#34; attachments_folder = source_dir + &amp;#34;attachments&amp;#34; target = sys.argv[1].strip(&amp;#34;.md&amp;#34;) static_dir = blog_dir + &amp;#34;static/&amp;#34; def copy_files(source_dir, dest_dir, pattern): search_pattern = source_dir + &amp;#34;/&amp;#34; + pattern file_paths = glob.glob(search_pattern) for file_path in file_paths: dest_path = dest_dir + &amp;#34;/&amp;#34; + file_path.split(&amp;#34;/&amp;#34;)[-1] shutil.copy2(file_path, dest_path) copy_files(attachments_folder, static_dir, target + &amp;#34;*&amp;#34;) source_path = source_dir + target + &amp;#34;.</description>
+    </item>
     <item>
       <title>天选4Archlinux安装及使用小记</title>
       <link>https://juicymio.github.io/posts/archlinux-installation/</link>
