@@ -11,8 +11,20 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Mon, 01 Apr 2024 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 05 Apr 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://juicymio.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>clangd异常闪退原因分析</title>
+      <link>https://juicymio.github.io/posts/clangd_crash_analysis/</link>
+      <pubDate>Fri, 05 Apr 2024 00:00:00 +0000</pubDate>
+      <guid>https://juicymio.github.io/posts/clangd_crash_analysis/</guid>
+      <description>背景 使用neovim打开一个pwn题给的main.c源码的时候，clangd直接exit 1退出。当时的目录是这个样子的：
+❯ ls ld-linux-x86-64.so.2 libc.so.6 main.c pwn 然后我找到了clangd的目录，执行./clangd，一切正常。
+又打开了几个其他的c语言代码测试，一切正常。
+把main.c复制到其他目录下，打开仍然一切正常。
+看来问题出在clangd在处理这个特定目录下的文件时会闪退。于是我在这个目录下执行/path/to/clangd。复盘一下大概是这个样子的：
+❯ /tmp/clangd_17.0.3/bin/clangd /tmp/clangd_17.0.3/bin/clangd: libc.so.6: version `GLIBC_2.36&amp;#39; not found (required by /usr/lib/libpthread.so.0) /tmp/clangd_17.0.3/bin/clangd: libc.so.6: version `GLIBC_ABI_DT_RELR&amp;#39; not found (required by /usr/lib/libpthread.so.0) /tmp/clangd_17.0.3/bin/clangd: libc.so.6: version `GLIBC_2.36&amp;#39; not found (required by /usr/lib/librt.so.1) /tmp/clangd_17.0.3/bin/clangd: libc.so.6: version `GLIBC_ABI_DT_RELR&amp;#39; not found (required by /usr/lib/librt.so.1) /tmp/clangd_17.0.3/bin/clangd: libc.so.6: version `GLIBC_2.36&amp;#39; not found (required by /usr/lib/libdl.so.2) /tmp/clangd_17.0.3/bin/clangd: libc.so.6: version `GLIBC_ABI_DT_RELR&amp;#39; not found (required by /usr/lib/libdl.so.2) /tmp/clangd_17.0.3/bin/clangd: libc.</description>
+    </item>
     <item>
       <title>hugo_with_obsidian</title>
       <link>https://juicymio.github.io/posts/hugo_with_obsidian/</link>
