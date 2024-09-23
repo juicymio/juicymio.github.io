@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Os on JuicyMio&#39;s Blog</title>
+    <link>https://juicymio.github.io/tags/os/</link>
+    <description>Recent content in Os on JuicyMio&#39;s Blog</description>
+    <image>
+      <title>JuicyMio&#39;s Blog</title>
+      <url>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
+      <link>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Tue, 14 Mar 2023 22:36:18 +0800</lastBuildDate>
+    <atom:link href="https://juicymio.github.io/tags/os/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>操作系统学习笔记</title>
+      <link>https://juicymio.github.io/posts/oslearning/</link>
+      <pubDate>Tue, 14 Mar 2023 22:36:18 +0800</pubDate>
+      <guid>https://juicymio.github.io/posts/oslearning/</guid>
+      <description>&lt;h2 id=&#34;0xfe-序言&#34;&gt;0xFE 序言&lt;/h2&gt;
+&lt;p&gt;赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到&lt;a href=&#34;https://www.52pojie.cn/thread-1748588-1-1.html&#34;&gt;从0到-1写一个操作系统-0xFF-!!完结撒花!!&lt;/a&gt;, 感觉还不错, 于是开始动手实践, 开一个博客记录, 也是督促自己坚持下去.&lt;/p&gt;
+&lt;h2 id=&#34;0xff-操作系统的启动&#34;&gt;0xFF 操作系统的启动&lt;/h2&gt;
+&lt;h3 id=&#34;实模式&#34;&gt;实模式&lt;/h3&gt;
+&lt;p&gt;刚开机时CPU进入实模式, 因为此时只能使用物理地址.&lt;br&gt;
+实模式地址的分布是固定的,以8086为例, BIOS入口在0xFFFF0到0xFFFFF之间, 其中是一个jmp指令, 跳转到真正的BIOS位置. 中断向量表在0x00000到0x003FF. MBR加载地址在0x7C00到0x7DFF.&lt;/p&gt;
+&lt;h3 id=&#34;biosbasic-inputoutput-system&#34;&gt;BIOS(Basic Input/Output System)&lt;/h3&gt;
+&lt;p&gt;基本输入输出系统. 早期存储在ROM中, 现在存储在主板上的一个或多个芯片中. 目前其继承者UEFI(Unified Extensible Firmware Interface)正在全面取代BIOS.&lt;br&gt;
+BIOS首先进行加电自检(Power-On Self-Test), 缩写为POST, 检查CPU, 内存, 主板, 硬盘, 显卡等设备. POST结束后系统BIOS调用其他设备的BIOS对各个设备进行检测和初始化. 如果自检没有出现问题, 将执行启动程序.&lt;/p&gt;
+&lt;h3 id=&#34;boot&#34;&gt;Boot&lt;/h3&gt;
+&lt;p&gt;BOOT(靴子), 意为&amp;quot;to load a program into a computer from a disk; to start or ready for use especially by booting a program.&amp;quot;
+BOOTSTRAP(鞋带)&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;pull oneself up by one&amp;rsquo;s bootstraps 靠自己自立自强
+by one&amp;rsquo;s own bootstraps 自己努力, 自强&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>

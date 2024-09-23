@@ -18,13 +18,16 @@
       <link>https://juicymio.github.io/posts/when-debug-starts-with-no-command-line-parameters/</link>
       <pubDate>Sat, 25 Mar 2023 12:22:18 +0800</pubDate>
       <guid>https://juicymio.github.io/posts/when-debug-starts-with-no-command-line-parameters/</guid>
-      <description>0x00 前言 好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究.
-0x01 过程 查了一堆类似&amp;quot;What DEBUG for DOS debug without parameters&amp;quot;, &amp;ldquo;What DEBUG open by default&amp;quot;之类的问题, 没找到什么答案, 搜索的过程感觉在考古, 有用信息较少.
-尝试用-u指令反汇编阅读代码, 看不出什么有用信息.
-然后尝试二分法寻找指令段的结尾, 也没找到什么有用信息. 在这个过程中发现add [BX+SI], AL指令对应的机器码是0000.
-尝试将整个程序dump下来, 没找到怎么dump.
-于是再次返回搜索引擎, 仔细阅读Debug (command) - Wikipedia, 找到了这段, 他的第一句话看起来有用:
-When DEBUG is started without any parameters the DEBUG prompt, a &amp;ldquo;-&amp;rdquo; appears. The user can then enter one of several one or two-letter subcommands, including &amp;ldquo;A&amp;rdquo; to enter the assembler mode, &amp;ldquo;D&amp;rdquo; to perform a hexadecimal dump, &amp;ldquo;T&amp;rdquo; to trace and &amp;ldquo;U&amp;rdquo; to unassemble (disassemble) a program in memory.</description>
+      <description>&lt;h2 id=&#34;0x00-前言&#34;&gt;0x00 前言&lt;/h2&gt;
+&lt;p&gt;好奇无参数启动debug时, debug在对什么程序进行debug, 于是进行一番探究.&lt;/p&gt;
+&lt;h2 id=&#34;0x01-过程&#34;&gt;0x01 过程&lt;/h2&gt;
+&lt;p&gt;查了一堆类似&amp;quot;What DEBUG for DOS debug without parameters&amp;quot;, &amp;ldquo;What DEBUG open by default&amp;quot;之类的问题, 没找到什么答案, 搜索的过程感觉在考古, 有用信息较少.&lt;br&gt;
+尝试用-u指令反汇编阅读代码, 看不出什么有用信息.&lt;br&gt;
+然后尝试二分法寻找指令段的结尾, 也没找到什么有用信息. 在这个过程中发现&lt;code&gt;add [BX+SI], AL&lt;/code&gt;指令对应的机器码是0000.&lt;br&gt;
+尝试将整个程序dump下来, 没找到怎么dump.&lt;br&gt;
+于是再次返回搜索引擎, 仔细阅读&lt;a href=&#34;https://en.wikipedia.org/wiki/Debug_(command)#cite_note-Using_Debug-14&#34;&gt;Debug (command) - Wikipedia&lt;/a&gt;, 找到了这段, 他的第一句话看起来有用:&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;When DEBUG is started without any parameters the DEBUG prompt, a &amp;ldquo;-&amp;rdquo; appears. The user can then enter one of several one or two-letter subcommands, including &amp;ldquo;A&amp;rdquo; to enter the assembler mode, &amp;ldquo;D&amp;rdquo; to perform a &lt;a href=&#34;https://en.wikipedia.org/wiki/Hex_dump&#34; title=&#34;Hex dump&#34;&gt;hexadecimal dump&lt;/a&gt;, &amp;ldquo;T&amp;rdquo; to trace and &amp;ldquo;U&amp;rdquo; to unassemble (disassemble) a program in memory.&lt;a href=&#34;https://en.wikipedia.org/wiki/Debug_(command)#cite_note-TechNet-13&#34;&gt;13&lt;/a&gt; DEBUG can also be used as a &amp;ldquo;DEBUG script&amp;rdquo; &lt;a href=&#34;https://en.wikipedia.org/wiki/Interpreter_(computing)&#34; title=&#34;Interpreter (computing)&#34;&gt;interpreter&lt;/a&gt; using the following syntax.&lt;/p&gt;</description>
     </item>
   </channel>
 </rss>
