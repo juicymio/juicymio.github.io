@@ -11,8 +11,84 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <language>zh-CN</language>
-    <lastBuildDate>Tue, 14 Mar 2023 22:36:18 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 22 Oct 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://juicymio.github.io/tags/os/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>关于某些环境下第二次调用disp_str产生乱码的问题解析</title>
+      <link>https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/</link>
+      <pubDate>Tue, 22 Oct 2024 00:00:00 +0000</pubDate>
+      <guid>https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/</guid>
+      <description>&lt;h2 id=&#34;前言&#34;&gt;前言&lt;/h2&gt;
+&lt;p&gt;标题中的”某些环境“包括笔者和一些同学的64位系统。
+笔者验证时数次得到不符合预期的结果，于是数次推翻之前的结论，一开始以为这仅仅是一个与开关PIC选项有关的问题，后来发现可能是开关PIE的问题，再去实验发现同样的选项在不同编译器版本下行为也不同，可能是不同编译器的行为不同。
+本文中关于PIC、PIE的分析比较仓促，并且笔者的相关知识也比较匮乏，可能会有很多错误，希望读者包涵并指正。&lt;/p&gt;
+&lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
+&lt;p&gt;在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。
+图中可以看到最后一行输出是乱码。
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-1.png&#34; alt=&#34;&#34;  /&gt;
+&lt;/p&gt;
+&lt;h2 id=&#34;问题溯源&#34;&gt;问题溯源&lt;/h2&gt;
+&lt;p&gt;为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的：
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-2.png&#34; alt=&#34;&#34;  /&gt;
+
+比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-asm&#34; data-lang=&#34;asm&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;__x86_get_pc_thunk_bx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;__x86_get_pc_thunk_bx&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;proc&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;near&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;; __unwind {
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;     &lt;span class=&#34;no&#34;&gt;ebx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;esp&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;retn&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;; }
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于&lt;code&gt;push ip; jmp&lt;/code&gt;。下一句紧接着执行&lt;code&gt;mov ebx, [esp+0];retn&lt;/code&gt;就会将刚压进栈的ip的值赋给ebx。此时ebx的值是&lt;code&gt;add ebx, (offset _GLOBAL_OFFSET_TABLE)&lt;/code&gt;的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是&lt;strong&gt;相对此时的ebx寻址&lt;/strong&gt;的。
+从lea指令开始为第一次调用disp_str布置参数，将&lt;code&gt;[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_&lt;/code&gt;也就是&lt;code&gt;aCstartBegins&lt;/code&gt;的实际地址压入栈中。
+这段代码这么做是因为&lt;code&gt;aCstartBegins&lt;/code&gt;和&lt;code&gt;_GLOBAL_OFFSET_TABLE_&lt;/code&gt;的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。
+于是第一次调用十分正常，在disp_str中下断点，在bochs中调试：
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-3.png&#34; alt=&#34;&#34;  /&gt;
+
+看到&lt;strong&gt;正常的ebx的值应该是0x32ff4&lt;/strong&gt;,此时&lt;code&gt;aCstartBegins&lt;/code&gt;的地址是0x31000。
+继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串&lt;code&gt;aCstartEnds&lt;/code&gt;地址应该是&lt;code&gt;aCstartBegins+0x2a&lt;/code&gt;=0x3102a。
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-4.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-5.png&#34; alt=&#34;&#34;  /&gt;
+
+&lt;strong&gt;ebx的值变成了0x32fa0&lt;/strong&gt;=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。&lt;/p&gt;
+&lt;p&gt;既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-asm&#34; data-lang=&#34;asm&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nl&#34;&gt;disp_str:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;push&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;ebp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;ebp&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;esp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;xchg&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;bx&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;bx&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;# magic_break for debug
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;esi&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;ebp&lt;/span&gt; &lt;span class=&#34;err&#34;&gt;+&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;8&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;	&lt;span class=&#34;c1&#34;&gt;; pszInfo
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;  &lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;edi&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;disp_pos&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;ah&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;Fh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nl&#34;&gt;.1:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;lodsb&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;test&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;al&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;al&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;jz&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;.2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;cmp&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;al&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;Ah&lt;/span&gt;	
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;no&#34;&gt;jnz&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;.3&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;push&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;edi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;bl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;160&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;; &amp;lt;--------------修改bl
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nf&#34;&gt;div&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;bl&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;and&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;eax&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;FFh&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;inc&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;bl&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;160&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;; &amp;lt;--------------修改bl
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;	&lt;span class=&#34;nf&#34;&gt;mul&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;bl&lt;/span&gt;       
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;no&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;edi&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;pop&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;eax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;jmp&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;.1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nl&#34;&gt;.3:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;gs&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;edi&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;ax&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;add&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;edi&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;jmp&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;.1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nl&#34;&gt;.2:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;	&lt;span class=&#34;nf&#34;&gt;mov&lt;/span&gt;	&lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;no&#34;&gt;disp_pos&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;],&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;edi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;pop&lt;/span&gt;	&lt;span class=&#34;no&#34;&gt;ebp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;  &lt;span class=&#34;nf&#34;&gt;ret&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0.
+再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。&lt;/p&gt;</description>
+    </item>
     <item>
       <title>操作系统学习笔记</title>
       <link>https://juicymio.github.io/posts/oslearning/</link>

@@ -1,0 +1,303 @@
+<!doctype html><html lang=en dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>关于某些环境下第二次调用disp_str产生乱码的问题解析 | JuicyMio's Blog</title>
+<meta name=keywords content="os"><meta name=description content="前言
+标题中的”某些环境“包括笔者和一些同学的64位系统。
+笔者验证时数次得到不符合预期的结果，于是数次推翻之前的结论，一开始以为这仅仅是一个与开关PIC选项有关的问题，后来发现可能是开关PIE的问题，再去实验发现同样的选项在不同编译器版本下行为也不同，可能是不同编译器的行为不同。
+本文中关于PIC、PIE的分析比较仓促，并且笔者的相关知识也比较匮乏，可能会有很多错误，希望读者包涵并指正。
+问题描述
+在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。
+图中可以看到最后一行输出是乱码。
+
+
+问题溯源
+为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的：
+
+
+比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：
+public __x86_get_pc_thunk_bx
+__x86_get_pc_thunk_bx proc near
+; __unwind {
+mov     ebx, [esp+0]
+retn
+; }
+这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于push ip; jmp。下一句紧接着执行mov ebx, [esp+0];retn就会将刚压进栈的ip的值赋给ebx。此时ebx的值是add ebx, (offset _GLOBAL_OFFSET_TABLE)的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是相对此时的ebx寻址的。
+从lea指令开始为第一次调用disp_str布置参数，将[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_也就是aCstartBegins的实际地址压入栈中。
+这段代码这么做是因为aCstartBegins和_GLOBAL_OFFSET_TABLE_的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。
+于是第一次调用十分正常，在disp_str中下断点，在bochs中调试：
+
+
+看到正常的ebx的值应该是0x32ff4,此时aCstartBegins的地址是0x31000。
+继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串aCstartEnds地址应该是aCstartBegins+0x2a=0x3102a。
+
+
+
+
+ebx的值变成了0x32fa0=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。
+既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.
+disp_str:
+  push	ebp
+  mov	ebp, esp
+
+  xchg bx, bx # magic_break for debug
+  mov	esi, [ebp + 8]	; pszInfo
+  mov	edi, [disp_pos]
+  mov	ah, 0Fh
+.1:
+	lodsb
+	test	al, al
+	jz	.2
+	cmp	al, 0Ah	
+	jnz	.3
+	push	eax
+	mov	eax, edi
+	mov	bl, 160 ; <--------------修改bl
+	div	bl
+	and	eax, 0FFh
+	inc	eax
+	mov	bl, 160 ; <--------------修改bl
+	mul	bl       
+	mov	edi, eax
+	pop	eax
+	jmp	.1
+.3:
+	mov	[gs:edi], ax
+	add	edi, 2
+	jmp	.1
+
+.2:
+	mov	[disp_pos], edi
+  pop	ebp
+  ret
+发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0.
+再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。"><meta name=author content="JuicyMio"><link rel=canonical href=https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/><meta name=google-site-verification content="XYZabc"><meta name=yandex-verification content="XYZabc"><meta name=msvalidate.01 content="XYZabc"><link crossorigin=anonymous href=/assets/css/stylesheet.b609c58d5c11bb90b1a54e04005d74ad1ddf22165eb79f5533967e57df9c3b50.css integrity="sha256-tgnFjVwRu5CxpU4EAF10rR3fIhZet59VM5Z+V9+cO1A=" rel="preload stylesheet" as=style><link rel=icon href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=icon type=image/png sizes=16x16 href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=icon type=image/png sizes=32x32 href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=apple-touch-icon href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=mask-icon href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><meta property="og:title" content="关于某些环境下第二次调用disp_str产生乱码的问题解析"><meta property="og:description" content="前言
+标题中的”某些环境“包括笔者和一些同学的64位系统。
+笔者验证时数次得到不符合预期的结果，于是数次推翻之前的结论，一开始以为这仅仅是一个与开关PIC选项有关的问题，后来发现可能是开关PIE的问题，再去实验发现同样的选项在不同编译器版本下行为也不同，可能是不同编译器的行为不同。
+本文中关于PIC、PIE的分析比较仓促，并且笔者的相关知识也比较匮乏，可能会有很多错误，希望读者包涵并指正。
+问题描述
+在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。
+图中可以看到最后一行输出是乱码。
+
+
+问题溯源
+为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的：
+
+
+比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：
+public __x86_get_pc_thunk_bx
+__x86_get_pc_thunk_bx proc near
+; __unwind {
+mov     ebx, [esp+0]
+retn
+; }
+这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于push ip; jmp。下一句紧接着执行mov ebx, [esp+0];retn就会将刚压进栈的ip的值赋给ebx。此时ebx的值是add ebx, (offset _GLOBAL_OFFSET_TABLE)的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是相对此时的ebx寻址的。
+从lea指令开始为第一次调用disp_str布置参数，将[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_也就是aCstartBegins的实际地址压入栈中。
+这段代码这么做是因为aCstartBegins和_GLOBAL_OFFSET_TABLE_的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。
+于是第一次调用十分正常，在disp_str中下断点，在bochs中调试：
+
+
+看到正常的ebx的值应该是0x32ff4,此时aCstartBegins的地址是0x31000。
+继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串aCstartEnds地址应该是aCstartBegins+0x2a=0x3102a。
+
+
+
+
+ebx的值变成了0x32fa0=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。
+既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.
+disp_str:
+  push	ebp
+  mov	ebp, esp
+
+  xchg bx, bx # magic_break for debug
+  mov	esi, [ebp + 8]	; pszInfo
+  mov	edi, [disp_pos]
+  mov	ah, 0Fh
+.1:
+	lodsb
+	test	al, al
+	jz	.2
+	cmp	al, 0Ah	
+	jnz	.3
+	push	eax
+	mov	eax, edi
+	mov	bl, 160 ; <--------------修改bl
+	div	bl
+	and	eax, 0FFh
+	inc	eax
+	mov	bl, 160 ; <--------------修改bl
+	mul	bl       
+	mov	edi, eax
+	pop	eax
+	jmp	.1
+.3:
+	mov	[gs:edi], ax
+	add	edi, 2
+	jmp	.1
+
+.2:
+	mov	[disp_pos], edi
+  pop	ebp
+  ret
+发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0.
+再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。"><meta property="og:type" content="article"><meta property="og:url" content="https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/"><meta property="og:image" content="https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-10-22T00:00:00+00:00"><meta property="article:modified_time" content="2024-10-22T00:00:00+00:00"><meta property="og:site_name" content="JuicyMio's Blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:title content="关于某些环境下第二次调用disp_str产生乱码的问题解析"><meta name=twitter:description content="前言
+标题中的”某些环境“包括笔者和一些同学的64位系统。
+笔者验证时数次得到不符合预期的结果，于是数次推翻之前的结论，一开始以为这仅仅是一个与开关PIC选项有关的问题，后来发现可能是开关PIE的问题，再去实验发现同样的选项在不同编译器版本下行为也不同，可能是不同编译器的行为不同。
+本文中关于PIC、PIE的分析比较仓促，并且笔者的相关知识也比较匮乏，可能会有很多错误，希望读者包涵并指正。
+问题描述
+在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。
+图中可以看到最后一行输出是乱码。
+
+
+问题溯源
+为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的：
+
+
+比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：
+public __x86_get_pc_thunk_bx
+__x86_get_pc_thunk_bx proc near
+; __unwind {
+mov     ebx, [esp+0]
+retn
+; }
+这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于push ip; jmp。下一句紧接着执行mov ebx, [esp+0];retn就会将刚压进栈的ip的值赋给ebx。此时ebx的值是add ebx, (offset _GLOBAL_OFFSET_TABLE)的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是相对此时的ebx寻址的。
+从lea指令开始为第一次调用disp_str布置参数，将[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_也就是aCstartBegins的实际地址压入栈中。
+这段代码这么做是因为aCstartBegins和_GLOBAL_OFFSET_TABLE_的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。
+于是第一次调用十分正常，在disp_str中下断点，在bochs中调试：
+
+
+看到正常的ebx的值应该是0x32ff4,此时aCstartBegins的地址是0x31000。
+继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串aCstartEnds地址应该是aCstartBegins+0x2a=0x3102a。
+
+
+
+
+ebx的值变成了0x32fa0=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。
+既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.
+disp_str:
+  push	ebp
+  mov	ebp, esp
+
+  xchg bx, bx # magic_break for debug
+  mov	esi, [ebp + 8]	; pszInfo
+  mov	edi, [disp_pos]
+  mov	ah, 0Fh
+.1:
+	lodsb
+	test	al, al
+	jz	.2
+	cmp	al, 0Ah	
+	jnz	.3
+	push	eax
+	mov	eax, edi
+	mov	bl, 160 ; <--------------修改bl
+	div	bl
+	and	eax, 0FFh
+	inc	eax
+	mov	bl, 160 ; <--------------修改bl
+	mul	bl       
+	mov	edi, eax
+	pop	eax
+	jmp	.1
+.3:
+	mov	[gs:edi], ax
+	add	edi, 2
+	jmp	.1
+
+.2:
+	mov	[disp_pos], edi
+  pop	ebp
+  ret
+发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0.
+再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://juicymio.github.io/posts/"},{"@type":"ListItem","position":2,"name":"关于某些环境下第二次调用disp_str产生乱码的问题解析","item":"https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"关于某些环境下第二次调用disp_str产生乱码的问题解析","name":"关于某些环境下第二次调用disp_str产生乱码的问题解析","description":"前言 标题中的”某些环境“包括笔者和一些同学的64位系统。 笔者验证时数次得到不符合预期的结果，于是数次推翻之前的结论，一开始以为这仅仅是一个与开关PIC选项有关的问题，后来发现可能是开关PIE的问题，再去实验发现同样的选项在不同编译器版本下行为也不同，可能是不同编译器的行为不同。 本文中关于PIC、PIE的分析比较仓促，并且笔者的相关知识也比较匮乏，可能会有很多错误，希望读者包涵并指正。\n问题描述 在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。 图中可以看到最后一行输出是乱码。 问题溯源 为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的： 比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：\npublic __x86_get_pc_thunk_bx __x86_get_pc_thunk_bx proc near ; __unwind { mov ebx, [esp+0] retn ; } 这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于push ip; jmp。下一句紧接着执行mov ebx, [esp+0];retn就会将刚压进栈的ip的值赋给ebx。此时ebx的值是add ebx, (offset _GLOBAL_OFFSET_TABLE)的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是相对此时的ebx寻址的。 从lea指令开始为第一次调用disp_str布置参数，将[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_也就是aCstartBegins的实际地址压入栈中。 这段代码这么做是因为aCstartBegins和_GLOBAL_OFFSET_TABLE_的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。 于是第一次调用十分正常，在disp_str中下断点，在bochs中调试： 看到正常的ebx的值应该是0x32ff4,此时aCstartBegins的地址是0x31000。 继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串aCstartEnds地址应该是aCstartBegins+0x2a=0x3102a。 ebx的值变成了0x32fa0=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。\n既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.\ndisp_str: push\tebp mov\tebp, esp xchg bx, bx # magic_break for debug mov\tesi, [ebp + 8]\t; pszInfo mov\tedi, [disp_pos] mov\tah, 0Fh .1: lodsb test\tal, al jz\t.2 cmp\tal, 0Ah\tjnz\t.3 push\teax mov\teax, edi mov\tbl, 160 ; \u0026lt;--------------修改bl div\tbl and\teax, 0FFh inc\teax mov\tbl, 160 ; \u0026lt;--------------修改bl mul\tbl mov\tedi, eax pop\teax jmp\t.1 .3: mov\t[gs:edi], ax add\tedi, 2 jmp\t.1 .2: mov\t[disp_pos], edi pop\tebp ret 发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0. 再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。\n","keywords":["os"],"articleBody":"前言 标题中的”某些环境“包括笔者和一些同学的64位系统。 笔者验证时数次得到不符合预期的结果，于是数次推翻之前的结论，一开始以为这仅仅是一个与开关PIC选项有关的问题，后来发现可能是开关PIE的问题，再去实验发现同样的选项在不同编译器版本下行为也不同，可能是不同编译器的行为不同。 本文中关于PIC、PIE的分析比较仓促，并且笔者的相关知识也比较匮乏，可能会有很多错误，希望读者包涵并指正。\n问题描述 在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。 图中可以看到最后一行输出是乱码。 问题溯源 为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的： 比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：\npublic __x86_get_pc_thunk_bx __x86_get_pc_thunk_bx proc near ; __unwind { mov ebx, [esp+0] retn ; } 这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于push ip; jmp。下一句紧接着执行mov ebx, [esp+0];retn就会将刚压进栈的ip的值赋给ebx。此时ebx的值是add ebx, (offset _GLOBAL_OFFSET_TABLE)的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是相对此时的ebx寻址的。 从lea指令开始为第一次调用disp_str布置参数，将[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_也就是aCstartBegins的实际地址压入栈中。 这段代码这么做是因为aCstartBegins和_GLOBAL_OFFSET_TABLE_的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。 于是第一次调用十分正常，在disp_str中下断点，在bochs中调试： 看到正常的ebx的值应该是0x32ff4,此时aCstartBegins的地址是0x31000。 继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串aCstartEnds地址应该是aCstartBegins+0x2a=0x3102a。 ebx的值变成了0x32fa0=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。\n既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.\ndisp_str: push\tebp mov\tebp, esp xchg bx, bx # magic_break for debug mov\tesi, [ebp + 8]\t; pszInfo mov\tedi, [disp_pos] mov\tah, 0Fh .1: lodsb test\tal, al jz\t.2 cmp\tal, 0Ah\tjnz\t.3 push\teax mov\teax, edi mov\tbl, 160 ; \u003c--------------修改bl div\tbl and\teax, 0FFh inc\teax mov\tbl, 160 ; \u003c--------------修改bl mul\tbl mov\tedi, eax pop\teax jmp\t.1 .3: mov\t[gs:edi], ax add\tedi, 2 jmp\t.1 .2: mov\t[disp_pos], edi pop\tebp ret 发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0. 再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。\n问题思考 那么为什么start.c编译生成的代码没有保存ebx呢？推测是因为x86架构下c语言中函数调用默认是__cdecl调用约定，其中ebx是callee保存的寄存器，但此时的callee也就是disp_str是直接用汇编写的，不遵守函数调用约定，因此产生了问题。事实上原本的代码看似能正常运行，是disp_str违反调用约定却幸运地没被发现。 此时笔者心中还有一个问题，就是原本的a.img为什么没有显示出问题？于是笔者提取出了原本附件中a.img中的kernel.bin进行逆向分析。 发现在函数调用前竟然直接是将aCstartBegins的偏移赋值给了栈顶，根本没有前面分析的用ebx保存_GLOBAL_OFFSET_TABLE的地址的过程。也就是说这份程序编译时~~可能没有开启PIE ~~使用的重定位方法与笔者编译出的不同，是绝对寻址。\n与笔者自己编译的kernel.bin结果作对比： 笔者的kernel.bin是开启了PIE的，使用相对PC寻址字符串. 再进行验证：~~在Makefile中的CFLAGS里加入-no-pie。编译出的程序虽然跟附件中的有略微不同，但也是没有使用ebx运行时获取_GLOBAL_OFFSET_TABLE地址的过程。可以猜测就是由于PIE的开启，才导致了上述不同。也正是因为附件中的kernel.bin编译时没有开启PIE,所以不会有这个问题（事实上是disp_str违反调用约定却幸运地没被发现）。 ~~ 。\n在Makefile中的CFLAGS里加入-no-pie，发现仍然会用ebx存储_GLOBAL_OFFSET_TABLE_的方式。 在CFLAGS里加入-fno-PIC, 发现与附件中的编译结果类似，是直接用链接时重定位寻址的字符串，填入绝对地址。 分析start.o的反汇编结果和重定位表，可以发现两个对字符串的引用都是通过R_386_32类型（填入绝对地址）的重定位表项进行重定位的，这个步骤在链接时进行。 再与开启了PIC/PIE的进行对比：这里使用相对GOT寻址，重定位时填入的都是相对PC的偏移。 ~~但既然用的是同一份Makefile,编译时却一个开启了-pie,一个没有开启，这多半是因为gcc版本不同，导致默认编译选项不同。 ~~ 找使用32位ubuntu16.04的同学进行查证，gcc版本如下： 编译出来的kernel.bin中start.c部分，也是直接pushaCstartBegins地址的: 而笔者的gcc版本： 发现笔者的gcc开启了–enable-default-pie选项，也就是默认情况下会开启PIE.而ubuntu16中的gcc就没有这个选项，默认情况下不会开启PIE.\n问题延伸 前面得到的结果有些混乱，整理一下：\ngcc 14.2.1+PIE gcc 14.2.1+PIC Ubuntu16 gcc5.4.0+PIC gcc 14.2.1 无PIC 附件中程序的未知编译器 寻址字符串方式 R_386_GOTPC R_386_GOTOFF R_386_GOTPC R_386_GOTOFF R_386_32 R_386_32 R_386_32 R_386_GOTPC的相对PC寻址的方法是先获取PC,然后根据PC和GOT表地址的偏移计算出GOT表地址，再通过GOT表地址与字符串偏移算出字符串地址。 R_386_32则是链接时直接计算出绝对地址。 其中使用R_386_GOTPC的会因为该方式用到了ebx寄存器保存GOT地址，而该寄存器在disp_str中被修改，导致输出的字符串寻址错误，输出乱码。但使用R_386_32的由于寻址时没用到寄存器，不会表现出问题。 不同重定位项的简介如下： 至于他们重定位方式为什么不同，推测是高版本编译器修改了对字符串寻址的默认重定位方式。\n值得注意的是，经检查两个版本的gcc都默认开启-fPIC。 gcc -dumpspec | grep pic的结果节选：（代表默认情况下开启的是-fPIC）\n%{!fno-pic:%{!fno-PIC:%{!fpic:%{!fPIC: -fPIC}}}}} 也就是说在本次实验的环境下，开启PIC时，程序不存在GOT表，对于全局字符串的寻址会采用全局偏移。（经过实验、关闭PIC和PIE时也还是这样） 而开启PIE时，会先用PC相对寻址找到GOT表地址（事实上为了这样寻址，编译时似乎特意生成了一个空的got表），再相对GOT表寻址字符串。\n对于PIE和PIC的差别以及不同gcc版本下他们处理寻址全局字符串时的机制，笔者尚未弄清楚，留待以后补充探究。 （例如：这个机制是在哪个版本修改的？）\n参考链接：x86: Relocation Types\n解决办法 既然是由于ebx寄存器未保存导致的问题，只要在disp_str中添加保存ebx的代码就可以了。\ndisp_str: push\tebp mov\tebp, esp push ebx ... pop ebx pop\tebp ret 重新编译链接装入a.img, 发现问题已经解决。\n或者在makefile中的CFLAGS加入-fno-PIC也可以，不过这种办法毕竟治标不治本，还是推荐第一种做法。\n","wordCount":"208","inLanguage":"en","image":"https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E","datePublished":"2024-10-22T00:00:00Z","dateModified":"2024-10-22T00:00:00Z","author":[{"@type":"Person","name":"JuicyMio"}],"mainEntityOfPage":{"@type":"WebPage","@id":"https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/"},"publisher":{"@type":"Organization","name":"JuicyMio's Blog","logo":{"@type":"ImageObject","url":"https://juicymio.github.io/%3Clink%20/%20abs%20url%3E"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://juicymio.github.io/ accesskey=h title="Home (Alt + H)"><img src=https://juicymio.github.io/apple-touch-icon.png alt aria-label=logo height=35>Home</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://juicymio.github.io/posts/ title=posts><span>posts</span></a></li><li><a href=https://juicymio.github.io/categories/ title=categories><span>categories</span></a></li><li><a href=https://juicymio.github.io/tags/ title=tags><span>tags</span></a></li><li><a href=https://juicymio.github.io/friends/ title=friends><span>friends</span></a></li><li><a href=https://juicymio.github.io/about/ title=about><span>about</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://juicymio.github.io/>Home</a>&nbsp;»&nbsp;<a href=https://juicymio.github.io/posts/>Posts</a></div><h1 class="post-title entry-hint-parent">关于某些环境下第二次调用disp_str产生乱码的问题解析</h1><div class=post-meta><span title='2024-10-22 00:00:00 +0000 UTC'>October 22, 2024</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;208 words&nbsp;·&nbsp;JuicyMio&nbsp;|&nbsp;<a href=https://github.com/%3cpath_to_repo%3e/content/posts/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90.md rel="noopener noreferrer" target=_blank>Suggest Changes</a></div></header><div class=toc><details><summary accesskey=c title="(Alt + C)"><span class=details>Table of Contents</span></summary><div class=inner><nav id=TableOfContents><ul><li><a href=#前言>前言</a></li><li><a href=#问题描述>问题描述</a></li><li><a href=#问题溯源>问题溯源</a></li><li><a href=#问题思考>问题思考</a><ul><li><a href=#问题延伸>问题延伸</a></li></ul></li><li><a href=#解决办法>解决办法</a></li></ul></nav></div></details></div><div class=post-content><h2 id=前言>前言<a hidden class=anchor aria-hidden=true href=#前言>#</a></h2><p>标题中的”某些环境“包括笔者和一些同学的64位系统。
+笔者验证时数次得到不符合预期的结果，于是数次推翻之前的结论，一开始以为这仅仅是一个与开关PIC选项有关的问题，后来发现可能是开关PIE的问题，再去实验发现同样的选项在不同编译器版本下行为也不同，可能是不同编译器的行为不同。
+本文中关于PIC、PIE的分析比较仓促，并且笔者的相关知识也比较匮乏，可能会有很多错误，希望读者包涵并指正。</p><h2 id=问题描述>问题描述<a hidden class=anchor aria-hidden=true href=#问题描述>#</a></h2><p>在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。
+图中可以看到最后一行输出是乱码。
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-1.png alt></p><h2 id=问题溯源>问题溯源<a hidden class=anchor aria-hidden=true href=#问题溯源>#</a></h2><p>为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的：
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-2.png alt>
+比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nf>public</span> <span class=no>__x86_get_pc_thunk_bx</span>
+</span></span><span class=line><span class=cl><span class=nf>__x86_get_pc_thunk_bx</span> <span class=no>proc</span> <span class=no>near</span>
+</span></span><span class=line><span class=cl><span class=c1>; __unwind {
+</span></span></span><span class=line><span class=cl><span class=c1></span><span class=nf>mov</span>     <span class=no>ebx</span><span class=p>,</span> <span class=p>[</span><span class=no>esp</span><span class=err>+</span><span class=mi>0</span><span class=p>]</span>
+</span></span><span class=line><span class=cl><span class=nf>retn</span>
+</span></span><span class=line><span class=cl><span class=c1>; }
+</span></span></span></code></pre></div><p>这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于<code>push ip; jmp</code>。下一句紧接着执行<code>mov ebx, [esp+0];retn</code>就会将刚压进栈的ip的值赋给ebx。此时ebx的值是<code>add ebx, (offset _GLOBAL_OFFSET_TABLE)</code>的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是<strong>相对此时的ebx寻址</strong>的。
+从lea指令开始为第一次调用disp_str布置参数，将<code>[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_</code>也就是<code>aCstartBegins</code>的实际地址压入栈中。
+这段代码这么做是因为<code>aCstartBegins</code>和<code>_GLOBAL_OFFSET_TABLE_</code>的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。
+于是第一次调用十分正常，在disp_str中下断点，在bochs中调试：
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-3.png alt>
+看到<strong>正常的ebx的值应该是0x32ff4</strong>,此时<code>aCstartBegins</code>的地址是0x31000。
+继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串<code>aCstartEnds</code>地址应该是<code>aCstartBegins+0x2a</code>=0x3102a。
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-4.png alt>
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-5.png alt>
+<strong>ebx的值变成了0x32fa0</strong>=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。</p><p>既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nl>disp_str:</span>
+</span></span><span class=line><span class=cl>  <span class=nf>push</span>	<span class=no>ebp</span>
+</span></span><span class=line><span class=cl>  <span class=nf>mov</span>	<span class=no>ebp</span><span class=p>,</span> <span class=no>esp</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nf>xchg</span> <span class=no>bx</span><span class=p>,</span> <span class=no>bx</span> <span class=c1># magic_break for debug
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nf>mov</span>	<span class=no>esi</span><span class=p>,</span> <span class=p>[</span><span class=no>ebp</span> <span class=err>+</span> <span class=mi>8</span><span class=p>]</span>	<span class=c1>; pszInfo
+</span></span></span><span class=line><span class=cl><span class=c1></span>  <span class=nf>mov</span>	<span class=no>edi</span><span class=p>,</span> <span class=p>[</span><span class=no>disp_pos</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>  <span class=nf>mov</span>	<span class=no>ah</span><span class=p>,</span> <span class=mi>0</span><span class=no>Fh</span>
+</span></span><span class=line><span class=cl><span class=nl>.1:</span>
+</span></span><span class=line><span class=cl>	<span class=nf>lodsb</span>
+</span></span><span class=line><span class=cl>	<span class=nf>test</span>	<span class=no>al</span><span class=p>,</span> <span class=no>al</span>
+</span></span><span class=line><span class=cl>	<span class=nf>jz</span>	<span class=no>.2</span>
+</span></span><span class=line><span class=cl>	<span class=nf>cmp</span>	<span class=no>al</span><span class=p>,</span> <span class=mi>0</span><span class=no>Ah</span>	
+</span></span><span class=line><span class=cl>	<span class=no>jnz</span>	<span class=no>.3</span>
+</span></span><span class=line><span class=cl>	<span class=nf>push</span>	<span class=no>eax</span>
+</span></span><span class=line><span class=cl>	<span class=nf>mov</span>	<span class=no>eax</span><span class=p>,</span> <span class=no>edi</span>
+</span></span><span class=line><span class=cl>	<span class=nf>mov</span>	<span class=no>bl</span><span class=p>,</span> <span class=mi>160</span> <span class=c1>; &lt;--------------修改bl
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nf>div</span>	<span class=no>bl</span>
+</span></span><span class=line><span class=cl>	<span class=nf>and</span>	<span class=no>eax</span><span class=p>,</span> <span class=mi>0</span><span class=no>FFh</span>
+</span></span><span class=line><span class=cl>	<span class=nf>inc</span>	<span class=no>eax</span>
+</span></span><span class=line><span class=cl>	<span class=nf>mov</span>	<span class=no>bl</span><span class=p>,</span> <span class=mi>160</span> <span class=c1>; &lt;--------------修改bl
+</span></span></span><span class=line><span class=cl><span class=c1></span>	<span class=nf>mul</span>	<span class=no>bl</span>       
+</span></span><span class=line><span class=cl>	<span class=no>mov</span>	<span class=no>edi</span><span class=p>,</span> <span class=no>eax</span>
+</span></span><span class=line><span class=cl>	<span class=nf>pop</span>	<span class=no>eax</span>
+</span></span><span class=line><span class=cl>	<span class=nf>jmp</span>	<span class=no>.1</span>
+</span></span><span class=line><span class=cl><span class=nl>.3:</span>
+</span></span><span class=line><span class=cl>	<span class=nf>mov</span>	<span class=p>[</span><span class=no>gs</span><span class=p>:</span><span class=no>edi</span><span class=p>],</span> <span class=no>ax</span>
+</span></span><span class=line><span class=cl>	<span class=nf>add</span>	<span class=no>edi</span><span class=p>,</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl>	<span class=nf>jmp</span>	<span class=no>.1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nl>.2:</span>
+</span></span><span class=line><span class=cl>	<span class=nf>mov</span>	<span class=p>[</span><span class=no>disp_pos</span><span class=p>],</span> <span class=no>edi</span>
+</span></span><span class=line><span class=cl>  <span class=nf>pop</span>	<span class=no>ebp</span>
+</span></span><span class=line><span class=cl>  <span class=nf>ret</span>
+</span></span></code></pre></div><p>发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0.
+再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。</p><h2 id=问题思考>问题思考<a hidden class=anchor aria-hidden=true href=#问题思考>#</a></h2><p>那么为什么start.c编译生成的代码没有保存ebx呢？推测是因为x86架构下c语言中函数调用默认是__cdecl调用约定，其中ebx是<strong>callee保存</strong>的寄存器，但此时的callee也就是disp_str是直接用汇编写的，不遵守函数调用约定，因此产生了问题。事实上原本的代码看似能正常运行，是<strong>disp_str违反调用约定却幸运地没被发现</strong>。
+此时笔者心中还有一个问题，就是原本的a.img为什么没有显示出问题？于是笔者提取出了原本附件中a.img中的kernel.bin进行逆向分析。
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-6.png alt>
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-7.png alt></p><p>发现在函数调用前竟然直接是将<code>aCstartBegins</code>的偏移赋值给了栈顶，根本没有前面分析的用ebx保存<code>_GLOBAL_OFFSET_TABLE</code>的地址的过程。也就是说这份程序编译时~~可能没有开启PIE ~~使用的重定位方法与笔者编译出的不同，是绝对寻址。</p><p>与笔者自己编译的kernel.bin结果作对比：
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-8.png alt>
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-9.png alt></p><p>笔者的kernel.bin是开启了PIE的，使用相对PC寻址字符串.
+再进行验证：~~在Makefile中的CFLAGS里加入-no-pie。编译出的程序虽然跟附件中的有略微不同，但也是没有使用ebx运行时获取<code>_GLOBAL_OFFSET_TABLE</code>地址的过程。可以猜测就是由于PIE的开启，才导致了上述不同。也正是因为附件中的kernel.bin编译时没有开启PIE,所以不会有这个问题（事实上是disp_str违反调用约定却幸运地没被发现）。 ~~
+。</p><p>在Makefile中的CFLAGS里加入-no-pie，发现仍然会用ebx存储<code>_GLOBAL_OFFSET_TABLE_</code>的方式。
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-10.png alt>
+在CFLAGS里加入-fno-PIC, 发现与附件中的编译结果类似，是直接用链接时重定位寻址的字符串，填入绝对地址。
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-11.png alt></p><p>分析start.o的反汇编结果和重定位表，可以发现两个对字符串的引用都是通过R_386_32类型（填入绝对地址）的重定位表项进行重定位的，这个步骤在链接时进行。
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-12.png alt></p><p>再与开启了PIC/PIE的进行对比：这里使用相对GOT寻址，重定位时填入的都是相对PC的偏移。
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-13.png alt></p><p>~~但既然用的是同一份Makefile,编译时却一个开启了-pie,一个没有开启，这多半是因为gcc版本不同，导致默认编译选项不同。 ~~
+找使用32位ubuntu16.04的同学进行查证，gcc版本如下：
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-14.png alt>
+编译出来的kernel.bin中start.c部分，也是直接push<code>aCstartBegins</code>地址的:
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-15.png alt>
+而笔者的gcc版本：
+<img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-16.png alt>
+发现笔者的gcc开启了&ndash;enable-default-pie选项，也就是默认情况下会开启PIE.而ubuntu16中的gcc就没有这个选项，默认情况下不会开启PIE.</p><h3 id=问题延伸>问题延伸<a hidden class=anchor aria-hidden=true href=#问题延伸>#</a></h3><p>前面得到的结果有些混乱，整理一下：</p><table><thead><tr><th></th><th>gcc 14.2.1+PIE</th><th>gcc 14.2.1+PIC</th><th>Ubuntu16 gcc5.4.0+PIC</th><th>gcc 14.2.1 无PIC</th><th>附件中程序的未知编译器</th></tr></thead><tbody><tr><td>寻址字符串方式</td><td>R_386_GOTPC R_386_GOTOFF</td><td>R_386_GOTPC R_386_GOTOFF</td><td>R_386_32</td><td>R_386_32</td><td>R_386_32</td></tr><tr><td>R_386_GOTPC的相对PC寻址的方法是先获取PC,然后根据PC和GOT表地址的偏移计算出GOT表地址，再通过GOT表地址与字符串偏移算出字符串地址。</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>R_386_32则是链接时直接计算出绝对地址。</td><td></td><td></td><td></td><td></td><td></td></tr><tr><td><strong>其中使用R_386_GOTPC的会因为该方式用到了ebx寄存器保存GOT地址，而该寄存器在disp_str中被修改，导致输出的字符串寻址错误，输出乱码。但使用R_386_32的由于寻址时没用到寄存器，不会表现出问题。</strong></td><td></td><td></td><td></td><td></td><td></td></tr><tr><td>不同重定位项的简介如下：</td><td></td><td></td><td></td><td></td><td></td></tr></tbody></table><p><img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-18.png alt>
+至于他们重定位方式为什么不同，推测是高版本编译器修改了对字符串寻址的默认重定位方式。</p><p>值得注意的是，经检查两个版本的gcc都默认开启-fPIC。
+gcc -dumpspec | grep pic的结果节选：（代表默认情况下开启的是-fPIC）</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-shell data-lang=shell><span class=line><span class=cl>%<span class=o>{</span>!fno-pic:%<span class=o>{</span>!fno-PIC:%<span class=o>{</span>!fpic:%<span class=o>{</span>!fPIC: -fPIC<span class=o>}}}}}</span>
+</span></span></code></pre></div><p><del>也就是说在本次实验的环境下，开启PIC时，程序不存在GOT表，对于全局字符串的寻址会采用全局偏移。（经过实验、关闭PIC和PIE时也还是这样）
+而开启PIE时，会先用PC相对寻址找到GOT表地址（事实上为了这样寻址，编译时似乎特意生成了一个空的got表），再相对GOT表寻址字符串。</del></p><p>对于PIE和PIC的差别以及<strong>不同gcc版本下</strong>他们处理寻址全局字符串时的机制，笔者尚未弄清楚，留待以后补充探究。 （例如：这个机制是在哪个版本修改的？）</p><p>参考链接：<a href=https://docs.oracle.com/cd/E19683-01/817-3677/chapter6-26/index.html>x86: Relocation Types</a></p><h2 id=解决办法>解决办法<a hidden class=anchor aria-hidden=true href=#解决办法>#</a></h2><p>既然是由于ebx寄存器未保存导致的问题，只要在disp_str中添加保存ebx的代码就可以了。</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nl>disp_str:</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nf>push</span>	<span class=no>ebp</span>
+</span></span><span class=line><span class=cl>  <span class=nf>mov</span>	<span class=no>ebp</span><span class=p>,</span> <span class=no>esp</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nf>push</span> <span class=no>ebx</span>
+</span></span><span class=line><span class=cl>  <span class=na>...</span>
+</span></span><span class=line><span class=cl>  <span class=nf>pop</span> <span class=no>ebx</span>
+</span></span><span class=line><span class=cl>  <span class=nf>pop</span>	<span class=no>ebp</span>
+</span></span><span class=line><span class=cl>  <span class=nf>ret</span>
+</span></span></code></pre></div><p>重新编译链接装入a.img, 发现问题已经解决。</p><p><img loading=lazy src=/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-17.png alt>
+或者在makefile中的CFLAGS加入-fno-PIC也可以，不过这种办法毕竟治标不治本，还是推荐第一种做法。</p></div><footer class=post-footer><ul class=post-tags><li><a href=https://juicymio.github.io/tags/os/>Os</a></li></ul><nav class=paginav><a class=next href=https://juicymio.github.io/posts/clangd_crash_analysis/><span class=title>Next »</span><br><span>clangd异常闪退原因分析</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2024 <a href=https://juicymio.github.io/>JuicyMio's Blog</a></span>
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
