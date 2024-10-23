@@ -856,12 +856,5 @@ by one&amp;rsquo;s own bootstraps 自己努力, 自强&lt;/p&gt;</description>
 这样我们就可以让fd = 0, 程序等待从stdin中读取字符
 我们再向命令行中输入LETMEWIN, 即可得到flag&lt;/p&gt;</description>
     </item>
-    <item>
-      <title></title>
-      <link>https://juicymio.github.io/posts/%E6%9C%AA%E5%91%BD%E5%90%8D/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://juicymio.github.io/posts/%E6%9C%AA%E5%91%BD%E5%90%8D/</guid>
-      <description></description>
-    </item>
   </channel>
 </rss>
