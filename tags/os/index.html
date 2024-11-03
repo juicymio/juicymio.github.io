@@ -10,13 +10,11 @@
 public __x86_get_pc_thunk_bx __x86_get_pc_thunk_bx proc near ; __unwind { mov ebx, [esp+0] retn ; } 这个函数跟软件安全课程中介绍的病毒获取自身代码段位置的代码一样，是一种实现PIE（position-independent Executable，位置无关可执行文件），因为call指令相当于push ip; jmp。下一句紧接着执行mov ebx, [esp+0];retn就会将刚压进栈的ip的值赋给ebx。此时ebx的值是add ebx, (offset _GLOBAL_OFFSET_TABLE)的地址。所以下一句的add就会让ebx的值变为_GLOBAL_OFFSET_TABLE的值了，后续的字符串都是相对此时的ebx寻址的。
 从lea指令开始为第一次调用disp_str布置参数，将[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_也就是aCstartBegins的实际地址压入栈中。
 这段代码这么做是因为aCstartBegins和_GLOBAL_OFFSET_TABLE_的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。
-于是第一次调用十分正常，在disp_str中下断点，在bochs中调试：
-看到正常的ebx的值应该是0x32ff4,此时aCstartBegins的地址是0x31000。
+于是第一次调用十分正常，在disp_str中下断点，在bochs中调试： 看到正常的ebx的值应该是0x32ff4,此时aCstartBegins的地址是0x31000。
 继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串aCstartEnds地址应该是aCstartBegins+0x2a=0x3102a。
 ebx的值变成了0x32fa0=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。
 既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.
-disp_str: push ebp mov ebp, esp xchg bx, bx # magic_break for debug mov esi, [ebp + 8] ; pszInfo mov edi, [disp_pos] mov ah, 0Fh .1: lodsb test al, al jz .2 cmp al, 0Ah jnz .3 push eax mov eax, edi mov bl, 160 ; &lt;--------------修改bl div bl and eax, 0FFh inc eax mov bl, 160 ; &lt;--------------修改bl mul bl mov edi, eax pop eax jmp .1 .3: mov [gs:edi], ax add edi, 2 jmp .1 .2: mov [disp_pos], edi pop ebp ret 发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0.
-再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。
+disp_str: push ebp mov ebp, esp xchg bx, bx # magic_break for debug mov esi, [ebp + 8] ; pszInfo mov edi, [disp_pos] mov ah, 0Fh .1: lodsb test al, al jz .2 cmp al, 0Ah jnz .3 push eax mov eax, edi mov bl, 160 ; &lt;--------------修改bl div bl and eax, 0FFh inc eax mov bl, 160 ; &lt;--------------修改bl mul bl mov edi, eax pop eax jmp .1 .3: mov [gs:edi], ax add edi, 2 jmp .1 .2: mov [disp_pos], edi pop ebp ret 发现代码中两次修改ebx的值，都是将bl(ebx低8位)改为160,也就是16进制的0xa0. 再根据先前的ebx从0x32ff4变成0x32fa0,正好是低8位从0xf4变成了0xa0，出错过程完全分析清楚。
 ...</p></div><footer class=entry-footer><span title='2024-10-22 00:00:00 +0000 UTC'>October 22, 2024</span>&nbsp;·&nbsp;1 min&nbsp;·&nbsp;206 words&nbsp;·&nbsp;JuicyMio</footer><a class=entry-link aria-label="post link to 关于某些环境下第二次调用disp_str产生乱码的问题解析" href=https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/></a></article><article class="post-entry tag-entry"><header class=entry-header><h2 class=entry-hint-parent>操作系统学习笔记</h2></header><div class=entry-content><p>0xFE 序言 赶上吾爱破解十五周年开放注册, 注册了个账号. 随便翻了翻精品帖子, 看到从0到-1写一个操作系统-0xFF-!!完结撒花!!, 感觉还不错, 于是开始动手实践, 开一个博客记录, 也是督促自己坚持下去.
 0xFF 操作系统的启动 实模式 刚开机时CPU进入实模式, 因为此时只能使用物理地址.
 实模式地址的分布是固定的,以8086为例, BIOS入口在0xFFFF0到0xFFFFF之间, 其中是一个jmp指令, 跳转到真正的BIOS位置. 中断向量表在0x00000到0x003FF. MBR加载地址在0x7C00到0x7DFF.
