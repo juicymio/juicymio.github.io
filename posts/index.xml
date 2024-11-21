@@ -9,7 +9,7 @@
       <url>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- 0.136.5</generator>
+    <generator>Hugo -- 0.139.0</generator>
     <language>zh-CN</language>
     <lastBuildDate>Tue, 22 Oct 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://juicymio.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
@@ -245,7 +245,8 @@
 sddm改为使用wayland启动（其实没什么意义，而且sddm的wayland支持尚不稳定）。&lt;br&gt;
 &lt;a href=&#34;https://wiki.archlinux.org/title/Kernel_mode_setting#Early_KMS_start&#34;&gt;Kernel mode setting - ArchWiki (archlinux.org)&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;输入法&#34;&gt;输入法&lt;/h2&gt;
-&lt;p&gt;只装了个最基础的fcitx5就没管了。&lt;/p&gt;
+&lt;p&gt;只装了个最基础的fcitx5就没管了。
+WPS等软件中无法使用输入法： &lt;a href=&#34;https://wszqkzqk.github.io/2024/03/09/WPS-Fcitx5/&#34;&gt;https://wszqkzqk.github.io/2024/03/09/WPS-Fcitx5/&lt;/a&gt;&lt;/p&gt;
 &lt;h2 id=&#34;字体&#34;&gt;字体&lt;/h2&gt;
 &lt;p&gt;不知道怎么同时配置中文字体和英文字体，装了教程里的一堆字体之后，暂时摆了。&lt;/p&gt;
 &lt;h2 id=&#34;kde&#34;&gt;KDE&lt;/h2&gt;
