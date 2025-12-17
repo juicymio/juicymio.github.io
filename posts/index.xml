@@ -9,23 +9,22 @@
       <url>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- 0.139.4</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh-CN</language>
     <lastBuildDate>Mon, 16 Dec 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://juicymio.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>ccbciscn</title>
+      <title>ccbciscn pwn wp</title>
       <link>https://juicymio.github.io/posts/ccbciscn/</link>
       <pubDate>Mon, 16 Dec 2024 00:00:00 +0000</pubDate>
       <guid>https://juicymio.github.io/posts/ccbciscn/</guid>
       <description>&lt;p&gt;期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。
-吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。&lt;/p&gt;
+吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到又上了三个pwn感觉天都塌了。&lt;/p&gt;
 &lt;h3 id=&#34;anote&#34;&gt;anote&lt;/h3&gt;
 &lt;p&gt;发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。
 因此可以创建两个堆块，将后门函数的地址system(&amp;quot;/bin/sh&amp;quot;)写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。
 堆地址由show时的gift直接给出，只需要稍加计算。
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/ccbciscn-2.png&#34; alt=&#34;&#34;  /&gt;
-
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/ccbciscn-2.png&#34;&gt;
 exp:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;```&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Python&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#!/usr/bin/env python3&lt;/span&gt;
@@ -116,12 +115,10 @@ exp:&lt;/p&gt;
 &lt;h2 id=&#34;问题描述&#34;&gt;问题描述&lt;/h2&gt;
 &lt;p&gt;在进行orange chapter5的第i个实验时，第二个disp_str的输出会变成乱码。原本笔者以为是对输出字符串的修改导致了错误，但经过许多尝试发现即使不做任何修改，只要编译一下原始的代码，第二次disp_str的输出就是乱码。更诡异的是原本附件中的a.img的运行结果是正常的，那么这有可能是编译环境不同，导致出现了问题。&lt;br&gt;
 图中可以看到最后一行输出是乱码。&lt;br&gt;
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-1.png&#34; alt=&#34;&#34;  /&gt;
-&lt;/p&gt;
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90-1.png&#34;&gt;&lt;/p&gt;
 &lt;h2 id=&#34;问题溯源&#34;&gt;问题溯源&lt;/h2&gt;
 &lt;p&gt;为了方便查看，笔者只将start.c编译到start.o，其中第一次调用disp_str的部分是这样的：&lt;br&gt;
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-2.png&#34; alt=&#34;&#34;  /&gt;
-
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90-2.png&#34;&gt;
 比较有意思的是__x86_get_pc_thunk_bx函数，它的内容是这样的：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-asm&#34; data-lang=&#34;asm&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;public&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;__x86_get_pc_thunk_bx&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nf&#34;&gt;__x86_get_pc_thunk_bx&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;proc&lt;/span&gt; &lt;span class=&#34;no&#34;&gt;near&lt;/span&gt;
@@ -133,14 +130,11 @@ exp:&lt;/p&gt;
 从lea指令开始为第一次调用disp_str布置参数，将&lt;code&gt;[ebx]+aCstartBegins-_GLOBAL_OFFSET_TABLE_&lt;/code&gt;也就是&lt;code&gt;aCstartBegins&lt;/code&gt;的实际地址压入栈中。&lt;br&gt;
 这段代码这么做是因为&lt;code&gt;aCstartBegins&lt;/code&gt;和&lt;code&gt;_GLOBAL_OFFSET_TABLE_&lt;/code&gt;的相对偏移是固定的，但程序本身的装载地址会发生变化，为了实现位置无关需要运行时获取代码所在的地址。&lt;br&gt;
 于是第一次调用十分正常，在disp_str中下断点，在bochs中调试：
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-3.png&#34; alt=&#34;&#34;  /&gt;
-
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90-3.png&#34;&gt;
 看到&lt;strong&gt;正常的ebx的值应该是0x32ff4&lt;/strong&gt;,此时&lt;code&gt;aCstartBegins&lt;/code&gt;的地址是0x31000。&lt;br&gt;
 继续到第二次调用disp_str，用调试器或者静态分析都可以看到，正确的字符串&lt;code&gt;aCstartEnds&lt;/code&gt;地址应该是&lt;code&gt;aCstartBegins+0x2a&lt;/code&gt;=0x3102a。&lt;br&gt;
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-4.png&#34; alt=&#34;&#34;  /&gt;
-
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%e5%85%b3%e4%ba%8e64%e4%bd%8d%e7%b3%bb%e7%bb%9f%e7%bc%96%e8%af%91%e5%af%bc%e8%87%b4%e7%ac%ac%e4%ba%8c%e6%ac%a1%e8%b0%83%e7%94%a8disp_str%e4%ba%a7%e7%94%9f%e4%b9%b1%e7%a0%81%e7%9a%84%e9%97%ae%e9%a2%98%e8%a7%a3%e6%9e%90-5.png&#34; alt=&#34;&#34;  /&gt;
-
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90-4.png&#34;&gt;
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/%E5%85%B3%E4%BA%8E64%E4%BD%8D%E7%B3%BB%E7%BB%9F%E7%BC%96%E8%AF%91%E5%AF%BC%E8%87%B4%E7%AC%AC%E4%BA%8C%E6%AC%A1%E8%B0%83%E7%94%A8disp_str%E4%BA%A7%E7%94%9F%E4%B9%B1%E7%A0%81%E7%9A%84%E9%97%AE%E9%A2%98%E8%A7%A3%E6%9E%90-5.png&#34;&gt;
 &lt;strong&gt;ebx的值变成了0x32fa0&lt;/strong&gt;=0x32ff4-0x54,导致disp_str显示字符串的地址变成了0x30fd6=0x3102a-0x54。&lt;/p&gt;
 &lt;p&gt;既然ebx的值改动了，浏览start.o的反汇编结果也没有发现ebx被改动，并且两次disp_str调用紧邻着也会输出乱码，那就只有可能是disp_str中本身修改了ebx.&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-asm&#34; data-lang=&#34;asm&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nl&#34;&gt;disp_str:&lt;/span&gt;
@@ -252,16 +246,14 @@ exp:&lt;/p&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;n&#34;&gt;adjust_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;post_path&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;![](&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s2&#34;&gt;&amp;#34;![](&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;需要使用obsidian的Paste image rename第三方插件把插入的图片名字改成{{fileName}}-1.jpg的形式，并设置obsidian的图片存放路径和图片链接格式(attachments这个名字随便改)。这样python脚本就可以把attachments里所有以{{filename}}开头的文件复制到hugo site的/static目录下，并把md文件中的&lt;code&gt;![]attachments/*&lt;/code&gt;修正为&lt;code&gt;![]/*&lt;/code&gt;。
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/hugo_with_obsidian-1.png&#34; alt=&#34;&#34;  /&gt;
-
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/hugo_with_obsidian-1.png&#34;&gt;
 使用方法：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sh&#34; data-lang=&#34;sh&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;./publish.py hugo_with_obsidian.md
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;非常好用。&lt;/p&gt;
 &lt;h2 id=&#34;模板&#34;&gt;模板&lt;/h2&gt;
 &lt;p&gt;以上虽然解决了图片的问题，但是直接复制的md并没有头部的Front Matter，&lt;del&gt;研究了一下&lt;/del&gt;(经xxw指点)发现可以使用obsidian的Template功能。在设置里给Insert Template分配一个快捷键可以让操作更加丝滑，我设置为了Alt+T。&lt;br&gt;
 设置template的目录，这里设置成templates,即Vault下的templates文件夹。
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/hugo_with_obsidian-2.png&#34; alt=&#34;&#34;  /&gt;
-
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/hugo_with_obsidian-2.png&#34;&gt;
 向template/posts中添加如下内容，变量可以根据使用的主题自行增减。&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-yaml&#34; data-lang=&#34;yaml&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;nn&#34;&gt;---&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;w&#34;&gt;&lt;/span&gt;&lt;span class=&#34;nt&#34;&gt;title&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;&lt;span class=&#34;w&#34;&gt; &lt;/span&gt;&lt;span class=&#34;s2&#34;&gt;&amp;#34;{{title}}&amp;#34;&lt;/span&gt;&lt;span class=&#34;w&#34;&gt;
@@ -484,8 +476,7 @@ setvbuf使用了这三个stdio.h中的extern变量&lt;/p&gt;
 &lt;h2 id=&#34;问题&#34;&gt;问题&lt;/h2&gt;
 &lt;ul&gt;
 &lt;li&gt;挂代理也连不上各种东西, 经一通检查之后发现
-&lt;img loading=&#34;lazy&#34; src=&#34;https://s2.loli.net/2023/08/28/st6uFvakz3OY8RL.png&#34; alt=&#34;088274827cd90a0270e69debfb4bfd3a.jpg&#34;  /&gt;
-
+&lt;img alt=&#34;088274827cd90a0270e69debfb4bfd3a.jpg&#34; loading=&#34;lazy&#34; src=&#34;https://s2.loli.net/2023/08/28/st6uFvakz3OY8RL.png&#34;&gt;
 感觉是wsl和steam++一起干的好事&amp;hellip;&lt;/li&gt;
 &lt;/ul&gt;</description>
     </item>
@@ -947,6 +938,13 @@ by one&amp;rsquo;s own bootstraps 自己努力, 自强&lt;/p&gt;</description>
 &lt;p&gt;atoi不能转化16进制数, 所以我们手动转换0x1234, 它的十进制表示是4660
 这样我们就可以让fd = 0, 程序等待从stdin中读取字符
 我们再向命令行中输入LETMEWIN, 即可得到flag&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title></title>
+      <link>https://juicymio.github.io/posts/taint_analysis_notes/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>https://juicymio.github.io/posts/taint_analysis_notes/</guid>
+      <description></description>
     </item>
   </channel>
 </rss>

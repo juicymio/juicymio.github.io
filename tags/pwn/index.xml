@@ -9,23 +9,22 @@
       <url>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</url>
       <link>https://juicymio.github.io/%3Clink%20or%20path%20of%20image%20for%20opengraph,%20twitter-cards%3E</link>
     </image>
-    <generator>Hugo -- 0.139.4</generator>
+    <generator>Hugo -- 0.152.2</generator>
     <language>zh-CN</language>
     <lastBuildDate>Mon, 16 Dec 2024 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://juicymio.github.io/tags/pwn/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>ccbciscn</title>
+      <title>ccbciscn pwn wp</title>
       <link>https://juicymio.github.io/posts/ccbciscn/</link>
       <pubDate>Mon, 16 Dec 2024 00:00:00 +0000</pubDate>
       <guid>https://juicymio.github.io/posts/ccbciscn/</guid>
       <description>&lt;p&gt;期末作业太多了，没什么时间详细写wp。不过三战国赛终于有望进入半决赛了，自己也出了个唯二解的二血，还是值得纪念一下的。
-吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到上了三个pwn感觉天都塌了。&lt;/p&gt;
+吐槽一下，怎么各个方向的题目数量都和赛前发的表对不上，本来以为pwn压力不大，主动承担了做一大半理论题的任务，结果下午看到又上了三个pwn感觉天都塌了。&lt;/p&gt;
 &lt;h3 id=&#34;anote&#34;&gt;anote&lt;/h3&gt;
 &lt;p&gt;发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。
 因此可以创建两个堆块，将后门函数的地址system(&amp;quot;/bin/sh&amp;quot;)写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。
 堆地址由show时的gift直接给出，只需要稍加计算。
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/ccbciscn-2.png&#34; alt=&#34;&#34;  /&gt;
-
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/ccbciscn-2.png&#34;&gt;
 exp:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;```&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Python&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#!/usr/bin/env python3&lt;/span&gt;
