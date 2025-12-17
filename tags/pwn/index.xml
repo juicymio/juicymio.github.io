@@ -24,7 +24,7 @@
 &lt;p&gt;发现创建0x1c大小的堆块后，可以输入超过这个长度。并且每个堆块的开头有一个函数指针，在edit结束后会调用该函数指针。
 因此可以创建两个堆块，将后门函数的地址system(&amp;quot;/bin/sh&amp;quot;)写在第一个堆块中，然后通过前一个的edit溢出写后一个的函数指针，直接改写成第一个堆块存储后门函数的地址。然后调用后一个堆块的edit，就可以执行后门函数，堆块布局如下。
 堆地址由show时的gift直接给出，只需要稍加计算。
-&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/ccbciscn-2.png&#34;&gt;
+&lt;img loading=&#34;lazy&#34; src=&#34;https://juicymio.github.io/posts/ccbciscn/ccbciscn-2.png&#34;&gt;
 exp:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-py&#34; data-lang=&#34;py&#34;&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;err&#34;&gt;```&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Python&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;line&#34;&gt;&lt;span class=&#34;cl&#34;&gt;&lt;span class=&#34;c1&#34;&gt;#!/usr/bin/env python3&lt;/span&gt;
