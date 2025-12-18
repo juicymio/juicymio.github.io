@@ -14,7 +14,7 @@
     <lastBuildDate>Wed, 17 Dec 2025 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://juicymio.github.io/tags/taint_analysis/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>污点分析学习笔记</title>
+      <title>污点分析学习笔记（一）：程序分析基础</title>
       <link>https://juicymio.github.io/posts/taint_analysis_note/</link>
       <pubDate>Wed, 17 Dec 2025 00:00:00 +0000</pubDate>
       <guid>https://juicymio.github.io/posts/taint_analysis_note/</guid>
@@ -31,19 +31,19 @@
 &lt;li&gt;程序P中是否存在死代码（Dead Code, 即控制流在任何情况下都无法到达的代码）&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;是否存在算法能给出该判定问题的答案？
-软件测试？
+&lt;p&gt;是否存在算法能给出该判定问题的答案？&lt;br&gt;
+软件测试？&lt;br&gt;
 &amp;ldquo;Testing shows the presence, not the absence of bugs.&amp;rdquo; ——Edsger W. Dijkstra&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h3 id=&#34;希尔伯特计划&#34;&gt;希尔伯特计划&lt;/h3&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&amp;ldquo;Wir müssen wissen, wir werden wissen.&amp;rdquo;  ——David Hilbert
+&lt;p&gt;&amp;ldquo;Wir müssen wissen, wir werden wissen.&amp;rdquo;  ——David Hilbert &lt;br&gt;
 (我们必须知道，我们必将知道)&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;p&gt;1900 年，38岁的希尔伯特在巴黎举行的第二届国际数学会议上以“数学问题”为题的演讲中提出了23个重要的数学难题，即众所周知的“&lt;strong&gt;希尔伯特问题&lt;/strong&gt;”，激励和推动了后来一个多世纪许多数学分支的蓬勃发展。简而言之，希尔伯特的第1-6问题关于数学基础理论，第 7-12 问题关于数论，第13-18问题属于代数和几何，而最后的第19-23问题属于数学分析范畴。经过许多数学家长期的努力，目前大多数问题都得到了完全或部分解答。&lt;br&gt;
 希尔伯特的第二问题是有名的“&lt;strong&gt;判定问题&lt;/strong&gt;”。它至关重要，涉及整个数学基础，关心数学是否完备和一致？、是不是所有数学命题都可以通过有限次正确的数学步骤作出判定？希尔伯特雄心勃勃，要将整个数学体系严格公理化，然后用他的所谓“元数学”（证明数学的数学）来证明整个数学体系是坚不可摧的。
-为了这个目标，他制定了一个后人称之为“&lt;strong&gt;希尔伯特计划&lt;/strong&gt;”的部署 ：首先，将所有数学形式化，把每一个数学陈述都用符号来表达。然后，证明&lt;strong&gt;整个数学系统是完备的&lt;/strong&gt;，即对任何一个数学陈述都存在一个数学证明（对所有命题，该命题本身或其否定命题一定能被证明）。同时，还要证明数学是&lt;strong&gt;一致的&lt;/strong&gt;，也就是说绝不存在自相矛盾的陈述（任意命题和其否定命题不能同时被证明）。最后，还要具有&lt;strong&gt;可判断性&lt;/strong&gt;，存在一个可以实现的算法，通过有限步程序最终判定数学陈述的对错。
-这个计划的背景是罗素悖论引发的第三次数学危机，罗素悖论的公式表述为：
+为了这个目标，他制定了一个后人称之为“&lt;strong&gt;希尔伯特计划&lt;/strong&gt;”的部署 ：首先，将所有数学形式化，把每一个数学陈述都用符号来表达。然后，证明&lt;strong&gt;整个数学系统是完备的&lt;/strong&gt;，即对任何一个数学陈述都存在一个数学证明（对所有命题，该命题本身或其否定命题一定能被证明）。同时，还要证明数学是&lt;strong&gt;一致的&lt;/strong&gt;，也就是说绝不存在自相矛盾的陈述（任意命题和其否定命题不能同时被证明）。最后，还要具有&lt;strong&gt;可判断性&lt;/strong&gt;，存在一个可以实现的算法，通过有限步程序最终判定数学陈述的对错。&lt;br&gt;
+这个计划的背景是罗素悖论引发的第三次数学危机，罗素悖论的公式表述为：&lt;br&gt;
 $$
 R = { x \mid x \notin x }, \qquad
 R \in R \iff R \notin R.
